@@ -1,0 +1,122 @@
+
+
+header {
+    position: fixed;  /* Fixed to top */
+    width: 100%;
+    top: 0;
+    background-color: #fff;  /* Change the color to white */
+    color: #000;
+    padding: 1em 0;
+    text-align: center;
+}
+
+footer {
+    position: fixed;  /* Fixed to bottom */
+    width: 100%;
+    bottom: 0;
+    background-color: #fff;  /* Change the color to white */
+    color: #000;
+    padding: 1em 0;
+    text-align: center;
+}
+
+body {
+    background-color: lightblue;  /* Change background color to light blue */
+    margin: 0;
+    padding: 0;
+    align-items: center;  /* align content in the center */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.header {
+    background-color: var(--secondary-color);
+    color: #000; /* set text color to black */
+    padding: 20px;
+}
+
+.body {
+    background-color: var(--primary-color);
+    color: #000;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer {
+    background-color: var(--secondary-color);
+    color: #000;
+    padding: 20px;
+    text-align: right;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 0 auto; /* to center the table */
+}
+
+table, th, td {
+    border: 1px solid white;
+}
+
+table td {
+    --background-color: var(--table-cell-color);
+}
+
+
+/* 1. Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Arial',
+    sans-serif; font-weight: bold;
+}
+p {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* 2. Colors */
+:root {
+    --primary-color: lightblue; /* setting primary color to light blue */
+    --secondary-color: white; /* setting secondary color to white */
+    --table-cell-color: #b3d4fc; /* a lighter light blue color for table cells */
+}
+body {
+    color: var(--primary-color);
+    background-color: var(--secondary-color);
+}
+
+/* 3. Layout & Spacing */
+.container { max-width: 1200px; margin: 0 auto; } p, h1, h2, h3, h4, h5, h6 { margin-bottom: 1em; }
+
+/* 4. Links and buttons */
+a { color: var(--primary-color); text-decoration: none; }
+button { background-color: var(--primary-color); color: white; border: none; }
+
+/* 5. images */
+img { max-width: 100%; height: auto; }
+
+/* 6. responsiveness */
+/* Style for medium devices (tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    body {
+        font-size: 1.2em;
+    }
+
+    .container {
+        width: 75%;
+    }
+}
+
+/* Style for large devices (desktops, 1024px and up) */
+@media only screen and (min-width: 1024px) {
+    body {
+        font-size: 1.5em;
+    }
+
+    .container {
+        width: 80%;
+    }
+}
