@@ -1,5 +1,7 @@
 package com.example.wishlist.Controller;
 
+import com.example.wishlist.Model.Item;
+import com.example.wishlist.Model.User;
 import com.example.wishlist.Model.Wishlist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +19,8 @@ public class HomeController {
     @GetMapping("/home")
     public String home(Model model) {
         // model lists: Users, Wishlists, Items
-        model.addAttribute("users", userController.getUsers());
+        List<User> userList = userController.getUsers();
+        model.addAttribute("users", userList);
         model.addAttribute("wishlists", userController.getWishlists());
         model.addAttribute("items", userController.getItems());
 
@@ -32,6 +35,14 @@ public class HomeController {
         return "userpage";
     }
 
+
+    @GetMapping("/wishlist/{wishlistId}")
+    public String wishlistPage(@PathVariable("wishlistId") int wishlistId, Model model) {
+        List<Item> items = userController.getItems(wishlistId);
+        model.addAttribute("items", items);
+
+        return "wishlistpage";
+    }
 
 
 }

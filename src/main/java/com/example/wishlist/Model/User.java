@@ -1,12 +1,13 @@
 package com.example.wishlist.Model;
 
-public class Users {
-    private int id;
-    private String u_name;
-    private String p_word;
+public class User {
+    public int id;
+    public String u_name;
+    public String p_word;
     private String email;
 
-    public Users (int id, String u_name, String p_word, String email){
+
+    public User(int id, String u_name, String p_word, String email){
         this.id = id;
         this.u_name = u_name;
         this.p_word = p_word;

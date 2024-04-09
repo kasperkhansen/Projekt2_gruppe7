@@ -14,12 +14,12 @@
 </header>
 
 <body class="body">
-<h2>User's wishlists</h2>
+<h2>User: "${user.name}"+'s wishlists</h2>
 
 <div class = "table">
     <table>
-        <tr th:each="wishlist : ${wishlists}">
-            <td><a th:href="@{'/wishlist/' + ${wishlist.ID}}" th:text="${wishlist.name}">Wishlist name</a></td>
+        <tr th:each="item : ${items}">
+            <td><a th:href="@{'/item/' + ${item.ID}}" th:text="${item.name}">Wishlist name</a></td>
             <td>[Other wishlist data...]</td>
         </tr>
     </table>
