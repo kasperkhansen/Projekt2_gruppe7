@@ -1,2 +1,0 @@
-CREATE DATABASE IF NOT EXISTS `wishlistDB` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `wishlistDB`;
