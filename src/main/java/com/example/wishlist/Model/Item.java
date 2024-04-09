@@ -1,15 +1,17 @@
 package com.example.wishlist.Model;
 
-public class Items {
+public class Item {
     private int w_ID;
     private String Pname;
     private double price;
     private String i_URL;
 
-    public Items(int w_ID, String Pname, double price, String i_URL){
+    public Item(int w_ID, String Pname, double price, String i_URL){
         this.Pname = Pname;
         this.price = price;
     }
+
+    // ------------------- GET and SET
 
     public int getW_ID(){
         return w_ID;
