@@ -11,6 +11,7 @@ import java.util.List;
 public class WishRepo {
     @Autowired
     JdbcTemplate template;
+
     public List<Items> fetchAll (){
         String sql = "SELECT * FROM ";
         return null;
