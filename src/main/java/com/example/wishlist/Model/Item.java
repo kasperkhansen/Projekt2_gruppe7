@@ -5,9 +5,9 @@ public class Item {
     private int w_ID;
     private String Pname;
     private double price;
-    private String i_URL;
+    private String itemUrl;
 
-    public Item(int w_ID, String Pname, double price, String i_URL){
+    public Item(int w_ID, String Pname, double price, String itemUrl){
         this.Pname = Pname;
         this.price = price;
     }
@@ -29,11 +29,11 @@ public class Item {
     public void setPrice(double price) {
         this.price = price;
     }
-    public String getI_URL() {
-        return i_URL;
+    public String getItemUrl() {
+        return itemUrl;
     }
-    public void setI_URL(String i_URL) {
-        this.i_URL = i_URL;
+    public void setItemUrl(String itemUrl) {
+        this.itemUrl = itemUrl;
     }
 
 } //item class

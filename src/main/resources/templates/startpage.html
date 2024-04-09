@@ -32,7 +32,7 @@
             <tbody id="table-body">
             <!-- Table rows will be here -->
             <tr th:each="user : ${users}">
-                <td><a th:href="@{'/user/' + ${user.id}}" th:text="${user.u_name}">Username</a></td>
+                <td><a th:href="@{'/user/' + ${user.id}}" th:text="${user.userName}">Username</a></td>
             </tr>
 
             </tbody>
