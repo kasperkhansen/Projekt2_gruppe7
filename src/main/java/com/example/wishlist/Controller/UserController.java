@@ -71,4 +71,5 @@ public class UserController {
     public List<Item> getItems(int wishlistID) {
         return getItems();
     }
+
 }
