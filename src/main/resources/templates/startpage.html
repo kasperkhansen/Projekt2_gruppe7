@@ -14,7 +14,7 @@
 </header>
 
 <body class="body">
-<h2>Wish List</h2>
+<h2>User List</h2>
 
 <div class = "table">
     <table>
@@ -28,13 +28,17 @@
 
             </thead>
         </div>
-        <div class="wishlistTable-body">
-            <tbody id="wishlistTable">
+        <div class="table-body">
+            <tbody id="table-body">
             <!-- Table rows will be here -->
+                <tr th:each="user : ${users}">
+                    <td><a th:href="@{'/user/' + ${user.id}}" th:text="${user.username}">Username</a></td>
+                    <td>[Other user data...]</td>
+                </tr>
 
             </tbody>
         </div>
-        <div class="wishlistTable-foot">
+        <div class="table-foot">
             <tfoot>
 
             <tr>

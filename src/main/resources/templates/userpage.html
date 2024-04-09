@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Start Page</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+
+<header class="header">
+    <h1>Wish List</h1>
+    <nav>
+
+    </nav>
+</header>
+
+<body class="body">
+<h2>User's wishlists</h2>
+
+<div class = "table">
+    <table>
+        <tr th:each="wishlist : ${wishlists}">
+            <td><a th:href="@{'/wishlist/' + ${wishlist.id}}" th:text="${wishlist.name}">Wishlist name</a></td>
+            <td>[Other wishlist data...]</td>
+        </tr>
+    </table>
+</div>
+</body>
+
+<footer class="footer">
+    <p>Created by: Gruppe 7</p>
+</footer>
+
+
+</html>

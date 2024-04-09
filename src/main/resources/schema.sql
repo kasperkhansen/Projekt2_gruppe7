@@ -1,6 +1,3 @@
-CREATE DATABASE IF NOT EXISTS WishlistDB;
-
-USE WishlistDB;
 
 CREATE TABLE Users(
 userID INT PRIMARY KEY AUTO_INCREMENT,
@@ -10,7 +7,7 @@ email VARCHAR(100)
 );
 
 
-CREATE TABLE Wishlist(
+CREATE TABLE Wishlists(
 wishlistID INT AUTO_INCREMENT PRIMARY KEY,
 userID INT,
 wishlist_name VARCHAR(100) NOT NULL,
@@ -23,5 +20,5 @@ wishlistID int,
 Pname VARCHAR(100) PRIMARY KEY,
 price DOUBLE,
 URL VARCHAR(255),
-FOREIGN KEY (wishlistID) REFERENCES wishlist(wishlistID)
+FOREIGN KEY (wishlistID) REFERENCES wishlists(wishlistID)
 );

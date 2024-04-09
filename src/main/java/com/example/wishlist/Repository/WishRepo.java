@@ -21,4 +21,5 @@ public class WishRepo {
         String sql = "INSERT INTO Items ()";
         template.update(sql, i.getName(), i.getPrice() );
     }
+
 }
