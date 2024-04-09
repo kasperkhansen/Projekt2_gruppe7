@@ -13,6 +13,7 @@ public class Users {
         this.email = email;
     }
 
+    // getters og setter. ID er tilegnet fra database, så ingen setter
     public int getId() {
         return id;
     }
