@@ -46,7 +46,7 @@ public class UserController {
     }
     public List<Wishlist> getWishlist(String userName) {
         for (User user : users) {
-            if(user.getName().equals(userName)) {
+            if(user.getUsername().equals(userName)) {
                 return user.getWishlists();
             }
         }

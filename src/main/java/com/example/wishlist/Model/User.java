@@ -10,7 +10,7 @@ public class User {
     private List<Wishlist> wishlists;
 
 
-    public User(int id, String userName, String passWord, String email){
+    public User(int id, String userName, String passWord, String email, List<Wishlist> wishlists){
         this.id = id;
         this.userName = userName;
         this.passWord = passWord;
@@ -87,10 +87,10 @@ public class User {
     public int getId() {
         return id;
     }
-    public String getUserName() {
+    public String getUsername() {
         return userName;
     }
-    public void setUserName(String userName) {
+    public void setUsername(String userName) {
         this.userName = userName;
     }
     public String getPassWord() {
