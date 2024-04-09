@@ -22,8 +22,7 @@
             <thead>
 
             <tr>
-                <th>Item</th>
-                <th>Actions</th>
+                <th>Users</th>
             </tr>
 
             </thead>
@@ -32,9 +31,12 @@
             <tbody id="table-body">
             <!-- Table rows will be here -->
             <tr th:each="user : ${users}">
-                <td><a th:href="@{'/user/' + ${user.id}}" th:text="${user.u_name}">Username</a></td>
+                <td><a th:href="@{'/user/' + ${user.id}}" th:text="${user.name}">Username</a></td>
+                <td th:each="wishlist : ${user.wishlists}">
+                    <!-- add your URL pattern for wishlists along with the ID if needed -->
+                    <a th:text="${wishlist.name}">WishlistName</a>
+                </td>
             </tr>
-
             </tbody>
         </div>
         <div class="table-foot">
@@ -42,7 +44,7 @@
 
             <tr>
                 <td colspan="2">
-                    <button id="addItem">Add Item</button>
+                    <button id="addUser">Add User</button>
                 </td>
             </tr>
             </tfoot>

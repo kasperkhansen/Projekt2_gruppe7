@@ -14,7 +14,7 @@
 </header>
 
 <body class="body">
-<h2>User: "${user.name}"+'s wishlists</h2>
+<h2 th:text="${user.name} + '\'s wishlists'">Default header</h2>
 
 <div class = "table">
     <table>
