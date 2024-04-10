@@ -6,7 +6,6 @@ import com.example.wishlist.Model.Wishlist;
 import com.example.wishlist.Repository.WishRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +82,26 @@ public class Service {
     }
     public List<Item> getItems(int wishlistID) {
         return getItems();
+    }
+
+    public List<Item> fetchAll(){
+        return repo.fetchAll();
+    }
+
+    public void addWishlist(Wishlist wl, User u){
+        repo.addWishlist(wl, u);
+    }
+
+    public void addItem(Item i){
+        repo.addItem(i);
+    }
+
+    public void addUser(User u){
+        repo.addUser(u);
+    }
+
+    public void updateWishlist(Wishlist wl, int wishlistID){
+        repo.updateWishlist(wl, wishlistID);
     }
 
 }
