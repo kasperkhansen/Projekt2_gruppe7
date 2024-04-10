@@ -1,16 +1,21 @@
-package com.example.wishlist.Controller;
+package com.example.wishlist.Service;
 
 import com.example.wishlist.Model.Item;
 import com.example.wishlist.Model.User;
 import com.example.wishlist.Model.Wishlist;
+import com.example.wishlist.Repository.WishRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class UserController {
+public class Service {
 
+    @Autowired
+    private WishRepo repo;
 
     List<User> users = new ArrayList<>((List.of(
             new User(1, "Jørgen", "1234", "1@mail.dk", getWishlistsJorgen()),
