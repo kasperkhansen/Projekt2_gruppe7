@@ -14,6 +14,8 @@ public class WishRepo {
     @Autowired
     JdbcTemplate template;
 
+    // save, load, delete, update User, wishlist, item
+
     public List<Item> fetchAll (){
         String sql = "SELECT * FROM Items";
         RowMapper<Item> rowMapper = new BeanPropertyRowMapper<>(Item.class);

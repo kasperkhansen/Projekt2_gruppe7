@@ -26,6 +26,7 @@ public class HomeController {
         model.addAttribute("items", service.getItems());
 
 
+
         return "startpage";
     }
 
