@@ -1,6 +1,6 @@
 package com.example.wishlist.Service;
 
-import com.example.wishlist.Model.Items;
+import com.example.wishlist.Model.Item;
 import com.example.wishlist.Repository.WishRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,11 +13,11 @@ public class WishService {
     @Autowired
     WishRepo wishRepo;
 
-    public List<Items> fetchAll(){
+    public List<Item> fetchAll(){
         return wishRepo.fetchAll();
     }
 
-    public void addItem(Items i){
+    public void addItem(Item i){
         wishRepo.addItem(i);
     }
 
