@@ -7,15 +7,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Repository;
 
+
+import javax.sql.DataSource;
 import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
 public class WishRepo {
-    @Autowired
-    JdbcTemplate template;
 
+
+    private final JdbcTemplate template;
+
+    @Autowired
+    public WishRepo(JdbcTemplate jdbcTemplate){
+        this.template = jdbcTemplate;
+    }
     // save, load, delete, update User, wishlist, item
 
     public List<Item> fetchAll (){

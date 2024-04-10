@@ -25,6 +25,10 @@ public class User {
         this.wishlists = wishlists;
     }
 
+    public User() {
+
+    }
+
     // ------------------- CRUD Methods for Wishlists
     // ------------------- Create Wishlist
     public void addWishlist (Wishlist newList){
@@ -114,4 +118,8 @@ public class User {
     }
     public List<Wishlist> getWishlists() { return wishlists; }
     public void setWishlists(List<Wishlist> updatedWishlists) { this.wishlists = updatedWishlists; }
+
+    public void setId(int i) {
+        this.id = i;
+    }
 }
