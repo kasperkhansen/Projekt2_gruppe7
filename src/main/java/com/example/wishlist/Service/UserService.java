@@ -1,4 +1,4 @@
-package com.example.wishlist.Service;
+/*package com.example.wishlist.Service;
 
 import com.example.wishlist.Model.User;
 
@@ -21,3 +21,4 @@ public class UserService {
 
     // More business methods here...
 }
+*/
