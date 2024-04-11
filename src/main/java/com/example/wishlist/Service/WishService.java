@@ -4,9 +4,8 @@ import com.example.wishlist.Model.Item;
 import com.example.wishlist.Model.User;
 import com.example.wishlist.Model.Wishlist;
 import com.example.wishlist.Repository.WishRepo;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

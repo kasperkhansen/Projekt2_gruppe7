@@ -1,9 +1,9 @@
 
 CREATE TABLE if not exists Users (
-userID INT PRIMARY KEY AUTO_INCREMENT,
-username VARCHAR(50),
-user_password VARCHAR(50),
-email VARCHAR(100)
+    userID INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50),
+    user_password VARCHAR(50),
+    email VARCHAR(100)
 );
 
 
@@ -16,9 +16,9 @@ CREATE TABLE if not exists Wishlists(
 
 
 CREATE TABLE if not exists Items(
-wishlistID int,
-Pname VARCHAR(100) PRIMARY KEY,
-price DOUBLE,
-URL VARCHAR(255),
-FOREIGN KEY (wishlistID) REFERENCES wishlists(wishlistID)
+    wishlistID int,
+    Pname VARCHAR(100) PRIMARY KEY,
+    price DOUBLE,
+    URL VARCHAR(255),
+    FOREIGN KEY (wishlistID) REFERENCES wishlists(wishlistID)
 );

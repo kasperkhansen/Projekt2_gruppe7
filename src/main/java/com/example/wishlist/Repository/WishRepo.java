@@ -7,13 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Repository;
 
-
-import javax.sql.DataSource;
 import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
+
 
 @Repository
 public class WishRepo {
@@ -52,7 +49,6 @@ public class WishRepo {
         String sql = "UPDATE Wishlists SET wishlist_name = ? WHERE wishlistID = ?";
         template.update(sql, wl.getName(), wl.getID());
     }
-
 
 
 }
