@@ -7,13 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Repository;
 
-
-import javax.sql.DataSource;
 import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
+
 
 @Repository
 public class WishRepo {
@@ -34,7 +31,7 @@ public class WishRepo {
     }
 
     public void addWishlist(Wishlist wl, User u){
-        String sql = "INSERT INTO Wishlists (wishlistID, userID, wishlist_name)";
+        String sql = "INSERT INTO Wishlist (wishlistID, userID, wishlist_name) VALUES (?, ?, ?)";
         template.update(sql, wl.getID(), u.getId(), wl.getName());
     }
 
@@ -44,15 +41,14 @@ public class WishRepo {
     }
 
     public void addUser(User u){
-        String sql = "INSERT INTO Users (userID, username, user_password, email)";
+        String sql = "INSERT INTO Users (userID, username, user_password, email) VALUES (?, ?, ?)";
         template.update(sql, u.getId(), u.getUsername(), u.getPassWord(), u.getEmail());
     }
 
     public void updateWishlist(Wishlist wl, int wishlistID){
-        String sql = "UPDATE Wishlists SET wishlist_name = ? WHERE wishlistID = ?";
+        String sql = "UPDATE Wishlist SET wishlist_name = ? WHERE wishlistID = ?";
         template.update(sql, wl.getName(), wl.getID());
     }
-
 
 
 }

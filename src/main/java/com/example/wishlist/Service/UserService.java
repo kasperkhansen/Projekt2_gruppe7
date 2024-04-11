@@ -1,7 +1,7 @@
-package com.example.wishlist.Service;
+/*package com.example.wishlist.Service;
 
 import com.example.wishlist.Model.User;
-import com.example.wishlist.Repository.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,3 +21,4 @@ public class UserService {
 
     // More business methods here...
 }
+*/
