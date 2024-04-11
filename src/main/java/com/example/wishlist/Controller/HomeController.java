@@ -23,18 +23,17 @@ public class HomeController {
         // model lists: Users, Wishlists, Items
         List<User> userList = wishService.getUsers();
         model.addAttribute("users", userList);
-        model.addAttribute("wishlists", wishService.getWishlists());
-        model.addAttribute("items", wishService.getItems());
+
 
 
         return "startpage";
     }
 
-    @GetMapping("/user/{userId}")
-    public String userPage(@PathVariable("userId") int userId, Model model) {
+    @GetMapping("/user/{userName}")
+    public String userPage(@PathVariable("userName") String userName, Model model) {
 
         // wishService getWishlist - calls hardcoded data
-        List<Wishlist> wishlists = wishService.getWishlists(userId);
+        List<Wishlist> wishlists = wishService.getWishlistsFrom(userName);
         model.addAttribute("wishlists", wishlists);
 
         return "userpage";
@@ -52,11 +51,11 @@ public class HomeController {
 
 
 
-    @GetMapping("/wishlist/{wishlistId}")
-    public String wishlistPage(@PathVariable("wishlistId") int wishlistId, Model model) {
+    @GetMapping("/wishlist/{wishlistName}")
+    public String wishlistPage(@PathVariable("wishlistName") String wishlistName, Model model) {
 
         // wishService getItems - calls hardcoded data
-        List<Item> items = wishService.getItems(wishlistId);
+        List<Item> items = wishService.getItemsFromWishlist(wishlistName);
         model.addAttribute("items", items);
 
         return "wishlistpage";

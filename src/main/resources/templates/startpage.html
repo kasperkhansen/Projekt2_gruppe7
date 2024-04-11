@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>Start Page</title>
-    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" th:href="@{/templates/style.css}">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 </head>
 
@@ -31,7 +31,7 @@
             <tbody id="table-body">
             <!-- Table rows will be here -->
             <tr th:each="user : ${users}">
-                <td><a th:href="@{'/user/' + ${user.id}}" th:text="${user.userName}">Username</a></td>
+                <td><a th:href="@{'/user/' + ${user.name}}" th:text="${user.userName}">Username</a></td>
                 <td th:each="wishlist : ${user.wishlists}">
                     <!-- add your URL pattern for wishlists along with the ID if needed -->
                     <a th:text="${wishlist.name}">WishlistName</a>

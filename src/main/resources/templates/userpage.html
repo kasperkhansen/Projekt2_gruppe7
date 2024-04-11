@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>Start Page</title>
-    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" th:href="@{/templates/style.css}">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 </head>
 
@@ -19,7 +19,7 @@
 <div class = "table">
     <table>
         <tr th:each="wishlist : ${wishlists}">
-            <td><a th:href="@{'/wishlist/' + ${wishlist.ID}}" th:text="${wishlist.name}">Wishlist name</a></td>
+            <td><a th:href="@{'/wishlist/' + ${wishlist.name}}" th:text="${wishlist.name}">Wishlist name</a></td>
             <td>[Other wishlist data...]</td>
         </tr>
 

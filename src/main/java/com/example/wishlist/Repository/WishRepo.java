@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -21,6 +22,13 @@ public class WishRepo {
     @Autowired
     public WishRepo(JdbcTemplate jdbcTemplate){
         this.template = jdbcTemplate;
+
+        try {
+            // This line tries to get a connection to see if it works.
+            jdbcTemplate.getDataSource().getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     // save, load, delete, update User, wishlist, item
 
@@ -31,10 +39,46 @@ public class WishRepo {
     }
 
     public List<User> fetchAllUsers(){
+        List<User> users = fetchAllUsersEmpty();
+
+        // go through all users and fill them with their Wishlists and the Items of the wishlists, check for null
+        for (User u : users){
+            List<Wishlist> wishlists = fetchAllWishlistsFrom(u);
+            for (Wishlist wl : wishlists){
+                List<Item> items = fetchAllItemsFrom(wl);
+                wl.setItems(items);
+            }
+            u.setWishlists(wishlists);
+        }
+
+        return users;
+    }
+
+    public List<User> fetchAllUsersEmpty(){
         String sql = "SELECT * FROM Users";
         RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
         return template.query(sql, rowMapper);
     }
+
+    public List<Wishlist> fetchAllWishlists(){
+        String sql = "SELECT * FROM Wishlists";
+        RowMapper<Wishlist> rowMapper = new BeanPropertyRowMapper<>(Wishlist.class);
+        return template.query(sql, rowMapper);
+    }
+
+    public List<Wishlist> fetchAllWishlistsFrom (User u){
+        String sql = "SELECT * FROM Wishlists WHERE username = ?";
+        RowMapper<Wishlist> rowMapper = new BeanPropertyRowMapper<>(Wishlist.class);
+        return template.query(sql, rowMapper, u.getId());
+    }
+
+    public List<Item> fetchAllItemsFrom (Wishlist wl){
+        String wishlist_name = wl.getName();
+        String sql = "SELECT * FROM Items WHERE wishlist_name = ?";
+        RowMapper<Item> rowMapper = new BeanPropertyRowMapper<>(Item.class);
+        return template.query(sql, rowMapper, wl.getName());
+    }
+
 
     public boolean checkUserExists(User u){
         String sql = "SELECT COUNT(*) FROM Users WHERE username = ?";

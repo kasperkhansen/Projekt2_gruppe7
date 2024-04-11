@@ -17,47 +17,74 @@ public class WishService {
     @Autowired
     private WishRepo repo;
 
+
+    // ------------------- CRUD Methods for Users, Wishlist and Items
     public void addUser(String userName){
         User u = new User(userName);
         repo.addUser(u);
     }
 
-    public void addWishlist(String wishlistName, int userId){
+    public void addWishlist(String wishlistName, int userId) {
         Wishlist wl = new Wishlist(wishlistName);
         User u = new User(userId);
-        repo.addWishlist(wl, u);
+        if (repo.checkUserExists(u) == true) {
+            repo.addWishlist(wl, u);
+        } else {
+            repo.addUser(u);
+            repo.addWishlist(wl, u);
+        }
     }
 
+    public void addItem(String itemName, double price, String url, String wishlistName) {
+        Item i = new Item(itemName, price, url);
+        Wishlist wl = new Wishlist(wishlistName);
+        repo.addItem(wl, i);
+    }
+
+
+    // ------------------- Read Methods
     public List<User> getUsers() {
         return repo.fetchAllUsers();
     }
+
+    public List<Wishlist> getWishlists() {
+        return repo.fetchAllWishlists();
+    }
+
+    public List<Wishlist> getWishlistsFrom(String userName) {
+        User u = new User(userName);
+        return repo.fetchAllWishlistsFrom(u);
+    }
+
+    public List<Item> getItems(){
+        return repo.fetchAllItems();
+    }
+
+    public List<Item> getItemsFromWishlist(String wishlistName) {
+        Wishlist wl = new Wishlist(wishlistName);
+        return repo.fetchAllItemsFrom(wl);
+    }
+
+
+    // -------------------- check methods
+    public boolean checkUserExists(User u){
+        return repo.checkUserExists(u);
+    }
+
+
+
 
 
 
 
     // --------------------------------------------------------------
 
-
-
-    public static void main(String[] args) {
-        WishService wishService = new WishService();
-
-        List<User> users = wishService.getUsers();
-
-        if (wishService.getRepo()==null){
-            System.out.println("Repo is null");
-        }
-        else{
-            System.out.println("Repo is not null");
-            wishService.getRepo().addUser(users.get(0));
-        }
-    }
-
     public WishRepo getRepo() {
         return this.repo;
     }
 
 
+    /*
     // ------------------- Testing methods -------------------------
     public List<User> users = new ArrayList<>((List.of(
             new User(1, "Jørgen", "1234", "1@mail.dk", getWishlistsJorgen()),
@@ -82,14 +109,14 @@ public class WishService {
 
 
 
-    public List<Wishlist> getWishlists() {
+    public List<Wishlist> getWishlistsTest() {
         List<Wishlist> allWishlists = new ArrayList<>();
         allWishlists.addAll(getWishlistsAlma());
         allWishlists.addAll(getWishlistsJorgen());
 
         return allWishlists;
     }
-    public List<Wishlist> getWishlist(String userName) {
+    public List<Wishlist> getWishlistTest(String userName) {
         for (User user : users) {
             if(user.getName().equals(userName)) {
                 return user.getWishlists();
@@ -98,14 +125,7 @@ public class WishService {
         return null;
     }
 
-    public List<Item> getItems() {
-        return new ArrayList<>((List.of(
-                new Item("Milk", 100.0, "www.item1.dk"),
-                new Item("Library", 200.0, "www.item2.dk"),
-                new Item("Alpaca", 300.0, "www.item3.dk")
-        )));
-    }
-    public List<Wishlist> getWishlists(int userID) {
+    public List<Wishlist> getWishlistsTest(int userID) {
         for (User user : users) {
             if (user.getId()==userID) {
                 return user.getWishlists();
@@ -113,36 +133,6 @@ public class WishService {
         }
         return null;
     }
-
-    public void addWishlist(String wishlistName, int userId) {
-        Wishlist wl = new Wishlist(wishlistName);
-        User u = new User(userId);
-        if (repo.checkUserExists(u) == true) {
-            repo.addWishlist(wl, u);
-        } else {
-            repo.addUser(u);
-            repo.addWishlist(wl, u);
-        }
-    }
-
-    public List<Item> getItems(int wishlistID) {
-        return getItems();
-    }
-
-<<<<<<< HEAD
-=======
-    public List<Item> fetchAllItems(){
-        return repo.fetchAllItems();
-    }
-
-    public List<User> fetchAllUsers(){
-        return repo.fetchAllUsers();
-    }
-
-    public boolean checkUserExists(User u){
-        return repo.checkUserExists(u);
-    }
->>>>>>> d1757ba7c03a91b3fd2dfdbdbd93d046f391a624
 
     public void addItem(Wishlist wl, Item i){
         repo.addItem(wl,i);
@@ -152,5 +142,7 @@ public class WishService {
     public void updateWishlist(Wishlist wl){
         repo.updateWishlist(wl);
     }
+
+     */
 
 }
