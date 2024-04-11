@@ -95,6 +95,18 @@ public class WishService {
         }
         return null;
     }
+
+    public void addWishlist(String wishlistName, int userId) {
+        Wishlist wl = new Wishlist(wishlistName);
+        User u = new User(userId);
+        if (repo.checkUserExists(u) == true) {
+            repo.addWishlist(wl, u);
+        } else {
+            repo.addUser(u);
+            repo.addWishlist(wl, u);
+        }
+    }
+
     public List<Item> getItems(int wishlistID) {
         return getItems();
     }
@@ -109,17 +121,6 @@ public class WishService {
 
     public boolean checkUserExists(User u){
         return repo.checkUserExists(u);
-    }
-
-    public void addWishlist(String wishlistName, int userId) {
-        Wishlist wl = new Wishlist(wishlistName);
-        User u = new User(userId);
-        if (repo.checkUserExists(u) == true) {
-            repo.addWishlist(wl, u);
-        } else {
-            repo.addUser(u);
-            repo.addWishlist(wl, u);
-        }
     }
 
     public void addItem(Wishlist wl, Item i){
