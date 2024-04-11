@@ -113,10 +113,36 @@ public class WishService {
         }
         return null;
     }
+
+    public void addWishlist(String wishlistName, int userId) {
+        Wishlist wl = new Wishlist(wishlistName);
+        User u = new User(userId);
+        if (repo.checkUserExists(u) == true) {
+            repo.addWishlist(wl, u);
+        } else {
+            repo.addUser(u);
+            repo.addWishlist(wl, u);
+        }
+    }
+
     public List<Item> getItems(int wishlistID) {
         return getItems();
     }
 
+<<<<<<< HEAD
+=======
+    public List<Item> fetchAllItems(){
+        return repo.fetchAllItems();
+    }
+
+    public List<User> fetchAllUsers(){
+        return repo.fetchAllUsers();
+    }
+
+    public boolean checkUserExists(User u){
+        return repo.checkUserExists(u);
+    }
+>>>>>>> d1757ba7c03a91b3fd2dfdbdbd93d046f391a624
 
     public void addItem(Wishlist wl, Item i){
         repo.addItem(wl,i);
