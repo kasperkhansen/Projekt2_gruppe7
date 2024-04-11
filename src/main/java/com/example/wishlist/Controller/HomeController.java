@@ -39,6 +39,14 @@ public class HomeController {
         return "userpage";
     }
 
+    @PostMapping("/wishlist")
+    public String addWishlist(@RequestParam("user") int userId, @RequestParam("wishlistName") String wishlistName) {
+        //call the service to add wishlist
+        wishService.addWishlist(userId, wishlistName);
+
+        //redirecting to the same user page after adding the wishlist
+        return "redirect:/user/" + userId;
+    }
 
     @GetMapping("/wishlist/{wishlistId}")
     public String wishlistPage(@PathVariable("wishlistId") int wishlistId, Model model) {

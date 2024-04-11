@@ -22,7 +22,13 @@
             <td><a th:href="@{'/wishlist/' + ${wishlist.ID}}" th:text="${wishlist.name}">Wishlist name</a></td>
             <td>[Other wishlist data...]</td>
         </tr>
+
     </table>
+    <form th:action="@{/wishlist}" method="post">
+        <input type="hidden" name="user" th:value="${userId}">
+        <input type="text" name="wishlistName" placeholder="New Wishlist Name">
+        <button type="submit">Add Wishlist</button>
+    </form>
 </div>
 </body>
 
