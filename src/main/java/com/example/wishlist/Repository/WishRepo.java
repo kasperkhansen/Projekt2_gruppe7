@@ -35,19 +35,19 @@ public class WishRepo {
         template.update(sql, u.getId(), wl.getName());
     }
 
-    public void addItem(Item i){
-        String sql = "INSERT INTO Items (Pname, price, URL) VALUES (?, ?, ?)";
-        template.update(sql, i.getName(), i.getPrice(), i.getItemUrl());
+    public void addItem(Wishlist wl, Item i){
+        String sql = "INSERT INTO Items (wishlistID, Pname, price, URL) VALUES (?, ?, ?, ?)";
+        template.update(sql, wl.getID(), i.getName(), i.getPrice(), i.getItemUrl());
     }
 
     public void addUser(User u){
-        String sql = "INSERT INTO Users (userID, username, user_password, email) VALUES (?, ?, ?)";
-        template.update(sql, u.getId(), u.getUsername(), u.getPassWord(), u.getEmail());
+        String sql = "INSERT INTO Users (username, user_password, email) VALUES (?, ?, ?)";
+        template.update(sql, u.getUsername(), u.getPassWord(), u.getEmail());
     }
 
-    public void updateWishlist(Wishlist wl, int wishlistID){
+    public void updateWishlist(Wishlist wl){
         String sql = "UPDATE Wishlist SET wishlist_name = ? WHERE wishlistID = ?";
-        template.update(sql, wl.getName(), wl.getID());
+        template.update(sql, wl.getName());
     }
 
 

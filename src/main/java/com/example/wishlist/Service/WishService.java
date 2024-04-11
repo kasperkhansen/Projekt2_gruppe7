@@ -107,16 +107,16 @@ public class WishService {
         repo.addWishlist(wl, u);
     }
 
-    public void addItem(Item i){
-        repo.addItem(i);
+    public void addItem(Wishlist wl, Item i){
+        repo.addItem(wl,i);
     }
 
     public void addUser(User u){
         repo.addUser(u);
     }
 
-    public void updateWishlist(Wishlist wl, int wishlistID){
-        repo.updateWishlist(wl, wishlistID);
+    public void updateWishlist(Wishlist wl){
+        repo.updateWishlist(wl);
     }
 
 }
