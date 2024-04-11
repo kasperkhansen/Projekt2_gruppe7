@@ -26,7 +26,7 @@ public class WishRepoTest {
 
     @Test
     public void testFetchAll() {
-        Item item1 = new Item("item1", 100.0, "url1", 1);
+        Item item1 = new Item("item1", 100.0, "url1");
         Item item2 = new Item("item2", 200.0, "url2");
 
         List<Item> expectedItems = Arrays.asList(item1, item2);

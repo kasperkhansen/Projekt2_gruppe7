@@ -82,9 +82,9 @@ public class WishService {
 
     public List<Item> getItems() {
         return new ArrayList<>((List.of(
-                new Item(1, "Milk", 100.0, "www.item1.dk"),
-                new Item(2, "Library", 200.0, "www.item2.dk"),
-                new Item(3, "Alpaca", 300.0, "www.item3.dk")
+                new Item("Milk", 100.0, "www.item1.dk"),
+                new Item("Library", 200.0, "www.item2.dk"),
+                new Item("Alpaca", 300.0, "www.item3.dk")
         )));
     }
     public List<Wishlist> getWishlists(int userID) {
