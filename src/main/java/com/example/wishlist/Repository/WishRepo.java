@@ -31,8 +31,8 @@ public class WishRepo {
     }
 
     public void addWishlist(Wishlist wl, User u){
-        String sql = "INSERT INTO Wishlist (wishlistID, userID, wishlist_name) VALUES (?, ?, ?)";
-        template.update(sql, wl.getID(), u.getId(), wl.getName());
+        String sql = "INSERT INTO Wishlist (userID, wishlist_name) VALUES (?, ?)";
+        template.update(sql, u.getId(), wl.getName());
     }
 
     public void addItem(Item i){
