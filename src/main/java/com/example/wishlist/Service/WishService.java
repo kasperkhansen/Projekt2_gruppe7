@@ -73,7 +73,7 @@ public class WishService {
     }
     public List<Wishlist> getWishlist(String userName) {
         for (User user : users) {
-            if(user.getUsername().equals(userName)) {
+            if(user.getName().equals(userName)) {
                 return user.getWishlists();
             }
         }

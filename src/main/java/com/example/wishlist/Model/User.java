@@ -102,7 +102,7 @@ public class User {
     public int getId() {
         return id;
     }
-    public String getUsername() {
+    public String getName() {
         return userName;
     }
     public void setUsername(String userName) {

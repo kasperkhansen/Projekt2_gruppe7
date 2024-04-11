@@ -42,7 +42,7 @@ public class WishRepo {
 
     public void addUser(User u){
         String sql = "INSERT INTO Users (username, user_password, email) VALUES (?, ?, ?)";
-        template.update(sql, u.getUsername(), u.getPassWord(), u.getEmail());
+        template.update(sql, u.getName(), u.getPassWord(), u.getEmail());
     }
 
     public void updateWishlist(Wishlist wl){
