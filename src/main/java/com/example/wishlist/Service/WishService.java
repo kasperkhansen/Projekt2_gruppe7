@@ -103,7 +103,9 @@ public class WishService {
         return repo.fetchAll();
     }
 
-    public void addWishlist(Wishlist wl, User u){
+    public void addWishlist(String wishlistName, int userId){
+        Wishlist wl = new Wishlist(wishlistName);
+        User u = new User(userId);
         repo.addWishlist(wl, u);
     }
 

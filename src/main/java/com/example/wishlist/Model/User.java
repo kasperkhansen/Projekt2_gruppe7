@@ -29,6 +29,10 @@ public class User {
 
     }
 
+    public User(int userId) {
+        this.id = userId;
+    }
+
     // ------------------- CRUD Methods for Wishlists
     // ------------------- Create Wishlist
     public void addWishlist (Wishlist newList){

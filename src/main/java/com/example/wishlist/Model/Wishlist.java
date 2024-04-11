@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Wishlist {
     private int wishlistID;
-    private final int id;
+    private int id;
     private int userID;
     private String wishlistName;
 
@@ -17,6 +17,10 @@ public class Wishlist {
         this.wishlistName = wishlistName;
         this.items = items;
         this.id = wishlistID;
+    }
+
+    public Wishlist(String wishlistName) {
+        this.wishlistName = wishlistName;
     }
 
     // ------------------- CRUD Methods for Items
