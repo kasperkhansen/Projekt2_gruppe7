@@ -17,6 +17,14 @@ public class Service {
     @Autowired
     private WishRepo repo;
 
+
+
+
+
+
+
+
+    // ------------------- Testing methods -------------------------
     List<User> users = new ArrayList<>((List.of(
             new User(1, "Jørgen", "1234", "1@mail.dk", getWishlistsJorgen()),
             new User(2, "Alma", "1234", "2@mail.dk", getWishlistsAlma())

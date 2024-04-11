@@ -25,6 +25,7 @@ public class HomeController {
         model.addAttribute("wishlists", service.getWishlists());
         model.addAttribute("items", service.getItems());
 
+
         return "startpage";
     }
 
