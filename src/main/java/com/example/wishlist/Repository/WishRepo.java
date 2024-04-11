@@ -31,7 +31,7 @@ public class WishRepo {
     }
 
     public void addWishlist(Wishlist wl, User u){
-        String sql = "INSERT INTO Wishlists (wishlistID, userID, wishlist_name)";
+        String sql = "INSERT INTO Wishlist (wishlistID, userID, wishlist_name) VALUES (?, ?, ?)";
         template.update(sql, wl.getID(), u.getId(), wl.getName());
     }
 
@@ -41,12 +41,12 @@ public class WishRepo {
     }
 
     public void addUser(User u){
-        String sql = "INSERT INTO Users (userID, username, user_password, email)";
+        String sql = "INSERT INTO Users (userID, username, user_password, email) VALUES (?, ?, ?)";
         template.update(sql, u.getId(), u.getUsername(), u.getPassWord(), u.getEmail());
     }
 
     public void updateWishlist(Wishlist wl, int wishlistID){
-        String sql = "UPDATE Wishlists SET wishlist_name = ? WHERE wishlistID = ?";
+        String sql = "UPDATE Wishlist SET wishlist_name = ? WHERE wishlistID = ?";
         template.update(sql, wl.getName(), wl.getID());
     }
 

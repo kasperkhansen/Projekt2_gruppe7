@@ -1,5 +1,5 @@
 CREATE DATABASE IF NOT EXISTS WishlistDB;
 
-GRANT ALL PRIVILEGES ON WishlistDB.* TO 'root'@'localhost';
+GRANT ALL PRIVILEGES ON WishlistDB.* TO '${MYSQL_USERNAME}'@'localhost';
 
 USE WishlistDB;

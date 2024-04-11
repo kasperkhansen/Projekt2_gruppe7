@@ -1,4 +1,4 @@
-package com.example.wishlist.Controller;
+/*package com.example.wishlist.Controller;
 
 import com.example.wishlist.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,3 +24,4 @@ public class UserController {
 
     // More request mappings here...
 }
+*/
