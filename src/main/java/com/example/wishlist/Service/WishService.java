@@ -5,27 +5,42 @@ import com.example.wishlist.Model.User;
 import com.example.wishlist.Model.Wishlist;
 import com.example.wishlist.Repository.WishRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-public class Service {
+@Service
+public class WishService {
 
     @Autowired
     private WishRepo repo;
 
 
 
+    public static void main(String[] args) {
+        WishService wishService = new WishService();
 
+        List<User> users = wishService.getUsers();
 
+        if (wishService.getRepo()==null){
+            System.out.println("Repo is null");
+        }
+        else{
+            System.out.println("Repo is not null");
+            wishService.getRepo().addUser(users.get(0));
+        }
+    }
 
+    public WishRepo getRepo() {
+        return this.repo;
+    }
 
 
     // ------------------- Testing methods -------------------------
-    List<User> users = new ArrayList<>((List.of(
+    public List<User> users = new ArrayList<>((List.of(
             new User(1, "Jørgen", "1234", "1@mail.dk", getWishlistsJorgen()),
             new User(2, "Alma", "1234", "2@mail.dk", getWishlistsAlma())
     )));
@@ -83,6 +98,26 @@ public class Service {
     }
     public List<Item> getItems(int wishlistID) {
         return getItems();
+    }
+
+    public List<Item> fetchAll(){
+        return repo.fetchAll();
+    }
+
+    public void addWishlist(Wishlist wl, User u){
+        repo.addWishlist(wl, u);
+    }
+
+    public void addItem(Item i){
+        repo.addItem(i);
+    }
+
+    public void addUser(User u){
+        repo.addUser(u);
+    }
+
+    public void updateWishlist(Wishlist wl, int wishlistID){
+        repo.updateWishlist(wl, wishlistID);
     }
 
 }

@@ -9,6 +9,13 @@ public class User {
     private String email;
     private List<Wishlist> wishlists;
 
+    // Constructor used when creating a new user
+    public User(String userName, String passWord, String email, List<Wishlist> wishlists) {
+        this.userName = userName;
+        this.passWord = passWord;
+        this.email = email;
+        this.wishlists = wishlists;
+    }
 
     public User(int id, String userName, String passWord, String email, List<Wishlist> wishlists){
         this.id = id;
@@ -16,6 +23,10 @@ public class User {
         this.passWord = passWord;
         this.email = email;
         this.wishlists = wishlists;
+    }
+
+    public User() {
+
     }
 
     // ------------------- CRUD Methods for Wishlists
@@ -107,4 +118,8 @@ public class User {
     }
     public List<Wishlist> getWishlists() { return wishlists; }
     public void setWishlists(List<Wishlist> updatedWishlists) { this.wishlists = updatedWishlists; }
+
+    public void setId(int i) {
+        this.id = i;
+    }
 }
