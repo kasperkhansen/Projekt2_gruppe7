@@ -99,14 +99,27 @@ public class WishService {
         return getItems();
     }
 
-    public List<Item> fetchAll(){
-        return repo.fetchAll();
+    public List<Item> fetchAllItems(){
+        return repo.fetchAllItems();
     }
 
-    public void addWishlist(String wishlistName, int userId){
+    public List<User> fetchAllUsers(){
+        return repo.fetchAllUsers();
+    }
+
+    public boolean checkUserExists(User u){
+        return repo.checkUserExists(u);
+    }
+
+    public void addWishlist(String wishlistName, int userId) {
         Wishlist wl = new Wishlist(wishlistName);
         User u = new User(userId);
-        repo.addWishlist(wl, u);
+        if (repo.checkUserExists(u) == true) {
+            repo.addWishlist(wl, u);
+        } else {
+            repo.addUser(u);
+            repo.addWishlist(wl, u);
+        }
     }
 
     public void addItem(Wishlist wl, Item i){
