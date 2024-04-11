@@ -17,6 +17,26 @@ public class WishService {
     @Autowired
     private WishRepo repo;
 
+    public void addUser(String userName){
+        User u = new User(userName);
+        repo.addUser(u);
+    }
+
+    public void addWishlist(String wishlistName, int userId){
+        Wishlist wl = new Wishlist(wishlistName);
+        User u = new User(userId);
+        repo.addWishlist(wl, u);
+    }
+
+    public List<User> getUsers() {
+        return repo.fetchAllUsers();
+    }
+
+
+
+
+    // --------------------------------------------------------------
+
 
 
     public static void main(String[] args) {
@@ -60,9 +80,7 @@ public class WishService {
         ));
     }
 
-    public List<User> getUsers() {
-        return users;
-    }
+
 
     public List<Wishlist> getWishlists() {
         List<Wishlist> allWishlists = new ArrayList<>();
@@ -99,23 +117,11 @@ public class WishService {
         return getItems();
     }
 
-    public List<Item> fetchAll(){
-        return repo.fetchAll();
-    }
-
-    public void addWishlist(String wishlistName, int userId){
-        Wishlist wl = new Wishlist(wishlistName);
-        User u = new User(userId);
-        repo.addWishlist(wl, u);
-    }
 
     public void addItem(Wishlist wl, Item i){
         repo.addItem(wl,i);
     }
 
-    public void addUser(User u){
-        repo.addUser(u);
-    }
 
     public void updateWishlist(Wishlist wl){
         repo.updateWishlist(wl);

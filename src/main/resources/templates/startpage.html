@@ -40,17 +40,12 @@
 
             </tbody>
         </div>
-        <div class="table-foot">
-            <tfoot>
-
-            <tr>
-                <td colspan="2">
-                    <button id="addUser">Add User</button>
-                </td>
-            </tr>
-            </tfoot>
-        </div>
     </table>
+    <form th:action="@{/user}" method="post">
+        <label for="userName">User Name:</label>
+        <input type="text" name="userName" id="userName" placeholder="New User Name">
+        <button type="submit">Add User</button>
+    </form>
 </div>
 </body>
 

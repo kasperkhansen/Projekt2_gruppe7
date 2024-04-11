@@ -10,6 +10,19 @@ public class User {
     private List<Wishlist> wishlists;
 
     // Constructor used when creating a new user
+
+    public User (String userName) {
+        this.userName = userName;
+    }
+
+    public User() {
+
+    }
+
+    public User(int userId) {
+        this.id = userId;
+    }
+
     public User(String userName, String passWord, String email, List<Wishlist> wishlists) {
         this.userName = userName;
         this.passWord = passWord;
@@ -25,13 +38,7 @@ public class User {
         this.wishlists = wishlists;
     }
 
-    public User() {
 
-    }
-
-    public User(int userId) {
-        this.id = userId;
-    }
 
     // ------------------- CRUD Methods for Wishlists
     // ------------------- Create Wishlist
