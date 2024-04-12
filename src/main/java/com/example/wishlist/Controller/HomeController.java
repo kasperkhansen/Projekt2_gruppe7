@@ -36,8 +36,11 @@ public class HomeController {
 
         // add user id to model
         if(user != null){
-            model.addAttribute("userId", user.getId());
+            model.addAttribute("userId", user.getUserID());
         }
+        System.out.println("User id: " + user.getUserID());
+
+
         model.addAttribute("wishlists", wishlists);
 
         return "userpage";

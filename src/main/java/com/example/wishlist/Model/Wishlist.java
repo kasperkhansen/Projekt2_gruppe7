@@ -5,23 +5,27 @@ import java.util.List;
 
 public class Wishlist {
     private int wishlistID;
-    private int id;
     private int userID;
-    private String wishlistName;
+    private String wishlist_name;
 
     List<Item> items;
 
-    public Wishlist(int wishlistID, int userID, String wishlistName, List<Item> items){
+    // load-from-table constructor
+    public Wishlist(int wishlistID, int userID, String wishlist_name, List<Item> items){
         this.wishlistID = wishlistID;
         this.userID = userID;
-        this.wishlistName = wishlistName;
+        this.wishlist_name = wishlist_name;
         this.items = items;
-        this.id = wishlistID;
     }
 
-    public Wishlist(String wishlistName) {
-        this.wishlistName = wishlistName;
+    public Wishlist () {}
+
+    public Wishlist(String wishlist_name) {
+        this.wishlist_name = wishlist_name;
     }
+
+
+
 
     // ------------------- CRUD Methods for Items
 
@@ -63,11 +67,11 @@ public class Wishlist {
 
     // ------------------- GET and SET
     public int getID() {
-        return id;
+        return wishlistID;
     }
 
     public String getName() {
-        return wishlistName;
+        return wishlist_name;
     }
 
     public int getWishlistID() {
@@ -86,12 +90,12 @@ public class Wishlist {
         this.userID = userID;
     }
 
-    public String getWishlistName() {
-        return wishlistName;
+    public String getWishlist_name() {
+        return wishlist_name;
     }
 
-    public void setWishlistName(String wishlistName) {
-        this.wishlistName = wishlistName;
+    public void setWishlist_name(String wishlist_name) {
+        this.wishlist_name = wishlist_name;
     }
 
     public List<Item> getItems() {

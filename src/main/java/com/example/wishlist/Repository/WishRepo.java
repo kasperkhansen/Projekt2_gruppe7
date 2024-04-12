@@ -43,6 +43,13 @@ public class WishRepo {
 
         // go through all users and fill them with their Wishlists and the Items of the wishlists, check for null
         for (User u : users){
+
+            System.out.println("DEBUG fetchAllUsers: ");
+            System.out.println("- "+u.getUserID());
+            System.out.println("- "+u.getName());
+            System.out.println("- "+u.getUser_password());
+            System.out.println("- "+u.getEmail());
+
             List<Wishlist> wishlists = fetchAllWishlistsFrom(u);
             for (Wishlist wl : wishlists){
                 List<Item> items = fetchAllItemsFrom(wl);
@@ -69,14 +76,13 @@ public class WishRepo {
     public List<Wishlist> fetchAllWishlistsFrom (User u){
         String sql = "SELECT * FROM Wishlists WHERE userID = ?";
         RowMapper<Wishlist> rowMapper = new BeanPropertyRowMapper<>(Wishlist.class);
-        return template.query(sql, rowMapper, u.getId());
+        return template.query(sql, rowMapper, u.getUserID());
     }
 
     public List<Item> fetchAllItemsFrom (Wishlist wl){
-        String wishlist_name = wl.getName();
-        String sql = "SELECT * FROM Items WHERE wishlist_name = ?";
+        String sql = "SELECT * FROM Items WHERE wishlistID = ?";
         RowMapper<Item> rowMapper = new BeanPropertyRowMapper<>(Item.class);
-        return template.query(sql, rowMapper, wl.getName());
+        return template.query(sql, rowMapper, wl.getWishlistID());
     }
 
 
@@ -89,17 +95,17 @@ public class WishRepo {
 
     public void addWishlist(Wishlist wl, User u){
         String sql = "INSERT INTO Wishlists (userID, wishlist_name) VALUES (?, ?)";
-        template.update(sql, u.getId(), wl.getName());
+        template.update(sql, u.getUserID(), wl.getName());
     }
 
     public void addItem(Wishlist wl, Item i){
         String sql = "INSERT INTO Items (wishlistID, Pname, price, URL) VALUES (?, ?, ?, ?)";
-        template.update(sql, wl.getID(), i.getName(), i.getPrice(), i.getItemUrl());
+        template.update(sql, wl.getID(), i.getName(), i.getPrice(), i.getURL());
     }
 
     public void addUser(User u){
         String sql = "INSERT INTO Users (username, user_password, email) VALUES (?, ?, ?)";
-        template.update(sql, u.getName(), u.getPassWord(), u.getEmail());
+        template.update(sql, u.getName(), u.getUser_password(), u.getEmail());
     }
 
     public void updateWishlist(Wishlist wl){

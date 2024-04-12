@@ -3,37 +3,37 @@ package com.example.wishlist.Model;
 import java.util.List;
 
 public class User {
-    public int id;
-    public String userName;
-    public String passWord;
+    public int userID;
+    public String username;
+    public String user_password;
     private String email;
     private List<Wishlist> wishlists;
 
     // Constructor used when creating a new user
 
-    public User (String userName) {
-        this.userName = userName;
+    public User (String username) {
+        this.username = username;
     }
 
     public User() {
-
     }
 
     public User(int userId) {
-        this.id = userId;
+        this.userID = userId;
     }
 
-    public User(String userName, String passWord, String email, List<Wishlist> wishlists) {
-        this.userName = userName;
-        this.passWord = passWord;
+    public User(String username, String user_password, String email, List<Wishlist> wishlists) {
+        this.username = username;
+        this.user_password = user_password;
         this.email = email;
         this.wishlists = wishlists;
     }
 
-    public User(int id, String userName, String passWord, String email, List<Wishlist> wishlists){
-        this.id = id;
-        this.userName = userName;
-        this.passWord = passWord;
+    // load-from-table constructor
+    public User(int userID, String username, String user_password, String email, List<Wishlist> wishlists){
+        this.userID = userID;
+        this.username = username;
+        this.user_password = user_password;
         this.email = email;
         this.wishlists = wishlists;
     }
@@ -79,7 +79,7 @@ public class User {
     // ------------------- Get Wishlist By Name(String listName)
     public Wishlist getWishlistByName(String wName) {
         for (Wishlist wishlist : wishlists) {
-            if (wishlist.getWishlistName().equals(wName)) {
+            if (wishlist.getWishlist_name().equals(wName)) {
                 return wishlist;
             }
         }
@@ -88,7 +88,7 @@ public class User {
 
     // ------------------- Update Wishlist
     public void updateWishlist(Wishlist updatedWishlist) {
-        int index = wishlists.indexOf(getWishlistByName(updatedWishlist.getWishlistName()));
+        int index = wishlists.indexOf(getWishlistByName(updatedWishlist.getWishlist_name()));
         wishlists.remove(index);
         wishlists.set(index, updatedWishlist);
     }
@@ -97,7 +97,7 @@ public class User {
     // ------------------- Delete Wishlist by name
     public void deleteWishlist(String name) {
         for (int i = 0; i < wishlists.size(); i++){
-            if (wishlists.get(i).getWishlistName().equals(name)) {
+            if (wishlists.get(i).getWishlist_name().equals(name)) {
                 wishlists.remove(i);
                 return;
             }
@@ -106,20 +106,21 @@ public class User {
     }
 
     // ------------------- GET and SET
-    public int getId() {
-        return id;
+    public int getId() { return userID; }
+    public int getUserID() {
+        return userID;
     }
     public String getName() {
-        return userName;
+        return username;
     }
     public void setUsername(String userName) {
-        this.userName = userName;
+        this.username = userName;
     }
-    public String getPassWord() {
-        return passWord;
+    public String getUser_password() {
+        return user_password;
     }
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public void setUser_password(String user_password) {
+        this.user_password = user_password;
     }
     public String getEmail() {
         return email;
@@ -130,7 +131,7 @@ public class User {
     public List<Wishlist> getWishlists() { return wishlists; }
     public void setWishlists(List<Wishlist> updatedWishlists) { this.wishlists = updatedWishlists; }
 
-    public void setId(int i) {
-        this.id = i;
+    public void setUserID(int i) {
+        this.userID = i;
     }
 }
