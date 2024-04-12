@@ -134,15 +134,14 @@ nav a:hover {
     /* Adjust your responsive styles here */
 }
 
-.image-button {
-    position: relative; /* No longer static, so it can be properly positioned in flexbox */
-    margin-right: auto; /* Pushes the button to the left */
-    background-image: url("assets/sky.png");
-    background-size: contain;
-    cursor: pointer;
+.image-button{
+    position: static;
+    border: none;
     width: 50px;
     height: 50px;
-    border: none;
+    background-image: url("assets/sky.png");
+    background-size: contain; /* Knappen er dækket */
+    cursor: pointer;
 }
 
 .homebuttonOgHeader{
