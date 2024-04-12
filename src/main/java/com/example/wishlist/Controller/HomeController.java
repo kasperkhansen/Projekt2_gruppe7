@@ -27,26 +27,28 @@ public class HomeController {
         return "startpage";
     }
 
+
     @GetMapping("/user/{userName}")
-    public String userPage(@PathVariable("userName") String userName, Model model) {
+    public String userPage(@PathVariable("userName") String username, Model model) {
 
-        // get Users and Wishlists
-        User user = wishService.getUserByUsername(userName);
+        // get User
+        User user = wishService.getUserByUsername(username);
 
-        System.out.println("DEBUG check getWishlistsFrom(userName):");
-        System.out.println("- userName: " + userName);
-        List<Wishlist> wishlists = wishService.getWishlistsFrom(userName);
-        System.out.println("- wishlists: " + wishlists);
-
-        // add user id to model
+        // check if User is not null and retrieve Wishlists
         if(user != null){
-            System.out.println("User:"+user);
-            System.out.println("User id: " + user.getUserID());
+            System.out.println(" User:"+user);
+            System.out.println(" User id: " + user.getUserID());
+
+            List<Wishlist> wishlists = user.getWishlists();
+            System.out.println("- wishlists from User object "+ user.getWishlists());
+
+            // add user id and wishlists to model
+            model.addAttribute("user", user);
             model.addAttribute("userId", user.getUserID());
+            model.addAttribute("wishlists", wishlists);
+
+
         }
-
-
-        model.addAttribute("wishlists", wishlists);
 
         return "userpage";
     }
@@ -64,23 +66,32 @@ public class HomeController {
 
 
     @GetMapping("/wishlist/{wishlistName}")
-    public String wishlistPage(@PathVariable("wishlistName") String wishlistName, Model model) {
+    public String wishlistPage(@PathVariable("wishlistName") String wishlistName, @RequestParam("userName") String userName, Model model) {
 
-        // wishService getItems - calls hardcoded data
-        List<Item> items = wishService.getItemsFromWishlist(wishlistName);
-        model.addAttribute("items", items);
+        // get wishlist and User
+        User user = wishService.getUserByUsername(userName);
+        Wishlist wishlist = wishService.getWishlistByName(wishlistName, user);
+
+        if(user != null && wishlist != null){
+            // wishService getItems - calls hardcoded data
+            List<Item> items = wishService.getItemsFromWishlist(wishlistName);
+
+            // add user and items to model
+            model.addAttribute("items", items);
+            model.addAttribute("user", user);
+        }
 
         return "wishlistpage";
     }
 
     @PostMapping("/wishlist")
-    public String addWishlist(@RequestParam("user") int userId, @RequestParam("wishlist_name") String wishlist_name) {
+    public String addWishlist(@RequestParam("username") String username, @RequestParam("wishlist_name") String wishlist_name) {
 
         // wishService addWishlist - calls database
-        wishService.addWishlist(userId, wishlist_name);
+        wishService.addWishlist(username, wishlist_name);
 
         //redirecting to the same user page after adding the wishlist
-        return "redirect:/user/" + userId;
+        return "redirect:/user/" + username;
     }
 
 

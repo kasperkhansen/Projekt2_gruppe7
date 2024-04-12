@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -34,9 +35,9 @@ public class WishService {
         repo.addUser(u);
     }
 
-    public void addWishlist(int userId, String wishlistName) {
+    public void addWishlist(String username, String wishlistName) {
         Wishlist wl = new Wishlist(wishlistName);
-        User u = new User(userId);
+        User u = new User(username);
 
         if (repo.checkUserExists(u) == true) {
             // user exists -> add wishlist
@@ -65,8 +66,12 @@ public class WishService {
     }
 
     public List<Wishlist> getWishlistsFrom(String userName) {
-        User u = new User(userName);
-        return repo.fetchAllWishlistsFrom(u);
+        User u = getUserByUsername(userName);
+        if (u != null) {
+            return repo.fetchAllWishlistsFrom(u);
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     public List<Item> getItems(){
@@ -101,6 +106,17 @@ public class WishService {
         for (User user : getUsers()) {
             if (user.getName().equals(userName) && user.getName() != null) {
                 return user;
+            }
+        }
+
+        return null;
+    }
+
+    public Wishlist getWishlistByName(String wishlistName, User user) {
+
+        for (Wishlist wl : getWishlistsFrom(user.getName())) {
+            if (wl.getName().equals(wishlistName)) {
+                return wl;
             }
         }
 
