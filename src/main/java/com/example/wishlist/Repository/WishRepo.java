@@ -67,7 +67,7 @@ public class WishRepo {
     }
 
     public List<Wishlist> fetchAllWishlistsFrom (User u){
-        String sql = "SELECT * FROM Wishlists WHERE username = ?";
+        String sql = "SELECT * FROM Wishlists WHERE userID = ?";
         RowMapper<Wishlist> rowMapper = new BeanPropertyRowMapper<>(Wishlist.class);
         return template.query(sql, rowMapper, u.getId());
     }
@@ -106,6 +106,7 @@ public class WishRepo {
         String sql = "UPDATE Wishlist SET wishlist_name = ? WHERE wishlistID = ?";
         template.update(sql, wl.getName());
     }
+
 
 
 }

@@ -24,16 +24,20 @@ public class HomeController {
         List<User> userList = wishService.getUsers();
         model.addAttribute("users", userList);
 
-
-
         return "startpage";
     }
 
     @GetMapping("/user/{userName}")
     public String userPage(@PathVariable("userName") String userName, Model model) {
 
-        // wishService getWishlist - calls hardcoded data
+        // get Users and Wishlists
+        User user = wishService.getUserByUsername(userName);
         List<Wishlist> wishlists = wishService.getWishlistsFrom(userName);
+
+        // add user id to model
+        if(user != null){
+            model.addAttribute("userId", user.getId());
+        }
         model.addAttribute("wishlists", wishlists);
 
         return "userpage";
@@ -65,7 +69,7 @@ public class HomeController {
     public String addWishlist(@RequestParam("user") int userId, @RequestParam("wishlistName") String wishlistName) {
 
         // wishService addWishlist - calls database
-        wishService.addWishlist(wishlistName, userId);
+        wishService.addWishlist(userId, wishlistName);
 
         //redirecting to the same user page after adding the wishlist
         return "redirect:/user/" + userId;

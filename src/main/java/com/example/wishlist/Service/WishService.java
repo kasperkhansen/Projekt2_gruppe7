@@ -24,7 +24,7 @@ public class WishService {
         repo.addUser(u);
     }
 
-    public void addWishlist(String wishlistName, int userId) {
+    public void addWishlist(int userId, String wishlistName) {
         Wishlist wl = new Wishlist(wishlistName);
         User u = new User(userId);
         if (repo.checkUserExists(u) == true) {
@@ -81,6 +81,17 @@ public class WishService {
 
     public WishRepo getRepo() {
         return this.repo;
+    }
+
+    public User getUserByUsername(String userName) {
+
+        for (User user : getUsers()) {
+            if (user.getName().equals(userName)) {
+                return user;
+            }
+        }
+
+        return null;
     }
 
 
