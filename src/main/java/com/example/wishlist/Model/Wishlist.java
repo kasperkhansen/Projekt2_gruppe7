@@ -105,6 +105,16 @@ public class Wishlist {
         this.items = items;
     }
 
+    // toString
+    @Override
+    public String toString() {
+        return "Wishlist{" +
+                "wishlistID=" + wishlistID +
+                ", userID=" + userID +
+                ", wishlist_name='" + wishlist_name + '\'' +
+                ", items=" + items +
+                '}';
+    }
 
 } //wishlist class
 

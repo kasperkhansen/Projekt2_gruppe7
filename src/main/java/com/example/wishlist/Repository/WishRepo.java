@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -40,11 +41,15 @@ public class WishRepo {
 
     public List<User> fetchAllUsers(){
         List<User> users = fetchAllUsersEmpty();
+        List<User> usersNotNull = new ArrayList<User>();
 
         // go through all users and fill them with their Wishlists and the Items of the wishlists, check for null
         for (User u : users){
 
-            System.out.println("DEBUG fetchAllUsers: ");
+            if (u.getName() == null) {
+                continue;
+            }
+
             System.out.println("- "+u.getUserID());
             System.out.println("- "+u.getName());
             System.out.println("- "+u.getUser_password());
@@ -56,9 +61,10 @@ public class WishRepo {
                 wl.setItems(items);
             }
             u.setWishlists(wishlists);
+            usersNotNull.add(u);
         }
 
-        return users;
+        return usersNotNull;
     }
 
     public List<User> fetchAllUsersEmpty(){
@@ -85,13 +91,7 @@ public class WishRepo {
         return template.query(sql, rowMapper, wl.getWishlistID());
     }
 
-
-    public boolean checkUserExists(User u){
-        String sql = "SELECT COUNT(*) FROM Users WHERE username = ?";
-        int count = template.queryForObject(sql, Integer.class, u.getName());
-
-        return count > 0;
-    }
+    // ------------------- Add methods -------------------
 
     public void addWishlist(Wishlist wl, User u){
         String sql = "INSERT INTO Wishlists (userID, wishlist_name) VALUES (?, ?)";
@@ -108,9 +108,27 @@ public class WishRepo {
         template.update(sql, u.getName(), u.getUser_password(), u.getEmail());
     }
 
+    // ------------------- Update methods -------------------
+
     public void updateWishlist(Wishlist wl){
         String sql = "UPDATE Wishlist SET wishlist_name = ? WHERE wishlistID = ?";
         template.update(sql, wl.getName());
+    }
+
+    // ------------------- Service methods
+
+
+    public boolean checkUserExists(User u){
+        String sql = "SELECT COUNT(*) FROM Users WHERE username = ?";
+
+        int count = template.queryForObject(sql, Integer.class, u.getName());
+        return count > 0;
+    }
+
+
+    public void cleanupUsers() {
+        String sql = "DELETE FROM Users WHERE username IS NULL";
+        template.update(sql);
     }
 
 

@@ -110,28 +110,45 @@ public class User {
     public int getUserID() {
         return userID;
     }
+    public void setUserID(int i) {
+        this.userID = i;
+    }
+
     public String getName() {
         return username;
     }
     public void setUsername(String userName) {
         this.username = userName;
     }
+
     public String getUser_password() {
         return user_password;
     }
     public void setUser_password(String user_password) {
         this.user_password = user_password;
     }
+
     public String getEmail() {
         return email;
     }
     public void setEmail(String email) {
         this.email = email;
     }
+
     public List<Wishlist> getWishlists() { return wishlists; }
     public void setWishlists(List<Wishlist> updatedWishlists) { this.wishlists = updatedWishlists; }
 
-    public void setUserID(int i) {
-        this.userID = i;
+
+
+    // tostring
+    @Override
+    public String toString() {
+        return "User{" +
+                "userID=" + userID +
+                ", username='" + username + '\'' +
+                ", user_password='" + user_password + '\'' +
+                ", email='" + email + '\'' +
+                ", wishlists=" + wishlists +
+                '}';
     }
 }

@@ -19,17 +19,30 @@ public class WishService {
 
 
     // ------------------- CRUD Methods for Users, Wishlist and Items
-    public void addUser(String userName){
-        User u = new User(userName);
+    public void addUser(String username){
+        // check if userName is null
+        if (username == null) {
+            return;
+        }
+
+        // check if user exists in database
+        if (repo.checkUserExists(new User(username)) == true) {
+            return;
+        }
+
+        User u = new User(username);
         repo.addUser(u);
     }
 
     public void addWishlist(int userId, String wishlistName) {
         Wishlist wl = new Wishlist(wishlistName);
         User u = new User(userId);
+
         if (repo.checkUserExists(u) == true) {
+            // user exists -> add wishlist
             repo.addWishlist(wl, u);
         } else {
+            // user does not exist -> add user and then wishlist
             repo.addUser(u);
             repo.addWishlist(wl, u);
         }
@@ -86,7 +99,7 @@ public class WishService {
     public User getUserByUsername(String userName) {
 
         for (User user : getUsers()) {
-            if (user.getName().equals(userName)) {
+            if (user.getName().equals(userName) && user.getName() != null) {
                 return user;
             }
         }

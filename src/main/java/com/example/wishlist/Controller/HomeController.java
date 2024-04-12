@@ -32,13 +32,18 @@ public class HomeController {
 
         // get Users and Wishlists
         User user = wishService.getUserByUsername(userName);
+
+        System.out.println("DEBUG check getWishlistsFrom(userName):");
+        System.out.println("- userName: " + userName);
         List<Wishlist> wishlists = wishService.getWishlistsFrom(userName);
+        System.out.println("- wishlists: " + wishlists);
 
         // add user id to model
         if(user != null){
+            System.out.println("User:"+user);
+            System.out.println("User id: " + user.getUserID());
             model.addAttribute("userId", user.getUserID());
         }
-        System.out.println("User id: " + user.getUserID());
 
 
         model.addAttribute("wishlists", wishlists);
@@ -69,10 +74,10 @@ public class HomeController {
     }
 
     @PostMapping("/wishlist")
-    public String addWishlist(@RequestParam("user") int userId, @RequestParam("wishlistName") String wishlistName) {
+    public String addWishlist(@RequestParam("user") int userId, @RequestParam("wishlist_name") String wishlist_name) {
 
         // wishService addWishlist - calls database
-        wishService.addWishlist(userId, wishlistName);
+        wishService.addWishlist(userId, wishlist_name);
 
         //redirecting to the same user page after adding the wishlist
         return "redirect:/user/" + userId;
