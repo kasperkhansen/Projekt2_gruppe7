@@ -2,12 +2,12 @@ package com.example.wishlist.Model;
 
 public class Item {
     private int wishlistID;
-    private String Pname;
+    private String itemName;
     private double price;
     private String URL;
 
-    public Item(String Pname, double price, String URL){
-        this.Pname = Pname;
+    public Item(String itemName, double price, String URL){
+        this.itemName = itemName;
         this.price = price;
         this.URL = URL;
     }
@@ -17,9 +17,9 @@ public class Item {
     }
 
     // load-from-table constructor
-    public Item(int wishlistID, String Pname, double price, String URL){
+    public Item(int wishlistID, String itemName, double price, String URL){
         this.wishlistID = wishlistID;
-        this.Pname = Pname;
+        this.itemName = itemName;
         this.price = price;
         this.URL = URL;
     }
@@ -29,13 +29,20 @@ public class Item {
 
         // get and set for thymeleaf calls on the html pages in ID and Name
     public int getWishlistID() {
+        System.out.println("DEBUG getWishlistID()");
+        System.out.println("- "+ wishlistID);
         return wishlistID;
     }
-    public String getName() {
-        return Pname;
+    public void setWishlistID(int wishlistID) {
+        this.wishlistID = wishlistID;
     }
-    public void setName(String name) {
-        this.Pname = name;
+    public String getItemName() {
+        System.out.println("DEBUG getItemName()");
+        System.out.println("- "+ itemName);
+        return itemName;
+    }
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
     public double getPrice() {
         return price;
@@ -50,4 +57,13 @@ public class Item {
         this.URL = URL;
     }
 
+    @Override
+    public String toString() {
+        return "Item{" +
+                "wishlistID=" + wishlistID +
+                ", itemName='" + itemName + '\'' +
+                ", price=" + price +
+                ", URL='" + URL + '\'' +
+                '}';
+    }
 } //item class

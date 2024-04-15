@@ -90,12 +90,23 @@ table {
     margin: 0 auto;
 }
 
+
 table, th, td {
     border: 1px solid white;
 }
 
 table td {
     background-color: var(--table-cell-color);
+}
+
+.table-column-titles {
+    font-weight: bold;
+    background-color: grey;
+    color: black;
+}
+
+.item-row {
+    color: blue; /* adjust as needed */
 }
 
 nav {
@@ -150,3 +161,4 @@ nav a:hover {
     justify-content: space-between; /* This pushes the button to the left and the title to the center */
     align-items: center;
 }
+

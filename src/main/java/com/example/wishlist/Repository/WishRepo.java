@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +37,6 @@ public class WishRepo {
 
     // ------------------- Fetch methods -------------------
 
-
-    public List<Item> fetchAllItems (){
-        String sql = "SELECT * FROM Items";
-        RowMapper<Item> rowMapper = new BeanPropertyRowMapper<>(Item.class);
-        return template.query(sql, rowMapper);
-    }
 
         // ------------------- Get methods -------------------
 
@@ -99,8 +94,30 @@ public class WishRepo {
 
     public List<Item> fetchAllItemsFrom (Wishlist wl){
         String sql = "SELECT * FROM Items WHERE wishlistID = ?";
-        RowMapper<Item> rowMapper = new BeanPropertyRowMapper<>(Item.class);
-        return template.query(sql, rowMapper, wl.getWishlistID());
+        return template.query(sql, new RowMapper<Item>() {
+            public Item mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Item item = new Item();
+                item.setWishlistID(rs.getInt("wishlistID"));
+                item.setItemName(rs.getString("itemName"));
+                item.setPrice(rs.getDouble("price"));
+                item.setURL(rs.getString("URL"));
+                return item;
+            } // using mapRow instead of BeanPropertyRowMapper, since had trouble loading wishlistID
+        }, wl.getWishlistID());
+    }
+
+    public List<Item> fetchAllItems (){
+        String sql = "SELECT * FROM Items";
+        return template.query(sql, new RowMapper<Item>() {
+            public Item mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Item item = new Item();
+                item.setWishlistID(rs.getInt("wishlistID"));
+                item.setItemName(rs.getString("itemName"));
+                item.setPrice(rs.getDouble("price"));
+                item.setURL(rs.getString("URL"));
+                return item;
+            }
+        });
     }
 
     // ------------------- Add methods -------------------
@@ -111,8 +128,8 @@ public class WishRepo {
     }
 
     public void addItem(Wishlist wl, Item i){
-        String sql = "INSERT INTO Items (wishlistID, Pname, price, URL) VALUES (?, ?, ?, ?)";
-        template.update(sql, wl.getID(), i.getName(), i.getPrice(), i.getURL());
+        String sql = "INSERT INTO Items (wishlistID, itemName, price, URL) VALUES (?, ?, ?, ?)";  //update here
+        template.update(sql, wl.getID(), i.getItemName(), i.getPrice(), i.getURL());
     }
 
     public void addUser(User u){

@@ -67,8 +67,8 @@ public class HomeController {
 
 
 
-    @GetMapping("/wishlist/{wishlistName}")
-    public String wishlistPage(@PathVariable("wishlistName") String wishlistName, @RequestParam("userName") String userName, Model model) {
+    @GetMapping("/{userName}/wishlist/{wishlistName}")
+    public String wishlistPage(@PathVariable("userName") String userName, @PathVariable("wishlistName") String wishlistName, Model model) {
 
         // get wishlist and User
         User user = wishService.getUserByUsername(userName);
@@ -76,7 +76,7 @@ public class HomeController {
 
         if(user != null && wishlist != null){
             // wishService getItems - calls hardcoded data
-            List<Item> items = wishService.getItemsFromWishlist(wishlistName);
+            List<Item> items = wishService.getItemsFromWishlist(wishlist);
 
             // add user and items to model
             model.addAttribute("items", items);
@@ -100,6 +100,21 @@ public class HomeController {
 
         //redirecting to the same user page after adding the wishlist
         return "redirect:/user/" + username;
+    }
+
+    @PostMapping("/item")
+    public String addItem(@RequestParam("username") String username,
+                          @RequestParam("wishlist_name") String wishlist_name,
+                          @RequestParam("Pname") String item_name,
+                          @RequestParam("price") Double item_price,
+                          @RequestParam("URL") String item_url,
+                          Model model) {
+
+        // You will need to add a new item to user's specific wishlist here
+        wishService.addItem(username, wishlist_name, item_name, item_price, item_url);
+
+        // After adding the item, redirect back to the wishlist page.
+        return "redirect:/" + username + "/wishlist/" + wishlist_name;
     }
 
 

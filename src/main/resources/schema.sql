@@ -14,10 +14,9 @@ CREATE TABLE if not exists Wishlists(
     FOREIGN KEY (userID) REFERENCES users(userID)
 );
 
-
 CREATE TABLE if not exists Items(
     wishlistID int,
-    Pname VARCHAR(100) PRIMARY KEY,
+    itemName VARCHAR(100) PRIMARY KEY,
     price DOUBLE,
     URL VARCHAR(255),
     FOREIGN KEY (wishlistID) REFERENCES wishlists(wishlistID)

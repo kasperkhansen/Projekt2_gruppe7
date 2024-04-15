@@ -27,12 +27,12 @@
 <div class = "table">
     <table>
         <tr th:each="wishlist : ${wishlists}">
-            <td><a th:href="@{'/wishlist/' + ${wishlist.name}}" th:text="${wishlist.name}">Wishlist name</a></td>
+            <td><a th:href="@{'/' + ${user.name} + '/wishlist/' + ${wishlist.name}}" th:text="${wishlist.name}">Wishlist name</a></td>
 
 
             <!-- Start Nested Iteration over Wishlist items -->
             <th:block th:each="item : ${wishlist.items}">
-                <td th:text="${item.name}"></td>
+                <td th:text="${item.itemName}"></td>
                 <!-- Replace the property 'name' with actual attribute names to be displayed -->
                 <td>[Other item data...]</td>
             </th:block>

@@ -42,7 +42,7 @@ public class Wishlist {
     // ------------------- Search for Item by name
     public Item getItemByName(String name){
         for (Item item : items){
-            if (item.getName().equals(name)){
+            if (item.getItemName().equals(name)){
                 return item;
             }
         }
@@ -52,7 +52,7 @@ public class Wishlist {
     // ------------------- Update Item
     public void updateItem (Item updatedItem) {
         for (int i = 0 ; i < items.size(); i++) {
-            if (items.get(i).getName().equals(updatedItem.getName())){
+            if (items.get(i).getItemName().equals(updatedItem.getItemName())){
                 items.set(i, updatedItem);
                 return;
             }
@@ -60,7 +60,7 @@ public class Wishlist {
     }
     // ------------------- Delete Item
     public void deleteItem(String name) {
-        items.removeIf(item -> item.getName().equals(name));
+        items.removeIf(item -> item.getItemName().equals(name));
     }
 
 

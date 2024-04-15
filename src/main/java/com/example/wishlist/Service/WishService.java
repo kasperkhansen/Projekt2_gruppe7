@@ -53,9 +53,9 @@ public class WishService {
         }
     }
 
-    public void addItem(String itemName, double price, String url, String wishlistName) {
+    public void addItem(String username, String wishlistName, String itemName, double price, String url) {
         Item i = new Item(itemName, price, url);
-        Wishlist wl = new Wishlist(wishlistName);
+        Wishlist wl = getWishlistByName(wishlistName, getUserByUsername(username));
         repo.addItem(wl, i);
     }
 
@@ -82,9 +82,12 @@ public class WishService {
         return repo.fetchAllItems();
     }
 
-    public List<Item> getItemsFromWishlist(String wishlistName) {
-        Wishlist wl = new Wishlist(wishlistName);
-        return repo.fetchAllItemsFrom(wl);
+    public List<Item> getItemsFromWishlist(Wishlist wishlist) {
+        Wishlist wl = wishlist;
+        List<Item> items = repo.fetchAllItemsFrom(wl);
+        System.out.println("DEBUG getItemsFromWishlist");
+        System.out.println("Items: " + items);
+        return items;
     }
 
 
@@ -162,7 +165,7 @@ public class WishService {
     }
     public List<Wishlist> getWishlistTest(String userName) {
         for (User user : users) {
-            if(user.getName().equals(userName)) {
+            if(user.getItemName().equals(userName)) {
                 return user.getWishlists();
             }
         }

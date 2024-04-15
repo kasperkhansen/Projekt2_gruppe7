@@ -22,15 +22,39 @@
 </header>
 
 <body class="body">
-<h2 th:text="${user.name} + '\'s wishlists'">Default header</h2>
+<h2 th:text="${user.name} + '\'s wishlist:'">Default header</h2>
+<h2 th:text="${wishlistName}">Wishlist name</h2>
 
 <div class = "table">
     <table>
-        <tr th:each="item : ${items}">
-            <td><a th:href="@{'/item/' + ${item.ID}}" th:text="${item.name}">Wishlist name</a></td>
-            <td>[Other wishlist data...]</td>
+        <tr>
+            <div class = "table-column-titles">
+                <th> </th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>URL</th>
+            </div>
+        </tr>
+        <tr th:each="item, iterStat: ${items}" class="item-row">
+            <td th:text="${iterStat.count}"></td>
+            <td th:text="${item.itemName}"></td>
+            <td th:text="${item.price}"></td>
+            <td><a th:href="${item.URL}" th:text="${item.URL}">Item link</a></td>
         </tr>
     </table>
+
+    <form th:action="@{/item}" method="post">
+
+        <input type="hidden" name="username" id="username" th:value="${user.name}">
+        <input type="hidden" name="wishlist_name" id="wishlist_name" th:value="${wishlistName}">
+
+        <label for="itemName">new Item:</label>
+
+        <input type="text" name="itemName" id="itemName" placeholder="New Item Name">
+        <input type="text" name="price" id="price" placeholder="New Item Price">
+        <input type="text" name="URL" id="URL" placeholder="New Item URL">
+        <button type="submit">Add Item</button>
+    </form>
 </div>
 </body>
 
