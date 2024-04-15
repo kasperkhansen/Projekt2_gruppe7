@@ -33,10 +33,22 @@ public class WishRepo {
     }
     // save, load, delete, update User, wishlist, item
 
+
+    // ------------------- Fetch methods -------------------
+
+
     public List<Item> fetchAllItems (){
         String sql = "SELECT * FROM Items";
         RowMapper<Item> rowMapper = new BeanPropertyRowMapper<>(Item.class);
         return template.query(sql, rowMapper);
+    }
+
+        // ------------------- Get methods -------------------
+
+    public User getUser(String username){
+        String sql = "SELECT * FROM Users WHERE username = ?";
+        RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
+        return template.queryForObject(sql, rowMapper, username);
     }
 
     public List<User> fetchAllUsers(){

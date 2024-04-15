@@ -37,7 +37,11 @@ public class WishService {
 
     public void addWishlist(String username, String wishlistName) {
         Wishlist wl = new Wishlist(wishlistName);
-        User u = new User(username);
+        User u = repo.getUser(username);
+
+        System.out.println("DEBUG addWishlist");
+        System.out.println("User: " + u);
+        System.out.println("Wishlist: " + wl);
 
         if (repo.checkUserExists(u) == true) {
             // user exists -> add wishlist

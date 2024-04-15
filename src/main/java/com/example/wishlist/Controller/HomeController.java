@@ -10,8 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+// frontend vscode
+// backend intellij
 
-@RestController
+@Controller
 public class HomeController {
 
     @Autowired
@@ -86,6 +88,12 @@ public class HomeController {
 
     @PostMapping("/wishlist")
     public String addWishlist(@RequestParam("username") String username, @RequestParam("wishlist_name") String wishlist_name) {
+
+        // debug addWishlist POST
+        System.out.println("DEBUG addWishlist POST method");
+        System.out.println("username: " + username);
+        System.out.println("wishlist_name: " + wishlist_name);
+        System.out.println();
 
         // wishService addWishlist - calls database
         wishService.addWishlist(username, wishlist_name);
