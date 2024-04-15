@@ -26,14 +26,16 @@
 <h2 th:text="${wishlistName}">Wishlist name</h2>
 
 <div class = "table">
-    <table>
-        <tr>
-            <div class = "table-column-titles">
-                <th> </th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>URL</th>
-            </div>
+    <div th:if="${items.isEmpty()}">
+        <p>Your wishlist is currently empty.</p>
+    </div>
+
+    <table th:unless="${items.isEmpty()}">
+        <tr class="table-column-titles">
+            <th> </th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>URL</th>
         </tr>
         <tr th:each="item, iterStat: ${items}" class="item-row">
             <td th:text="${iterStat.count}"></td>

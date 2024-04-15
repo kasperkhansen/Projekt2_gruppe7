@@ -105,7 +105,7 @@ public class HomeController {
     @PostMapping("/item")
     public String addItem(@RequestParam("username") String username,
                           @RequestParam("wishlist_name") String wishlist_name,
-                          @RequestParam("Pname") String item_name,
+                          @RequestParam("itemName") String item_name,
                           @RequestParam("price") Double item_price,
                           @RequestParam("URL") String item_url,
                           Model model) {

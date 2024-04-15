@@ -63,7 +63,6 @@ public class WishService {
 
 
     public void addItem(String username, String wishlistName, String itemName, double price, String url) {
-
         Item i = new Item(itemName, price, url);
         Wishlist wl = getWishlistByName(wishlistName, getUserByUsername(username));
         repo.addItem(wl, i);
