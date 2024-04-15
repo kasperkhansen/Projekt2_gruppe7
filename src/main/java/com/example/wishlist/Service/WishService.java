@@ -47,13 +47,23 @@ public class WishService {
             // user exists -> add wishlist
             repo.addWishlist(wl, u);
         } else {
-            // user does not exist -> add user and then wishlist
-            repo.addUser(u);
-            repo.addWishlist(wl, u);
-        }
+
+            // does our user have a name in the database
+            if (username != null && !username.isEmpty()) {
+                // Posible to insert a frontend comment
+                System.out.println("The user does not exist in the repository");
+            } else {
+                repo.addUser(new User(username));
+                repo.addWishlist(wl, u);
+            }
+
+
+            }
     }
 
+
     public void addItem(String username, String wishlistName, String itemName, double price, String url) {
+
         Item i = new Item(itemName, price, url);
         Wishlist wl = getWishlistByName(wishlistName, getUserByUsername(username));
         repo.addItem(wl, i);
