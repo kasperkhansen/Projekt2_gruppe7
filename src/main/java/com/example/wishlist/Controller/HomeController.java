@@ -26,7 +26,7 @@ public class HomeController {
         List<User> userList = wishService.getUsers();
         model.addAttribute("users", userList);
 
-        return "startpage";
+        return "home";
     }
 
 
