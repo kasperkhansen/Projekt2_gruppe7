@@ -57,7 +57,7 @@ public class WishRepo {
                 continue;
             }
 
-            System.out.println("- "+u.getUserID());
+            System.out.println("- "+u.getID());
             System.out.println("- "+u.getName());
             System.out.println("- "+u.getUser_password());
             System.out.println("- "+u.getEmail());
@@ -87,9 +87,9 @@ public class WishRepo {
     }
 
     public List<Wishlist> fetchAllWishlistsFrom (User u){
-        String sql = "SELECT * FROM Wishlists WHERE userID = ?";
+        String sql = "SELECT * FROM Wishlists WHERE ID = ?";
         RowMapper<Wishlist> rowMapper = new BeanPropertyRowMapper<>(Wishlist.class);
-        return template.query(sql, rowMapper, u.getUserID());
+        return template.query(sql, rowMapper, u.getID());
     }
 
     public List<Item> fetchAllItemsFrom (Wishlist wl){
@@ -123,8 +123,8 @@ public class WishRepo {
     // ------------------- Add methods -------------------
 
     public void addWishlist(Wishlist wl, User u){
-        String sql = "INSERT INTO Wishlists (userID, wishlist_name) VALUES (?, ?)";
-        template.update(sql, u.getUserID(), wl.getName());
+        String sql = "INSERT INTO Wishlists (ID, wishlist_name) VALUES (?, ?)";
+        template.update(sql, u.getID(), wl.getName());
     }
 
     public void addItem(Wishlist wl, Item i){

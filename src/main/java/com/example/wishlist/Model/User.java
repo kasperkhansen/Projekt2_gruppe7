@@ -3,11 +3,12 @@ package com.example.wishlist.Model;
 import java.util.List;
 
 public class User {
-    public int userID;
+    public int ID;
     public String username;
     public String user_password;
     private String email;
     private List<Wishlist> wishlists;
+
 
     // Constructor used when creating a new user
 
@@ -19,7 +20,7 @@ public class User {
     }
 
     public User(int userId) {
-        this.userID = userId;
+        this.ID = userId;
     }
 
     public User(String username, String user_password, String email, List<Wishlist> wishlists) {
@@ -30,8 +31,8 @@ public class User {
     }
 
     // load-from-table constructor
-    public User(int userID, String username, String user_password, String email, List<Wishlist> wishlists){
-        this.userID = userID;
+    public User(int ID, String username, String user_password, String email, List<Wishlist> wishlists){
+        this.ID = ID;
         this.username = username;
         this.user_password = user_password;
         this.email = email;
@@ -106,12 +107,11 @@ public class User {
     }
 
     // ------------------- GET and SET
-    public int getId() { return userID; }
-    public int getUserID() {
-        return userID;
+    public int getID() {
+        return ID;
     }
-    public void setUserID(int i) {
-        this.userID = i;
+    public void setID(int id) {
+        this.ID = id;
     }
 
     public String getName() {
@@ -144,7 +144,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userID=" + userID +
+                "ID=" + ID +
                 ", username='" + username + '\'' +
                 ", user_password='" + user_password + '\'' +
                 ", email='" + email + '\'' +

@@ -13,7 +13,6 @@ public class Item {
     }
 
     public Item() {
-
     }
 
     // load-from-table constructor

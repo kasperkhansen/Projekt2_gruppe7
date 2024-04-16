@@ -39,14 +39,14 @@ public class HomeController {
         // check if User is not null and retrieve Wishlists
         if(user != null){
             System.out.println(" User:"+user);
-            System.out.println(" User id: " + user.getUserID());
+            System.out.println(" User id: " + user.getID());
 
             List<Wishlist> wishlists = user.getWishlists();
             System.out.println("- wishlists from User object "+ user.getWishlists());
 
             // add user id and wishlists to model
             model.addAttribute("user", user);
-            model.addAttribute("userId", user.getUserID());
+            model.addAttribute("userId", user.getID());
             model.addAttribute("wishlists", wishlists);
 
 

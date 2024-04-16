@@ -110,7 +110,7 @@ public class Wishlist {
     public String toString() {
         return "Wishlist{" +
                 "wishlistID=" + wishlistID +
-                ", userID=" + userID +
+                ", ID=" + userID +
                 ", wishlist_name='" + wishlist_name + '\'' +
                 ", items=" + items +
                 '}';

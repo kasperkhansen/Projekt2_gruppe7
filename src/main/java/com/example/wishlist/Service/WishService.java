@@ -181,9 +181,9 @@ public class WishService {
         return null;
     }
 
-    public List<Wishlist> getWishlistsTest(int userID) {
+    public List<Wishlist> getWishlistsTest(int ID) {
         for (User user : users) {
-            if (user.getId()==userID) {
+            if (user.getId()==ID) {
                 return user.getWishlists();
             }
         }
