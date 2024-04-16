@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 // frontend vscode
 // backend intellij
 
@@ -54,16 +56,15 @@ public class HomeController {
     }
 
     @PostMapping("/user")
-    public String addUser(@RequestParam("userName") String userName) {
-
-        // wishService addUser - calls database
-        wishService.addUser(userName);
-
-        //redirecting to the same user page after adding the user
+    public String addUser(@RequestParam("userName") String userName, RedirectAttributes redirectAttributes) {
+        try {
+            wishService.addUser(userName);
+            redirectAttributes.addFlashAttribute("success", "User added successfully");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Failed to add user");
+        }
         return "redirect:/home";
     }
-
-
 
     @GetMapping("/{userName}/wishlist/{wishlistName}")
     public String wishlistPage(@PathVariable("userName") String userName, @PathVariable("wishlistName") String wishlistName, Model model) {
@@ -84,35 +85,41 @@ public class HomeController {
         return "wishlistpage";
     }
 
+
+
     @PostMapping("/wishlist")
-    public String addWishlist(@RequestParam("userName") String userName, @RequestParam("wishlistName") String wishlistName) {
-
-        // debug addWishlist POST
-        System.out.println("DEBUG addWishlist POST method");
-        System.out.println("name: " + userName);
-        System.out.println("wishlist_name: " + wishlistName);
-        System.out.println();
-
-        // wishService addWishlist - calls database
-        wishService.addWishlist(userName, wishlistName);
-
-        //redirecting to the same user page after adding the wishlist
+    public String addWishlist(
+            @RequestParam("userName") String userName,
+            @RequestParam("wishlistName") String wishlistName,
+            RedirectAttributes redirectAttributes) {
+        // Validate wishlistName doesn't include special characters like æ, ø, å
+        if (!wishlistName.matches("[a-zA-Z0-9 ]+")) {
+            redirectAttributes.addFlashAttribute("error", "Invalid characters in the wishlist name");
+        } else {
+            try {
+                wishService.addWishlist(userName, wishlistName);
+                redirectAttributes.addFlashAttribute("success", "Wishlist added successfully");
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("error", "Failed to add wishlist");
+            }
+        }
         return "redirect:/user/" + userName;
     }
 
     @PostMapping("/item")
     public String addItem(@RequestParam("userName") String userName,
-                          @RequestParam("wishlist_name") String wishlist_name,
-                          @RequestParam("itemName") String item_name,
-                          @RequestParam("price") Double item_price,
-                          @RequestParam("URL") String item_url,
-                          Model model) {
-
-        // You will need to add a new item to user's specific wishlist here
-        wishService.addItem(userName, wishlist_name, item_name, item_price, item_url);
-
-        // After adding the item, redirect back to the wishlist page.
-        return "redirect:/" + userName + "/wishlist/" + wishlist_name;
+                          @RequestParam("wishlistName") String wishlistName,
+                          @RequestParam("itemName") String itemName,
+                          @RequestParam("price") Double price,
+                          @RequestParam("URL") String URL,
+                          RedirectAttributes redirectAttributes) {
+        try {
+            wishService.addItem(userName, wishlistName, itemName, price, URL);
+            redirectAttributes.addFlashAttribute("success", "Item added successfully");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Failed to add item");
+        }
+        return "redirect:/" + userName + "/wishlist/" + wishlistName;
     }
 
 

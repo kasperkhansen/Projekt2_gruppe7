@@ -68,7 +68,8 @@ public class User {
 
     public void updateWishlist(Wishlist updatedWishlist) {
         // wishlist name is unique
-        // -> find the index of the old wishlist to update using name,
+        // -> find the index of the old wishlist to update using name
+
         int index = wishlists.indexOf(updatedWishlist.getName());
         wishlists.remove(index);
         wishlists.set(index, updatedWishlist);

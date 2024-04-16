@@ -3,6 +3,14 @@
     --secondary-color: #ffffff; /* White */
     --table-cell-color: #e9ecef; /* A light grey for table cells */
     --button-hover-color: #0056b3; /* A darker blue for button hover state */
+
+    --error-message-color: #a94442; /* A lighter red for error messages */
+    --error-message-background-color: #f8d7da;
+    --error-message-border-color: #f5c6cb;
+
+    --success-message-color: #3c763d; /* A lighter green for success messages */
+    --success-message-background-color: #dff0d8;
+    --success-message-border-color: #d6e9c6;
 }
 
 body, h1, h2, h1, h2, h3, h4, h5, h6, button, a {
@@ -173,3 +181,46 @@ nav a:hover {
     align-items: center;
 }
 
+.notifications {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    font-weight: bold;
+    text-align: center;
+    width: 250px; /* specify width as per your requirement */
+    animation: fadeout 5s ease-in-out forwards;
+}
+
+.notifications .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: .75rem 1.25rem;
+    color: inherit;
+    background-color: transparent;
+    border: 0;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+
+.error-message {
+    color: #a94442;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.success-message {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+@keyframes fadeout {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+}

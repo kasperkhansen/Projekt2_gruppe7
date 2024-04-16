@@ -21,6 +21,9 @@
         </nav>
     </header>
 
+<h3 th:if="${error}" th:class="'error-message'" th:text="${error}" class='notifications'><button class="close">x</button></h3>
+<h3 th:if="${success}" th:class="'success-message'" th:text="${success}" class='notifications'><button class="close">x</button></h3>
+
 <body class="body">
 <h2>User List</h2>
 
@@ -49,6 +52,7 @@
             </tbody>
         </div>
     </table>
+
 
     <form th:action="@{/user}" method="post">
         <label for="userName">User Name:</label>

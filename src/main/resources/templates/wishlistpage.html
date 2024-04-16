@@ -44,6 +44,8 @@
             <td><a th:href="${item.URL}" th:text="${item.URL}">Item link</a></td>
         </tr>
     </table>
+    <p th:if="${error}" th:text="${error}" class="error-message"></p>
+    <p th:if="${success}" th:text="${success}" class="success-message"></p>
 
     <form th:action="@{/item}" method="post">
 

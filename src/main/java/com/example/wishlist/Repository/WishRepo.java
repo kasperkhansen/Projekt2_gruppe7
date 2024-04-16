@@ -50,7 +50,7 @@ public class WishRepo {
         List<User> users = fetchAllUsersEmpty();
         List<User> usersNotNull = new ArrayList<User>();
 
-        System.out.println("DEBUG fetchAllUsers");
+        // System.out.println("DEBUG fetchAllUsers");
 
         // go through all users and fill them with their Wishlists and the Items of the wishlists, check for null
         for (User u : users){
@@ -59,22 +59,25 @@ public class WishRepo {
                 continue;
             }
 
+            /*
             System.out.println("- ID = "+u.getID());
             System.out.println("- name = "+u.getName());
             System.out.println("- password = "+u.getUserPassword());
             System.out.println("- email = "+u.getEmail());
+
+             */
 
             List<Wishlist> wishlists = fetchAllWishlistsFrom(u);
             for (Wishlist wl : wishlists){
                 List<Item> items = fetchAllItemsFrom(wl);
                 wl.setItems(items);
             }
-            System.out.println("- "+wishlists);
+            // System.out.println("- "+wishlists);
             u.setWishlists(wishlists);
             usersNotNull.add(u);
         }
 
-        System.out.println("DEBUG fetchAllUsers end");
+        // System.out.println("DEBUG fetchAllUsers end");
 
         return usersNotNull;
     }
@@ -143,7 +146,10 @@ public class WishRepo {
     }
 
     public void addUser(User u){
+        System.out.println("DEBUG repo.addUser()");
         String sql = "INSERT INTO Users (name, user_password, email) VALUES (?, ?, ?)";
+        System.out.println("SQL Command: "+ sql +", Parameters: name=" + u.getName() + ", password=" + u.getUserPassword() + ", email=" + u.getEmail());
+        System.out.println("DEBUG repo.addUser() end\n");
         template.update(sql, u.getName(), u.getUserPassword(), u.getEmail());
     }
 
@@ -158,7 +164,7 @@ public class WishRepo {
 
 
     public boolean checkUserExists(User u){
-        String sql = "SELECT COUNT(*) FROM Users WHERE username = ?";
+        String sql = "SELECT COUNT(*) FROM Users WHERE name = ?";
 
         int count = template.queryForObject(sql, Integer.class, u.getName());
         return count > 0;
