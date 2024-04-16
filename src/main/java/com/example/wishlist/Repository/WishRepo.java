@@ -40,10 +40,10 @@ public class WishRepo {
 
         // ------------------- Get methods -------------------
 
-    public User getUser(String username){
-        String sql = "SELECT * FROM Users WHERE username = ?";
+    public User getUser(String userName){
+        String sql = "SELECT * FROM Users WHERE name = ?";
         RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
-        return template.queryForObject(sql, rowMapper, username);
+        return template.queryForObject(sql, rowMapper, userName);
     }
 
     public List<User> fetchAllUsers(){
@@ -59,7 +59,7 @@ public class WishRepo {
 
             System.out.println("- "+u.getID());
             System.out.println("- "+u.getName());
-            System.out.println("- "+u.getUser_password());
+            System.out.println("- "+u.getUserPassword());
             System.out.println("- "+u.getEmail());
 
             List<Wishlist> wishlists = fetchAllWishlistsFrom(u);
@@ -87,23 +87,24 @@ public class WishRepo {
     }
 
     public List<Wishlist> fetchAllWishlistsFrom (User u){
-        String sql = "SELECT * FROM Wishlists WHERE ID = ?";
+        String sql = "SELECT * FROM Wishlists WHERE user_ID = ?";
         RowMapper<Wishlist> rowMapper = new BeanPropertyRowMapper<>(Wishlist.class);
         return template.query(sql, rowMapper, u.getID());
     }
 
     public List<Item> fetchAllItemsFrom (Wishlist wl){
-        String sql = "SELECT * FROM Items WHERE wishlistID = ?";
+        String sql = "SELECT * FROM Items WHERE wishlist_ID = ?";
         return template.query(sql, new RowMapper<Item>() {
             public Item mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Item item = new Item();
-                item.setWishlistID(rs.getInt("wishlistID"));
-                item.setItemName(rs.getString("itemName"));
+                item.setID(rs.getInt("ID")); // Get the new ID field
+                item.setWishlistID(rs.getInt("wishlist_ID"));
+                item.setName(rs.getString("name"));
                 item.setPrice(rs.getDouble("price"));
                 item.setURL(rs.getString("URL"));
                 return item;
-            } // using mapRow instead of BeanPropertyRowMapper, since had trouble loading wishlistID
-        }, wl.getWishlistID());
+            }
+        }, wl.getID());
     }
 
     public List<Item> fetchAllItems (){
@@ -111,8 +112,9 @@ public class WishRepo {
         return template.query(sql, new RowMapper<Item>() {
             public Item mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Item item = new Item();
+                item.setID(rs.getInt("ID")); // fetch the new ID field
                 item.setWishlistID(rs.getInt("wishlistID"));
-                item.setItemName(rs.getString("itemName"));
+                item.setName(rs.getString("name"));
                 item.setPrice(rs.getDouble("price"));
                 item.setURL(rs.getString("URL"));
                 return item;
@@ -123,25 +125,25 @@ public class WishRepo {
     // ------------------- Add methods -------------------
 
     public void addWishlist(Wishlist wl, User u){
-        String sql = "INSERT INTO Wishlists (ID, wishlist_name) VALUES (?, ?)";
+        String sql = "INSERT INTO Wishlists (wishlist_name) VALUES (?)";
         template.update(sql, u.getID(), wl.getName());
     }
 
     public void addItem(Wishlist wl, Item i){
-        String sql = "INSERT INTO Items (wishlistID, itemName, price, URL) VALUES (?, ?, ?, ?)";  //update here
-        template.update(sql, wl.getID(), i.getItemName(), i.getPrice(), i.getURL());
+        String sql = "INSERT INTO Items (name, wishlist_ID, price, URL) VALUES (?, ?, ?, ?)";
+        template.update(sql, i.getName(), wl.getID(), i.getPrice(), i.getURL());
     }
 
     public void addUser(User u){
-        String sql = "INSERT INTO Users (username, user_password, email) VALUES (?, ?, ?)";
-        template.update(sql, u.getName(), u.getUser_password(), u.getEmail());
+        String sql = "INSERT INTO Users (name, user_password, email) VALUES (?, ?, ?)";
+        template.update(sql, u.getName(), u.getUserPassword(), u.getEmail());
     }
 
     // ------------------- Update methods -------------------
 
     public void updateWishlist(Wishlist wl){
         String sql = "UPDATE Wishlist SET wishlist_name = ? WHERE wishlistID = ?";
-        template.update(sql, wl.getName());
+        template.update(sql, wl.getName(), wl.getID());
     }
 
     // ------------------- Service methods

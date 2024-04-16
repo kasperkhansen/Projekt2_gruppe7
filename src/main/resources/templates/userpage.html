@@ -42,7 +42,7 @@
     </table>
     <form th:action="@{/wishlist}" method="post">
 
-        <input type="hidden" name="username" id="username" th:value="${user.name}">
+        <input type="hidden" name="name" id="name" th:value="${user.name}">
 
         <label for="wishlist_name">Name for new Wishlist:</label>
         <input type="text" name="wishlist_name" id="wishlist_name" placeholder="New Wishlist Name">

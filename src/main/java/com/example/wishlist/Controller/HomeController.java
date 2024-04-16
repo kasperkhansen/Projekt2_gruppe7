@@ -91,7 +91,7 @@ public class HomeController {
 
         // debug addWishlist POST
         System.out.println("DEBUG addWishlist POST method");
-        System.out.println("username: " + username);
+        System.out.println("name: " + username);
         System.out.println("wishlist_name: " + wishlist_name);
         System.out.println();
 

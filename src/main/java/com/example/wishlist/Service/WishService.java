@@ -18,7 +18,6 @@ public class WishService {
     @Autowired
     private WishRepo repo;
 
-
     // ------------------- CRUD Methods for Users, Wishlist and Items
     public void addUser(String username){
         // check if userName is null
