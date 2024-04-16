@@ -50,6 +50,8 @@ public class WishRepo {
         List<User> users = fetchAllUsersEmpty();
         List<User> usersNotNull = new ArrayList<User>();
 
+        System.out.println("DEBUG fetchAllUsers");
+
         // go through all users and fill them with their Wishlists and the Items of the wishlists, check for null
         for (User u : users){
 
@@ -57,19 +59,22 @@ public class WishRepo {
                 continue;
             }
 
-            System.out.println("- "+u.getID());
-            System.out.println("- "+u.getName());
-            System.out.println("- "+u.getUserPassword());
-            System.out.println("- "+u.getEmail());
+            System.out.println("- ID = "+u.getID());
+            System.out.println("- name = "+u.getName());
+            System.out.println("- password = "+u.getUserPassword());
+            System.out.println("- email = "+u.getEmail());
 
             List<Wishlist> wishlists = fetchAllWishlistsFrom(u);
             for (Wishlist wl : wishlists){
                 List<Item> items = fetchAllItemsFrom(wl);
                 wl.setItems(items);
             }
+            System.out.println("- "+wishlists);
             u.setWishlists(wishlists);
             usersNotNull.add(u);
         }
+
+        System.out.println("DEBUG fetchAllUsers end");
 
         return usersNotNull;
     }
@@ -80,16 +85,19 @@ public class WishRepo {
         return template.query(sql, rowMapper);
     }
 
-    public List<Wishlist> fetchAllWishlists(){
-        String sql = "SELECT * FROM Wishlists";
-        RowMapper<Wishlist> rowMapper = new BeanPropertyRowMapper<>(Wishlist.class);
-        return template.query(sql, rowMapper);
-    }
-
+    // note: mapRow used for fetching Wishlists and Items when using the foreign keys, since the BeanPropertyRowMapper didn't map Model and Table correctly
     public List<Wishlist> fetchAllWishlistsFrom (User u){
         String sql = "SELECT * FROM Wishlists WHERE user_ID = ?";
-        RowMapper<Wishlist> rowMapper = new BeanPropertyRowMapper<>(Wishlist.class);
-        return template.query(sql, rowMapper, u.getID());
+        return template.query(sql, new RowMapper<Wishlist>() {
+            public Wishlist mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Wishlist wishlist = new Wishlist();
+                wishlist.setID(rs.getInt("ID"));
+                wishlist.setUserID(rs.getInt("user_ID"));
+                wishlist.setName(rs.getString("wishlist_name"));
+
+                return wishlist;
+            }
+        }, u.getID());
     }
 
     public List<Item> fetchAllItemsFrom (Wishlist wl){
@@ -125,7 +133,7 @@ public class WishRepo {
     // ------------------- Add methods -------------------
 
     public void addWishlist(Wishlist wl, User u){
-        String sql = "INSERT INTO Wishlists (wishlist_name) VALUES (?)";
+        String sql = "INSERT INTO Wishlists (user_ID, wishlist_name) VALUES (?, ?)";
         template.update(sql, u.getID(), wl.getName());
     }
 

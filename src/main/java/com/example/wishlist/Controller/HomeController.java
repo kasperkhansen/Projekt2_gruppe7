@@ -48,8 +48,6 @@ public class HomeController {
             model.addAttribute("user", user);
             model.addAttribute("userId", user.getID());
             model.addAttribute("wishlists", wishlists);
-
-
         }
 
         return "userpage";
@@ -74,7 +72,7 @@ public class HomeController {
         User user = wishService.getUserByUsername(userName);
         Wishlist wishlist = wishService.getWishlistByName(wishlistName, user);
 
-        if(user != null && wishlist != null){
+        if (user != null && wishlist != null){
             // wishService getItems - calls hardcoded data
             List<Item> items = wishService.getItemsFromWishlist(wishlist);
 
@@ -87,23 +85,23 @@ public class HomeController {
     }
 
     @PostMapping("/wishlist")
-    public String addWishlist(@RequestParam("username") String username, @RequestParam("wishlist_name") String wishlist_name) {
+    public String addWishlist(@RequestParam("userName") String userName, @RequestParam("wishlistName") String wishlistName) {
 
         // debug addWishlist POST
         System.out.println("DEBUG addWishlist POST method");
-        System.out.println("name: " + username);
-        System.out.println("wishlist_name: " + wishlist_name);
+        System.out.println("name: " + userName);
+        System.out.println("wishlist_name: " + wishlistName);
         System.out.println();
 
         // wishService addWishlist - calls database
-        wishService.addWishlist(username, wishlist_name);
+        wishService.addWishlist(userName, wishlistName);
 
         //redirecting to the same user page after adding the wishlist
-        return "redirect:/user/" + username;
+        return "redirect:/user/" + userName;
     }
 
     @PostMapping("/item")
-    public String addItem(@RequestParam("username") String username,
+    public String addItem(@RequestParam("userName") String userName,
                           @RequestParam("wishlist_name") String wishlist_name,
                           @RequestParam("itemName") String item_name,
                           @RequestParam("price") Double item_price,
@@ -111,10 +109,10 @@ public class HomeController {
                           Model model) {
 
         // You will need to add a new item to user's specific wishlist here
-        wishService.addItem(username, wishlist_name, item_name, item_price, item_url);
+        wishService.addItem(userName, wishlist_name, item_name, item_price, item_url);
 
         // After adding the item, redirect back to the wishlist page.
-        return "redirect:/" + username + "/wishlist/" + wishlist_name;
+        return "redirect:/" + userName + "/wishlist/" + wishlist_name;
     }
 
 

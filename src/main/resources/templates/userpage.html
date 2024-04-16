@@ -32,9 +32,9 @@
 
             <!-- Start Nested Iteration over Wishlist items -->
             <th:block th:each="item : ${wishlist.items}">
-                <td th:text="${item.itemName}"></td>
+                <td th:text="${item.name}"></td>
                 <!-- Replace the property 'name' with actual attribute names to be displayed -->
-                <td>[Other item data...]</td>
+
             </th:block>
             <!-- End Nested Iteration over Wishlist items -->
 
@@ -42,10 +42,10 @@
     </table>
     <form th:action="@{/wishlist}" method="post">
 
-        <input type="hidden" name="name" id="name" th:value="${user.name}">
+        <input type="hidden" name="userName" id="userName" th:value="${user.name}">
 
-        <label for="wishlist_name">Name for new Wishlist:</label>
-        <input type="text" name="wishlist_name" id="wishlist_name" placeholder="New Wishlist Name">
+        <label for="wishlistName">Name for new Wishlist:</label>
+        <input type="text" name="wishlistName" id="wishlistName" placeholder="New Wishlist Name">
 
         <button type="submit" class="sky-plus-button"></button>
 
@@ -56,6 +56,5 @@
 <footer class="footer">
     <p>Created by: Gruppe 7</p>
 </footer>
-
 
 </html>

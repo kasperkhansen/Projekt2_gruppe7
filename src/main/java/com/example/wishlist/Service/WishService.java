@@ -55,9 +55,7 @@ public class WishService {
                 repo.addUser(new User(username));
                 repo.addWishlist(wl, u);
             }
-
-
-            }
+        }
     }
 
 
@@ -71,10 +69,6 @@ public class WishService {
     // ------------------- Read Methods
     public List<User> getUsers() {
         return repo.fetchAllUsers();
-    }
-
-    public List<Wishlist> getWishlists() {
-        return repo.fetchAllWishlists();
     }
 
     public List<Wishlist> getWishlistsFrom(String userName) {
