@@ -6,65 +6,77 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 </head>
 
-<header class="header">
-
-    <div class="homebuttonOgHeader">
-
-        <a href="/home">
-            <button class="image-button"></button>
-        </a>
-        <h1>WishList</h1>
-    </div>
-
-    <nav>
-
-    </nav>
-</header>
-
 <body class="body">
-<h2 th:text="${user.name} + '\'s wishlist:'">Default header</h2>
-<h2 th:text="${wishlistName}">Wishlist name</h2>
+    <header class="header">
 
-<div class = "table">
-    <div th:if="${items.isEmpty()}">
-        <p>Your wishlist is currently empty.</p>
+        <div class="homebuttonOgHeader">
+
+            <a href="/home">
+                <button class="image-button"></button>
+            </a>
+            <h1>WishList</h1>
+        </div>
+
+        <nav>
+
+        </nav>
+    </header>
+
+    <div class="containers">
+        <div class="container-left"></div>
+        <div class="container-center">
+            <h2 th:text="${user.name} + '\'s wishlist:'">Default header</h2>
+            <h2 th:text="${wishlistName}">Wishlist name</h2>
+
+            <div class = "table">
+                <div th:if="${items.isEmpty()}">
+                    <p>Your wishlist is currently empty.</p>
+                </div>
+
+                <table th:unless="${items.isEmpty()}">
+                    <tr class="table-column-titles">
+                        <th> </th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>URL</th>
+                    </tr>
+                    <tr th:each="item, iterStat: ${items}" class="item-row">
+                        <td th:text="${iterStat.count}"></td>
+                        <td th:text="${item.itemName}"></td>
+                        <td th:text="${item.price}"></td>
+                        <td><a th:href="${item.URL}" th:text="${item.URL}">Item link</a></td>
+                    </tr>
+                </table>
+                <p th:if="${error}" th:text="${error}" class="error-message"></p>
+                <p th:if="${success}" th:text="${success}" class="success-message"></p>
+
+                <form th:action="@{/item}" method="post">
+
+                    <input type="hidden" name="userName" id="userName" th:value="${user.name}">
+                    <input type="hidden" name="wishlistName" id="wishlistName" th:value="${wishlistName}">
+
+                    <label for="itemName">new Item:</label>
+
+                    <input type="text" name="itemName" id="itemName" placeholder="New Item Name">
+                    <input type="text" name="price" id="price" placeholder="New Item Price">
+                    <input type="text" name="URL" id="URL" placeholder="New Item URL">
+                    <button type="submit">Add Item</button>
+                </form>
+            </div>
+        </div>
+        <div class="container-right">
+            <div class="notification-box">
+                <!-- Your right container content -->
+                <h3 th:if="${error}" th:class="'error-message'" th:text="${error}" class='notifications'></h3>
+                <h3 th:if="${success}" th:class="'success-message'" th:text="${success}" class='notifications'></h3>
+            </div>
+        </div>
     </div>
 
-    <table th:unless="${items.isEmpty()}">
-        <tr class="table-column-titles">
-            <th> </th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>URL</th>
-        </tr>
-        <tr th:each="item, iterStat: ${items}" class="item-row">
-            <td th:text="${iterStat.count}"></td>
-            <td th:text="${item.itemName}"></td>
-            <td th:text="${item.price}"></td>
-            <td><a th:href="${item.URL}" th:text="${item.URL}">Item link</a></td>
-        </tr>
-    </table>
-    <p th:if="${error}" th:text="${error}" class="error-message"></p>
-    <p th:if="${success}" th:text="${success}" class="success-message"></p>
+    <footer class="footer">
+        <p>Created by: Gruppe 7</p>
+    </footer>
 
-    <form th:action="@{/item}" method="post">
-
-        <input type="hidden" name="userName" id="userName" th:value="${user.name}">
-        <input type="hidden" name="wishlistName" id="wishlistName" th:value="${wishlistName}">
-
-        <label for="itemName">new Item:</label>
-
-        <input type="text" name="itemName" id="itemName" placeholder="New Item Name">
-        <input type="text" name="price" id="price" placeholder="New Item Price">
-        <input type="text" name="URL" id="URL" placeholder="New Item URL">
-        <button type="submit">Add Item</button>
-    </form>
-</div>
 </body>
-
-<footer class="footer">
-    <p>Created by: Gruppe 7</p>
-</footer>
-
 
 </html>

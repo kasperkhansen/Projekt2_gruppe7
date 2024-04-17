@@ -230,27 +230,21 @@ nav a:hover {
 }
 
 .notifications {
-    display: inline-block; /* Take only necessary width */
+    display: inline-block;
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: #f9edbe;
-    border: solid 1px #f0c36d;
     text-align: center;
     border-radius: 50px;
     padding: 20px;
     font-size: 1.5em;
-
     padding: 10px 20px; /* Y X - vertical horizontal */ /* Adds a space buffer around the text inside the box */
 }
-
-
 .error-message {
     color: #a94442;
     background-color: #f8d7da;
     border-color: #f5c6cb;
 }
-
 .success-message {
     color: #3c763d;
     background-color: #dff0d8;

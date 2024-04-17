@@ -78,13 +78,12 @@ public class HomeController {
     public String addUser(@RequestParam("userName") String userName, RedirectAttributes redirectAttributes) {
         try {
             wishService.addUser(userName);
-            redirectAttributes.addFlashAttribute("success", "User added successfully!");
+            redirectAttributes.addFlashAttribute("success", "User '"+userName+"' added successfully!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Failed to add user");
         }
         return "redirect:/home";
     }
-
 
 
     @PostMapping("/wishlist")
@@ -98,7 +97,7 @@ public class HomeController {
         } else {
             try {
                 wishService.addWishlist(userName, wishlistName);
-                redirectAttributes.addFlashAttribute("success", "Wishlist added successfully");
+                redirectAttributes.addFlashAttribute("success", "Wishlist '"+wishlistName+"' added successfully");
             } catch (Exception e) {
                 redirectAttributes.addFlashAttribute("error", "Failed to add wishlist");
             }
