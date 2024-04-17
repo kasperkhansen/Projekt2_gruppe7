@@ -19,6 +19,7 @@ body, h1, h2, h1, h2, h3, h4, h5, h6, button, a {
 
 header {
     position: fixed;
+    height: 5%;
     width: 100%;
     top: 0;
     background-color: var(--secondary-color);
@@ -29,6 +30,7 @@ header {
     text-align: center;
     display: flex; /* Make sure header is a flex container */
     box-sizing: border-box; /* Includes padding in width calculation */
+
 }
 
 h1{
@@ -64,13 +66,52 @@ footer {
 body {
     margin: 0;
     padding: 0;
+    padding-top: 5vh;  /* Adjust according to your actual header height in viewport percentages */
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row; /* Change from column to row */
+    align-items: flex-start; /* Align items to the top */
     justify-content: center;
     min-height: 100vh;
     color: var(--primary-color);
     background-color: lightblue;
+}
+
+@media all and (max-width: 700px) {
+    body {
+        flex-direction: column; /* Change to column for mobile or smaller screens */
+    }
+}
+
+.containers {
+    display: flex; /* Make the containers line up in a row */
+    flex-direction: row;
+    width: 100%;
+    min-height: 95vh; /* Remaining height under the header */
+}
+
+.container-left {
+    width: 25%;
+    position: relative;
+    padding-top: 5vh; /* actual header height = 5% */
+
+}
+
+.container-center {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 5%); /* header height = 5% */
+
+    /* border: 1px solid red; Test border */
+}
+
+.container-right {
+    width: 25%;
+    position: relative;
+    padding-top: 5vh; /* actual header height = 5% */
+
 }
 
 .button {
@@ -181,18 +222,26 @@ nav a:hover {
     align-items: center;
 }
 
+.notification-box {
+    display: inline-block;
+    padding: 1em;
+
+    box-sizing: border-box;
+}
+
 .notifications {
-    position: fixed;
+    display: inline-block; /* Take only necessary width */
+    position: absolute;
     top: 10px;
     right: 10px;
-    padding: .75rem 1.25rem;
-    margin-bottom: 1rem;
-    border: 1px solid transparent;
-    border-radius: .25rem;
-    font-weight: bold;
+    background-color: #f9edbe;
+    border: solid 1px #f0c36d;
     text-align: center;
-    width: 250px; /* specify width as per your requirement */
-    animation: fadeout 5s ease-in-out forwards;
+    border-radius: 50px;
+    padding: 20px;
+    font-size: 1.5em;
+
+    padding: 10px 20px; /* Y X - vertical horizontal */ /* Adds a space buffer around the text inside the box */
 }
 
 .notifications .close {
