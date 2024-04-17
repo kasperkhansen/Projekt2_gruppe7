@@ -23,42 +23,71 @@
     </header>
 
     <div class="containers">
-        <div class="container-left">
-
-        </div>
-        <div class="container-center">
+        <div class="container-1">
             <h2 th:text="${user.name} + ' wishlists'">User's wishlists</h2>
 
             <div class = "table">
-            <table>
-                <tr th:each="wishlist : ${wishlists}">
-                    <td><a th:href="@{'/' + ${user.name} + '/wishlist/' + ${wishlist.name}}" th:text="${wishlist.name}">Wishlist name</a></td>
+                <table>
+                    <tr th:each="wishlist : ${wishlists}">
+                        <td><a th:href="@{'/' + ${user.name} + '/wishlist/' + ${wishlist.name}}" th:text="${wishlist.name}">Wishlist name</a></td>
 
 
-                    <!-- Start Nested Iteration over Wishlist items -->
-                    <th:block th:each="item : ${wishlist.items}">
-                        <td th:text="${item.name}"></td>
-                        <!-- Replace the property 'name' with actual attribute names to be displayed -->
+                        <!-- Start Nested Iteration over Wishlist items -->
+                        <th:block th:each="item : ${wishlist.items}">
+                            <td th:text="${item.name}"></td>
+                            <!-- Replace the property 'name' with actual attribute names to be displayed -->
 
-                    </th:block>
-                    <!-- End Nested Iteration over Wishlist items -->
+                        </th:block>
+                        <!-- End Nested Iteration over Wishlist items -->
 
-                </tr>
-            </table>
+                    </tr>
+                </table>
 
-            <form th:action="@{/wishlist}" method="post">
-                <input type="hidden" name="userName" id="userName" th:value="${user.name}">
-                <label for="wishlistName">Name for new Wishlist:</label>
-                <input type="text" name="wishlistName" id="wishlistName" placeholder="New Wishlist Name">
-                <button type="submit" class="sky-plus-button"></button>
-            </form>
+                <form th:action="@{/wishlist}" method="post">
+                    <input type="hidden" name="userName" id="userName" th:value="${user.name}">
+                    <label for="wishlistName">Name for new Wishlist:</label>
+                    <input type="text" name="wishlistName" id="wishlistName" placeholder="New Wishlist Name">
+                    <button type="submit" class="sky-plus-button"></button>
+                </form>
             </div>
         </div>
-        <div class="container-right">
+
+        <div class="container-2">
             <div class="notification-box">
                 <!-- Your right container content -->
                 <h3 th:if="${error}" th:class="'error-message'" th:text="${error}" class='notifications'></h3>
                 <h3 th:if="${success}" th:class="'success-message'" th:text="${success}" class='notifications'></h3>
+            </div>
+        </div>
+
+        <!--  <h2 th:text="${user.name} + ' wishlists'">User's wishlists</h2> -->
+
+        <div class="container-3">
+            <h2 th:text="${user.name} + ' friends'">User's friends</h2>
+
+            <div class = "table">
+                <table>
+                    <div class="table-body">
+                        <tbody id="table-body">
+                        <!-- Table rows will be here -->
+                        <tr th:each="user : ${users}">
+                            <td><a th:href="@{'/user/' + ${user.name}}" th:text="${user.name}">Username</a></td>
+                            <td th:each="wishlist : ${user.wishlists}">
+                                <!-- add your URL pattern for wishlists along with the ID if needed -->
+                                <a th:text="${wishlist.name}">WishlistName</a>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </div>
+                </table>
+
+
+                <form th:action="@{/user}" method="post">
+                    <label for="userName">User Name:</label>
+                    <input type="text" name="userName" id="userName" placeholder="New User Name">
+                    <button type="submit">Add User</button>
+                </form>
             </div>
         </div>
     </div>
