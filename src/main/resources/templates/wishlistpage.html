@@ -33,27 +33,29 @@
                     <p>Your wishlist is currently empty.</p>
                 </div>
 
-                <table th:unless="${items.isEmpty()}">
-                    <tr class="table-column-titles">
-                        <th> </th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>URL</th>
-                    </tr>
-                    <tr th:each="item, iterStat: ${items}" class="item-row">
-                        <td th:text="${iterStat.count}"></td>
-                        <td th:text="${item.itemName}"></td>
-                        <td th:text="${item.price}"></td>
-                        <td><a th:href="${item.URL}" th:text="${item.URL}">Item link</a></td>
-                    </tr>
-                </table>
+    <table th:unless="${items.isEmpty()}">
+        <tr class="table-column-titles">
+            <th> </th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>URL</th>
+            <th>CopyUrl</th>
+        </tr>
+        <tr th:each="item, iterStat: ${items}" class="item-row">
+            <td th:text="${iterStat.count}"></td>
+            <td th:text="${item.itemName}"></td>
+            <td th:text="${item.price}"></td>
+            <td><a th:href="${item.URL}" th:text="${item.URL}">Item link</a></td>
+            <td><input type="text" value="${item.URL}" onFocus="this.select();" readonly></td>
+        </tr>
+    </table>
 
                 <form th:action="@{/item}" method="post">
 
                     <input type="hidden" name="userName" id="userName" th:value="${user.name}">
                     <input type="hidden" name="wishlistName" id="wishlistName" th:value="${wishlistName}">
 
-                    <label for="itemName">new Item:</label>
+        <label for="itemName">new Item:</label>
 
                     <input type="text" name="itemName" id="itemName" placeholder="New Item Name">
                     <input type="text" name="price" id="price" placeholder="New Item Price">
@@ -71,9 +73,11 @@
         </div>
     </div>
 
-    <footer class="footer">
-        <p>Created by: Gruppe 7</p>
-    </footer>
+</body>
+
+<footer class="footer">
+    <p>Created by: Gruppe 7</p>
+</footer>
 
 </body>
 
