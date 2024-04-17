@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 @Service
 public class ValidationService {
@@ -16,19 +17,23 @@ public class ValidationService {
     // ----------------- public methods -----------------
         // complex rule-check methods with combination of specific and individual rules
 
+    public void validateNotNullInput(List<Object> objectList) throws IllegalArgumentException {
+        validateNotNull(objectList);
+    }
+
     public String validateName(String namePara) throws Exception {
         String name = cleanUpField(namePara);
         validateNonEmpty(name, "Name cannot be empty");
-        validateLength(name, NAME_MAX_LENGTH, "Name is too long");
-        validateCharacterSet(name, "Name contains invalid characters");
+        validateLength(name, NAME_MAX_LENGTH, "Name '"+name+"' is too long");
+        validateCharacterSet(name, "Name '"+name+"' contains invalid characters");
         return name;
     }
 
     public String validateEmail(String emailPara) throws Exception {
         String email = cleanUpField(emailPara);
         validateNonEmpty(email, "Email cannot be empty");
-        validateLength(email, EMAIL_MAX_LENGTH, "Email is too long");
-        validateEmailFormat(email, "Email format is invalid");
+        validateLength(email, EMAIL_MAX_LENGTH, "Email '"+email+"' is too long");
+        validateEmailFormat(email, "Email format '"+email+"' is invalid");
         return email;
     }
 
@@ -36,12 +41,12 @@ public class ValidationService {
     public String validateURL(String urlPara) throws Exception {
         String url = cleanUpField(urlPara);
         validateNonEmpty(url, "URL cannot be empty");
-        validateURLFormat(url);
+        validateURLFormat(url, "URL '"+urlPara+"' format is invalid");
         return url;
     }
 
     public Double validatePrice(Double price) throws Exception {
-        validatePriceLength(price);
+        validatePriceLength(price, "Price should be between 0 and 1000000.0");
         return price;
     }
 
@@ -53,6 +58,17 @@ public class ValidationService {
             // 1. check with if-else
             // 2. embeds the Exception with a specified detail message, if Exception thrown
 
+        // not null
+    private void validateNotNull(List<Object> objectList) {
+        for (Object obj : objectList) {
+            if (obj == null || (obj instanceof String && ((String) obj).isEmpty())) {
+                throw new IllegalArgumentException("Parameters cannot be null or empty");
+            }
+            else if (obj instanceof Double && (Double)obj == 0) {
+                throw new IllegalArgumentException("Price cannot be null or zero");
+            }
+        }
+    }
 
         // non-empty
     private void validateNonEmpty(String field, String message) throws IllegalArgumentException {
@@ -68,9 +84,9 @@ public class ValidationService {
         }
     }
 
-    private void validatePriceLength(Double price) {
+    private void validatePriceLength(Double price, String message) {
         if(price < 0 || price > 1000000.0) {
-            throw new IllegalArgumentException("Price should be between 0 and 1000000.0");
+            throw new IllegalArgumentException(message);
         }
     }
 
@@ -88,11 +104,14 @@ public class ValidationService {
         }
     }
 
-    private void validateURLFormat(String url) throws IllegalArgumentException {
+    private void validateURLFormat(String url, String message) throws IllegalArgumentException {
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            url = "http://" + url;
+        }
         try {
             new URL(url);
         } catch (MalformedURLException ex) {
-            throw new IllegalArgumentException("URL format is invalid", ex);
+            throw new IllegalArgumentException(message, ex);
         }
     }
 

@@ -48,8 +48,7 @@
                     <tr th:each="user : ${users}">
                         <td><a th:href="@{'/user/' + ${user.name}}" th:text="${user.name}">Username</a></td>
                         <td th:each="wishlist : ${user.wishlists}">
-                            <!-- add your URL pattern for wishlists along with the ID if needed -->
-                            <a th:text="${wishlist.name}">WishlistName</a>
+                            <a th:text="${wishlist.name}" th:href="@{'/' + ${user.name} + '/wishlist/' + ${wishlist.name}}">${wishlist.name}</a>
                         </td>
                     </tr>
 

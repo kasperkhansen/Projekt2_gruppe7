@@ -11,8 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Arrays;
 import java.util.List;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 // frontend vscode
 // backend intellij
 
@@ -37,49 +37,65 @@ public class HomeController {
 
     @GetMapping("/user/{userName}")
     public String userPage(@PathVariable("userName") String username, Model model) {
+        try {
+            // get User
+            User user = wishService.getUserByUsername(username);
 
-        // get User
-        User user = wishService.getUserByUsername(username);
+            // Check if User exists and retrieve Wishlists
+            if(user != null) {
+                List<Wishlist> wishlists = user.getWishlists();
 
-        // check if User is not null and retrieve Wishlists
-        if(user != null){
-            System.out.println(" User:"+user);
-            System.out.println(" User id: " + user.getID());
+                // Add user and wishlists to model
+                model.addAttribute("user", user);
+                model.addAttribute("wishlists", wishlists);
+            } else {
+                throw new Exception("User does not exist");
+            }
 
-            List<Wishlist> wishlists = user.getWishlists();
-            System.out.println("- wishlists from User object "+ user.getWishlists());
-
-            // add user id and wishlists to model
-            model.addAttribute("user", user);
-            model.addAttribute("userId", user.getID());
-            model.addAttribute("wishlists", wishlists);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "errorPage";
         }
-
-        return "userpage";
+        return "userPage";
     }
 
     @GetMapping("/{userName}/wishlist/{wishlistName}")
-    public String wishlistPage(@PathVariable("userName") String userName, @PathVariable("wishlistName") String wishlistName, Model model) {
+    public String wishlistPage(@PathVariable("userName") String userName,
+                               @PathVariable("wishlistName") String wishlistName,
+                               Model model) {
+        try {
+            // Get User and Wishlist
+            User user = wishService.getUserByUsername(userName);
+            Wishlist wishlist = null;
+            if(user != null) {
+                wishlist = wishService.getWishlistByName(wishlistName, user);
+            } else {
+                throw new Exception("User does not exist");
+            }
 
-        // get wishlist and User
-        User user = wishService.getUserByUsername(userName);
-        Wishlist wishlist = wishService.getWishlistByName(wishlistName, user);
+            // add to Model if not null
+            if(wishlist != null) {
+                List<Item> items = wishService.getItemsFromWishlist(wishlist);
 
-        if (user != null && wishlist != null){
-            // wishService getItems - calls hardcoded data
-            List<Item> items = wishService.getItemsFromWishlist(wishlist);
+                model.addAttribute("user", user);
+                model.addAttribute("items", items);
+            } else {
+                throw new Exception("Wishlist does not exist");
+            }
 
-            // add user and items to model
-            model.addAttribute("items", items);
-            model.addAttribute("user", user);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "errorPage";
         }
-
-        return "wishlistpage";
+        return "wishlistPage";
     }
 
     @PostMapping("/user")
     public String addUser(@RequestParam("userName") String userName, RedirectAttributes redirectAttributes) {
+        List<Object> requiredParameters = Arrays.asList(userName);
+
         try {
+            validationService.validateNotNullInput(requiredParameters);
             userName = validationService.validateName(userName); // validate the username
             wishService.addUser(userName);
             redirectAttributes.addFlashAttribute("success", "User '" + userName + "' added successfully!");
@@ -89,13 +105,15 @@ public class HomeController {
         return "redirect:/home";
     }
 
-
     @PostMapping("/wishlist")
     public String addWishlist(
             @RequestParam("userName") String userName,
             @RequestParam("wishlistName") String wishlistName,
             RedirectAttributes redirectAttributes) {
+        List<Object> requiredParameters = Arrays.asList(wishlistName);
+
         try {
+            validationService.validateNotNullInput(requiredParameters);
             wishlistName = validationService.validateName(wishlistName); // only need to validate the user input: wishlistName
             wishService.addWishlist(userName, wishlistName);
             redirectAttributes.addFlashAttribute("success", "Wishlist '" + wishlistName + "' added successfully");
@@ -112,7 +130,11 @@ public class HomeController {
                           @RequestParam("price") Double price,
                           @RequestParam("URL") String URL,
                           RedirectAttributes redirectAttributes) {
+
+        List<Object> requiredParameters = Arrays.asList(itemName, price, URL);
+
         try {
+            validationService.validateNotNullInput(requiredParameters);
             // validate user inputs:
             itemName = validationService.validateName(itemName);
             price = validationService.validatePrice(price);
