@@ -21,30 +21,20 @@ public class WishService {
     // ------------------- CRUD Methods for Users, Wishlist and Items
     public void addUser(String username){
         try {
-            System.out.println("DEBUG addUser");
-            System.out.println("DEBUG check: Is 'username' null? - " + (username == null));
-
             // check if userName is null
             if (username == null) {
-                System.out.println("Username is null");
                 return;
             }
 
-            System.out.println("DEBUG check: Does User exist? - " + repo.checkUserExists(new User(username)));
-
             // check if user exists in database
             if (repo.checkUserExists(new User(username)) == true) {
-                System.out.println("User already exists");
                 return;
             }
 
             User u = new User(username);
-            System.out.println("user=" + u);
-            System.out.println("DEBUG addUser end");
-            System.out.println();
             repo.addUser(u);
         } catch (Exception e) {
-            System.out.println("DEBUG: Exception in addUser!");
+
             e.printStackTrace();
         }
     }
