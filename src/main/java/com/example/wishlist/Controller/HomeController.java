@@ -3,6 +3,7 @@ package com.example.wishlist.Controller;
 import com.example.wishlist.Model.Item;
 import com.example.wishlist.Model.User;
 import com.example.wishlist.Model.Wishlist;
+import com.example.wishlist.Service.ValidationService;
 import com.example.wishlist.Service.WishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,8 @@ public class HomeController {
 
     @Autowired
     private WishService wishService;
+    @Autowired
+    private ValidationService validationService;
 
     @GetMapping("/home")
     public String home(Model model) {
@@ -77,10 +80,11 @@ public class HomeController {
     @PostMapping("/user")
     public String addUser(@RequestParam("userName") String userName, RedirectAttributes redirectAttributes) {
         try {
+            userName = validationService.validateName(userName); // validate the username
             wishService.addUser(userName);
-            redirectAttributes.addFlashAttribute("success", "User '"+userName+"' added successfully!");
+            redirectAttributes.addFlashAttribute("success", "User '" + userName + "' added successfully!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Failed to add user");
+            redirectAttributes.addFlashAttribute("error", e.getMessage()); // Uses the exception message set by the ValidationService method
         }
         return "redirect:/home";
     }
@@ -91,16 +95,12 @@ public class HomeController {
             @RequestParam("userName") String userName,
             @RequestParam("wishlistName") String wishlistName,
             RedirectAttributes redirectAttributes) {
-        // Validate wishlistName doesn't include special characters like æ, ø, å
-        if (!wishlistName.matches("[a-zA-Z0-9 ]+")) {
-            redirectAttributes.addFlashAttribute("error", "Invalid characters in the wishlist name");
-        } else {
-            try {
-                wishService.addWishlist(userName, wishlistName);
-                redirectAttributes.addFlashAttribute("success", "Wishlist '"+wishlistName+"' added successfully");
-            } catch (Exception e) {
-                redirectAttributes.addFlashAttribute("error", "Failed to add wishlist");
-            }
+        try {
+            wishlistName = validationService.validateName(wishlistName); // only need to validate the user input: wishlistName
+            wishService.addWishlist(userName, wishlistName);
+            redirectAttributes.addFlashAttribute("success", "Wishlist '" + wishlistName + "' added successfully");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage()); // Uses the exception message by with the ValidationService method
         }
         return "redirect:/user/" + userName;
     }
@@ -113,10 +113,15 @@ public class HomeController {
                           @RequestParam("URL") String URL,
                           RedirectAttributes redirectAttributes) {
         try {
+            // validate user inputs:
+            itemName = validationService.validateName(itemName);
+            price = validationService.validatePrice(price);
+            URL = validationService.validateURL(URL);
+
             wishService.addItem(userName, wishlistName, itemName, price, URL);
             redirectAttributes.addFlashAttribute("success", "Item added successfully");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Failed to add item");
+            redirectAttributes.addFlashAttribute("error", e.getMessage()); // Uses the exception message by with the ValidationService method
         }
         return "redirect:/" + userName + "/wishlist/" + wishlistName;
     }
