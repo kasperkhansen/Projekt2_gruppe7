@@ -32,13 +32,38 @@ public class WishRepo {
             e.printStackTrace();
         }
     }
-    // save, load, delete, update User, wishlist, item
 
 
-    // ------------------- Fetch methods -------------------
+    // ------------------- Main functionality methods -------------------
+
+    public void reserveItem(User user, Item item) {
+        // update the is_reserved field in the Items table
+        String reserveItemSql = "UPDATE Items SET is_reserved = 1 WHERE ID = ?";
+        template.update(reserveItemSql, item.getID());
+
+        // insert a row in the ReservedItems table
+        String insertReservedItemSql = "INSERT INTO ReservedItems (item_ID, user_ID) VALUES (?, ?)";
+        template.update(insertReservedItemSql, item.getID(), user.getID());
+    }
+
+    public void unreserveItem(Item item) {
+        // update the is_reserved field in the Items table
+        String unreserveItemSql = "UPDATE Items SET is_reserved = 0 WHERE ID = ?";
+        template.update(unreserveItemSql, item.getID());
+
+        // delete the row from the ReservedItems table
+        String deleteReservedItemSql = "DELETE FROM ReservedItems WHERE item_ID = ?";
+        template.update(deleteReservedItemSql, item.getID());
+    }
 
 
-        // ------------------- Get methods -------------------
+
+
+
+
+
+
+    // ------------------- Fetch/Get methods -------------------
 
     public User getUser(String userName){
         String sql = "SELECT * FROM Users WHERE name = ?";
@@ -98,6 +123,8 @@ public class WishRepo {
                 wishlist.setUserID(rs.getInt("user_ID"));
                 wishlist.setName(rs.getString("wishlist_name"));
 
+                List<Item> items = fetchAllItemsForWishlist(rs.getInt("ID"));
+                wishlist.setItems(items);
                 return wishlist;
             }
         }, u.getID());
@@ -108,15 +135,34 @@ public class WishRepo {
         return template.query(sql, new RowMapper<Item>() {
             public Item mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Item item = new Item();
-                item.setID(rs.getInt("ID")); // Get the new ID field
+                item.setID(rs.getInt("ID"));
                 item.setWishlistID(rs.getInt("wishlist_ID"));
                 item.setName(rs.getString("name"));
                 item.setPrice(rs.getDouble("price"));
                 item.setURL(rs.getString("URL"));
+                item.setIsReserved(rs.getBoolean("is_reserved")); // Add this line
                 return item;
             }
         }, wl.getID());
     }
+
+
+    public List<Item> fetchAllItemsForWishlist(int ID){
+        String sql = "SELECT * FROM Items WHERE wishlist_ID = ?";
+        return template.query(sql, new RowMapper<Item>() {
+            public Item mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Item item = new Item();
+                item.setID(rs.getInt("ID"));
+                item.setWishlistID(rs.getInt("wishlist_ID"));
+                item.setName(rs.getString("name"));
+                item.setPrice(rs.getDouble("price"));
+                item.setURL(rs.getString("URL"));
+                item.setIsReserved(rs.getBoolean("is_reserved"));
+                return item;
+            }
+        }, ID);
+    }
+
 
     public List<Item> fetchAllItems (){
         String sql = "SELECT * FROM Items";
@@ -170,12 +216,17 @@ public class WishRepo {
         return count > 0;
     }
 
+    public boolean checkWishlistExists(Wishlist wl) {
+        String sql = "SELECT COUNT(*) FROM Wishlists WHERE wishlist_name = ?";
+
+        int count = template.queryForObject(sql, Integer.class, wl.getName());
+        return count > 0;
+    }
+
 
     public void cleanupUsers() {
         String sql = "DELETE FROM Users WHERE username IS NULL";
         template.update(sql);
     }
-
-
 
 }

@@ -78,6 +78,7 @@ public class HomeController {
                 List<Item> items = wishService.getItemsFromWishlist(wishlist);
 
                 model.addAttribute("user", user);
+                model.addAttribute("wishlist", wishlist);
                 model.addAttribute("items", items);
             } else {
                 throw new Exception("Wishlist does not exist");
@@ -147,6 +148,33 @@ public class HomeController {
         }
         return "redirect:/" + userName + "/wishlist/" + wishlistName;
     }
+
+    @PostMapping("/reserveItem")
+    public String reserveItem(@RequestParam("reserverUserName") String reserverUserName,
+                              @RequestParam("userName") String userName,
+                              @RequestParam("wishlist") Wishlist wishlist,
+                              @RequestParam("wishlistName") String wishlistName,
+                              @RequestParam("itemName") String itemName,
+                              RedirectAttributes redirectAttributes) {
+        try {
+            // initialize with items retrieved from the database
+            wishlist = wishService.getWishlistByName(wishlistName, wishService.getUserByUsername(userName));
+            // TODO: validate users exists (reserver and owner of the wishlist)
+
+            // validate user inputs
+            validationService.validateNotNullInput(Arrays.asList(itemName));
+            itemName = validationService.validateName(itemName);
+
+
+
+            wishService.reserveItem(reserverUserName, wishlist, itemName); // reserverUserName should be of the logged in Reserver, not the owner of the wishlist
+
+            redirectAttributes.addFlashAttribute("success", "Item '"+itemName+"'reserved successfully");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/" + userName + "/wishlist/" + wishlistName;
+    } // TODO: with log in feature the userName should be of the logged in user
 
 
 }

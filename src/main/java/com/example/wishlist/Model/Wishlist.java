@@ -1,6 +1,7 @@
 package com.example.wishlist.Model;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Wishlist {
@@ -10,18 +11,21 @@ public class Wishlist {
 
     List<Item> items;
 
-    // load-from-table constructor
+
+    public Wishlist() {
+        this.items = new ArrayList<>();
+    }
+
+    public Wishlist(String name) {
+        this.name = name;
+        this.items = new ArrayList<>();
+    }
+
     public Wishlist(int ID, int userID, String name, List<Item> items){
         this.ID = ID;
         this.userID = userID;
         this.name = name;
-        this.items = items;
-    }
-
-    public Wishlist () {}
-
-    public Wishlist(String name) {
-        this.name = name;
+        this.items = items != null ? new ArrayList<>(items) : new ArrayList<>(); // ensure that items is never null, even when Wishlist generated from Database where items is null
     }
 
 
@@ -89,6 +93,16 @@ public class Wishlist {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    // get item
+    public Item getItem(String itemName) {
+        for (Item item : items) {
+            if (item.getName().equals(itemName)) {
+                return item;
+            }
+        }
+        return null;
     }
 
     public List<Item> getItems() {

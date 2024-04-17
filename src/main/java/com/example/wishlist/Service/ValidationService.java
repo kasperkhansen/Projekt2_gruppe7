@@ -37,7 +37,6 @@ public class ValidationService {
         return email;
     }
 
-
     public String validateURL(String urlPara) throws Exception {
         String url = cleanUpField(urlPara);
         validateNonEmpty(url, "URL cannot be empty");

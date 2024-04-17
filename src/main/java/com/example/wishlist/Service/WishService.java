@@ -18,6 +18,23 @@ public class WishService {
     @Autowired
     private WishRepo repo;
 
+    // ------------------- main functionality methods -------------------
+        // reserve item
+    public void reserveItem(String userNameOfTheUserReserving, Wishlist wishlist, String itemName) {
+        System.out.println("DEBUG reserveItem");
+        User user = getUserByUsername(userNameOfTheUserReserving);
+
+        System.out.println("User: " + user);
+        System.out.println("Wishlist: " + wishlist);
+        System.out.println("Item: "+ wishlist.getItem(itemName));
+
+        repo.reserveItem(user, wishlist.getItem(itemName));
+    }
+        // unreserve item
+    public void unreserveItem(Wishlist wishlist, String itemName) {
+
+        repo.unreserveItem(wishlist.getItem(itemName));
+    }
 
     // ------------------- CRUD Methods for Users, Wishlist and Items
     public void addUser(String username){
@@ -104,11 +121,9 @@ public class WishService {
         return repo.checkUserExists(u);
     }
 
-
-
-
-
-
+    public boolean checkWishlistExists(Wishlist wl){
+        return repo.checkWishlistExists(wl);
+    }
 
     // --------------------------------------------------------------
 
@@ -137,6 +152,8 @@ public class WishService {
 
         return null;
     }
+
+
 
 
     /*

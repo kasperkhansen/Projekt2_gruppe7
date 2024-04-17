@@ -40,6 +40,7 @@
                         <th>Price</th>
                         <th>URL</th>
                         <th>CopyUrl</th>
+                        <th>Status</th>
                     </tr>
                     <tr th:each="item, iterStat: ${items}" class="item-row">
                         <td th:text="${iterStat.count}"></td>
@@ -47,12 +48,40 @@
                         <td th:text="${item.price}"></td>
                         <td><a th:href="${item.URL}" th:text="${item.URL}">Item link</a></td>
                         <td><input type="text" value="${item.URL}" onFocus="this.select();" readonly></td>
+                        <td class="reserved" th:if="${item.reserved}">Reserved</td>
+                        <td class="unreserved" th:unless="${item.reserved}">Not Reserved</td>
+                        <td>
+                            <form th:action="@{/reserveItem}" method="post">
+                                <input type="hidden" name="userName" id="userName" th:value="${user.name}">
+                                <input type="hidden" name="reserverUserName" id="reserverUserName" th:value="${user.name}">
+                                <input type="hidden" name="wishlist" id="wishlist" th:value="${wishlist}">
+                                <input type="hidden" name="wishlistName" id="wishlistName" th:value="${wishlist.name}">
+                                <input type="hidden" name="wishlistID" id="wishlist" th:value="${wishlist}">
+                                <input type="hidden" name="itemName" id="itemName" th:value="${item.name}">
+
+                                <button type="submit" name="action" th:value="${item.reserved ? 'unreserve' : 'reserve'}"
+                                th:text="${item.reserved ? 'Unreserve Item' : 'Reserve Item'}"></button>
+                            </form>
+                        </td>
+
+                        <td>
+                            <form th:action="@{/item}" method="post">
+                                <input type="hidden" name="userName" id="userName" th:value="${user.name}">
+                                <input type="hidden" name="wishlistName" id="wishlistName" th:value="${wishlist.name}">
+                                <input type="hidden" name="wishlistID" id="wishlistID" th:value="${wishlist.ID}">
+                                <input type="hidden" name="itemName" id="itemName" th:value="${item.name}">
+                                <input type="hidden" name="price" id="price" th:value="${item.price}">
+                                <input type="hidden" name="URL" id="URL" th:value="${item.URL}">
+                                <button type="submit" name="action" value="delete">Delete</button>
+                            </form>
+                        </td>
                     </tr>
                 </table>
 
                 <form th:action="@{/item}" method="post">
                     <input type="hidden" name="userName" id="userName" th:value="${user.name}">
-                    <input type="hidden" name="wishlistName" id="wishlistName" th:value="${wishlistName}">
+                    <input type="hidden" name="wishlistName" id="wishlistName" th:value="${wishlist.name}">
+                    <input type="hidden" name="wishlistID" id="wishlistID" th:value="${wishlist.ID}">
 
                     <label for="itemName">new Item:</label>
 
@@ -71,8 +100,6 @@
             </div>
         </div>
     </div>
-
-</body>
 
 <footer class="footer">
     <p>Created by: Gruppe 7</p>

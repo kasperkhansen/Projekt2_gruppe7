@@ -254,3 +254,11 @@ nav a:hover {
 @keyframes fadeout {
     100% { opacity: 0; display: none; }
 }
+
+.reserved {
+    color: #D2691E;
+}
+
+.unreserved {
+    color: #2E8B57;
+}

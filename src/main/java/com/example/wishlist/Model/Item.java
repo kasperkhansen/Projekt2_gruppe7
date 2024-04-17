@@ -6,6 +6,7 @@ public class Item {
     private int wishlistID;
     private double price;
     private String URL;
+    private boolean isReserved = false; // default value
 
 
     // ------------------- Constructors -------------------
@@ -17,15 +18,17 @@ public class Item {
         this.name = name;
         this.price = price;
         this.URL = URL;
+        this.isReserved = false;
     }
 
     // load-from-table constructor
-    public Item(int ID, String name, int wishlistID, double price, String URL){
+    public Item(int ID, String name, int wishlistID, double price, String URL, boolean isReserved){
         this.ID = ID;
         this.name = name;
         this.wishlistID = wishlistID;
         this.price = price;
         this.URL = URL;
+        this.isReserved = isReserved;
     }
 
 
@@ -63,6 +66,13 @@ public class Item {
     }
     public void setURL(String URL) {
         this.URL = URL;
+    }
+
+    public boolean isReserved() {
+        return isReserved;
+    }
+    public void setIsReserved(boolean isReserved) {
+        this.isReserved = isReserved;
     }
 
     @Override
