@@ -40,15 +40,17 @@ public class WishRepo {
 
         // ------------------- Get methods -------------------
 
-    public User getUser(String username){
-        String sql = "SELECT * FROM Users WHERE username = ?";
+    public User getUser(String userName){
+        String sql = "SELECT * FROM Users WHERE name = ?";
         RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
-        return template.queryForObject(sql, rowMapper, username);
+        return template.queryForObject(sql, rowMapper, userName);
     }
 
     public List<User> fetchAllUsers(){
         List<User> users = fetchAllUsersEmpty();
         List<User> usersNotNull = new ArrayList<User>();
+
+        // System.out.println("DEBUG fetchAllUsers");
 
         // go through all users and fill them with their Wishlists and the Items of the wishlists, check for null
         for (User u : users){
@@ -57,19 +59,25 @@ public class WishRepo {
                 continue;
             }
 
-            System.out.println("- "+u.getUserID());
-            System.out.println("- "+u.getName());
-            System.out.println("- "+u.getUser_password());
-            System.out.println("- "+u.getEmail());
+            /*
+            System.out.println("- ID = "+u.getID());
+            System.out.println("- name = "+u.getName());
+            System.out.println("- password = "+u.getUserPassword());
+            System.out.println("- email = "+u.getEmail());
+
+             */
 
             List<Wishlist> wishlists = fetchAllWishlistsFrom(u);
             for (Wishlist wl : wishlists){
                 List<Item> items = fetchAllItemsFrom(wl);
                 wl.setItems(items);
             }
+            // System.out.println("- "+wishlists);
             u.setWishlists(wishlists);
             usersNotNull.add(u);
         }
+
+        // System.out.println("DEBUG fetchAllUsers end");
 
         return usersNotNull;
     }
@@ -80,30 +88,34 @@ public class WishRepo {
         return template.query(sql, rowMapper);
     }
 
-    public List<Wishlist> fetchAllWishlists(){
-        String sql = "SELECT * FROM Wishlists";
-        RowMapper<Wishlist> rowMapper = new BeanPropertyRowMapper<>(Wishlist.class);
-        return template.query(sql, rowMapper);
-    }
-
+    // note: mapRow used for fetching Wishlists and Items when using the foreign keys, since the BeanPropertyRowMapper didn't map Model and Table correctly
     public List<Wishlist> fetchAllWishlistsFrom (User u){
-        String sql = "SELECT * FROM Wishlists WHERE userID = ?";
-        RowMapper<Wishlist> rowMapper = new BeanPropertyRowMapper<>(Wishlist.class);
-        return template.query(sql, rowMapper, u.getUserID());
+        String sql = "SELECT * FROM Wishlists WHERE user_ID = ?";
+        return template.query(sql, new RowMapper<Wishlist>() {
+            public Wishlist mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Wishlist wishlist = new Wishlist();
+                wishlist.setID(rs.getInt("ID"));
+                wishlist.setUserID(rs.getInt("user_ID"));
+                wishlist.setName(rs.getString("wishlist_name"));
+
+                return wishlist;
+            }
+        }, u.getID());
     }
 
     public List<Item> fetchAllItemsFrom (Wishlist wl){
-        String sql = "SELECT * FROM Items WHERE wishlistID = ?";
+        String sql = "SELECT * FROM Items WHERE wishlist_ID = ?";
         return template.query(sql, new RowMapper<Item>() {
             public Item mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Item item = new Item();
-                item.setWishlistID(rs.getInt("wishlistID"));
-                item.setItemName(rs.getString("itemName"));
+                item.setID(rs.getInt("ID")); // Get the new ID field
+                item.setWishlistID(rs.getInt("wishlist_ID"));
+                item.setName(rs.getString("name"));
                 item.setPrice(rs.getDouble("price"));
                 item.setURL(rs.getString("URL"));
                 return item;
-            } // using mapRow instead of BeanPropertyRowMapper, since had trouble loading wishlistID
-        }, wl.getWishlistID());
+            }
+        }, wl.getID());
     }
 
     public List<Item> fetchAllItems (){
@@ -111,8 +123,9 @@ public class WishRepo {
         return template.query(sql, new RowMapper<Item>() {
             public Item mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Item item = new Item();
+                item.setID(rs.getInt("ID")); // fetch the new ID field
                 item.setWishlistID(rs.getInt("wishlistID"));
-                item.setItemName(rs.getString("itemName"));
+                item.setName(rs.getString("name"));
                 item.setPrice(rs.getDouble("price"));
                 item.setURL(rs.getString("URL"));
                 return item;
@@ -123,32 +136,35 @@ public class WishRepo {
     // ------------------- Add methods -------------------
 
     public void addWishlist(Wishlist wl, User u){
-        String sql = "INSERT INTO Wishlists (userID, wishlist_name) VALUES (?, ?)";
-        template.update(sql, u.getUserID(), wl.getName());
+        String sql = "INSERT INTO Wishlists (user_ID, wishlist_name) VALUES (?, ?)";
+        template.update(sql, u.getID(), wl.getName());
     }
 
     public void addItem(Wishlist wl, Item i){
-        String sql = "INSERT INTO Items (wishlistID, itemName, price, URL) VALUES (?, ?, ?, ?)";  //update here
-        template.update(sql, wl.getID(), i.getItemName(), i.getPrice(), i.getURL());
+        String sql = "INSERT INTO Items (name, wishlist_ID, price, URL) VALUES (?, ?, ?, ?)";
+        template.update(sql, i.getName(), wl.getID(), i.getPrice(), i.getURL());
     }
 
     public void addUser(User u){
-        String sql = "INSERT INTO Users (username, user_password, email) VALUES (?, ?, ?)";
-        template.update(sql, u.getName(), u.getUser_password(), u.getEmail());
+        System.out.println("DEBUG repo.addUser()");
+        String sql = "INSERT INTO Users (name, user_password, email) VALUES (?, ?, ?)";
+        System.out.println("SQL Command: "+ sql +", Parameters: name=" + u.getName() + ", password=" + u.getUserPassword() + ", email=" + u.getEmail());
+        System.out.println("DEBUG repo.addUser() end\n");
+        template.update(sql, u.getName(), u.getUserPassword(), u.getEmail());
     }
 
     // ------------------- Update methods -------------------
 
     public void updateWishlist(Wishlist wl){
         String sql = "UPDATE Wishlist SET wishlist_name = ? WHERE wishlistID = ?";
-        template.update(sql, wl.getName());
+        template.update(sql, wl.getName(), wl.getID());
     }
 
     // ------------------- Service methods
 
 
     public boolean checkUserExists(User u){
-        String sql = "SELECT COUNT(*) FROM Users WHERE username = ?";
+        String sql = "SELECT COUNT(*) FROM Users WHERE name = ?";
 
         int count = template.queryForObject(sql, Integer.class, u.getName());
         return count > 0;

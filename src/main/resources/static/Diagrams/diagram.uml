@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="370.5" y="1130.5">com.example.wishlist.Controller.HomeController</node>
+    <node x="-65.0" y="948.5">com.example.wishlist.Model.Wishlist</node>
+    <node x="197.5" y="492.5">com.example.wishlist.Repository.WishRepo</node>
+    <node x="-13.0" y="-13.5">com.example.wishlist.Model.Item</node>
+    <node x="-81.0" y="1646.5">com.example.wishlist.Model.User</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.example.wishlist.Repository.WishRepo" target="com.example.wishlist.Model.Item" relationship="CREATE">
+      <point x="-146.5" y="0.0" />
+      <point x="84.0" y="708.0" />
+      <point x="0.0" y="201.5" />
+    </edge>
+    <edge source="com.example.wishlist.Model.User" target="com.example.wishlist.Model.Wishlist" relationship="TO_MANY">
+      <point x="0.0" y="-341.5" />
+      <point x="0.0" y="299.5" />
+    </edge>
+    <edge source="com.example.wishlist.Model.Wishlist" target="com.example.wishlist.Model.Item" relationship="TO_MANY">
+      <point x="0.0" y="-299.5" />
+      <point x="-40.0" y="201.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.5956866010998308" showDependencies="true" x="-136.15288055478493" y="1255.184" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

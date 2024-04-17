@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Start Page</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body class="body">
+    <header class="header">
+
+        <div class="homebuttonOgHeader">
+
+            <a href="/home">
+                <button class="image-button"></button>
+            </a>
+            <h1>WishList</h1>
+        </div>
+
+        <nav>
+
+        </nav>
+    </header>
+
+
+    <div class="containers">
+        <div class="container-left">
+            <!-- Your left container content -->
+        </div>
+        <div class="container-center">
+
+
+        <h2>User List</h2>
+
+        <div class = "table">
+            <table>
+                <div class="table-header">
+                    <thead>
+
+                    <tr>
+                        <th>Users</th>
+                    </tr>
+
+                    </thead>
+                </div>
+                <div class="table-body">
+                    <tbody id="table-body">
+                    <!-- Table rows will be here -->
+                    <tr th:each="user : ${users}">
+                        <td><a th:href="@{'/user/' + ${user.name}}" th:text="${user.name}">Username</a></td>
+                        <td th:each="wishlist : ${user.wishlists}">
+                            <!-- add your URL pattern for wishlists along with the ID if needed -->
+                            <a th:text="${wishlist.name}">WishlistName</a>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </div>
+            </table>
+
+
+            <form th:action="@{/user}" method="post">
+                <label for="userName">User Name:</label>
+                <input type="text" name="userName" id="userName" placeholder="New User Name">
+                <button type="submit">Add User</button>
+            </form>
+        </div>
+
+        </div>
+        <div class="container-right">
+            <div class="notification-box">
+            <!-- Your right container content -->
+            <h3 th:if="${error}" th:class="'error-message'" th:text="${error}" class='notifications'></h3>
+            <h3 th:if="${success}" th:class="'success-message'" th:text="${success}" class='notifications'></h3>
+            </div>
+        </div>
+    </div>
+
+
+
+    <footer class="footer">
+    <p>Created by: Gruppe 7</p>
+</footer>
+
+</body>
+
+</html>

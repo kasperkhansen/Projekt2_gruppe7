@@ -3,129 +3,111 @@ package com.example.wishlist.Model;
 import java.util.List;
 
 public class User {
-    public int userID;
-    public String username;
-    public String user_password;
+    public int ID;
+    public String name;
+    public String userPassword;
     private String email;
+
     private List<Wishlist> wishlists;
 
-    // Constructor used when creating a new user
 
-    public User (String username) {
-        this.username = username;
-    }
+    // Constructor used when creating a new user
 
     public User() {
     }
 
-    public User(int userId) {
-        this.userID = userId;
+    public User (String name) {
+        this.name = name;
     }
 
-    public User(String username, String user_password, String email, List<Wishlist> wishlists) {
-        this.username = username;
-        this.user_password = user_password;
+    public User(int userId) {
+        this.ID = userId;
+    }
+
+    // save-to-table constructor
+    public User(String name, String userPassword, String email, List<Wishlist> wishlists) {
+        this.name = name;
+        this.userPassword = userPassword;
         this.email = email;
         this.wishlists = wishlists;
     }
 
     // load-from-table constructor
-    public User(int userID, String username, String user_password, String email, List<Wishlist> wishlists){
-        this.userID = userID;
-        this.username = username;
-        this.user_password = user_password;
+    public User(int ID, String name, String userPassword, String email, List<Wishlist> wishlists){
+        this.ID = ID;
+        this.name = name;
+        this.userPassword = userPassword;
         this.email = email;
         this.wishlists = wishlists;
     }
 
 
+    // -----------
 
-    // ------------------- CRUD Methods for Wishlists
-    // ------------------- Create Wishlist
-    public void addWishlist (Wishlist newList){
-        wishlists.add(newList);
-    }
-
-    // ------------------- Read List of Wishlists
     public List<Wishlist> getAllWishlists (){
         return wishlists;
     }
 
+    // ------------------- CRUD Methods for Wishlists
+    // ------------------- Create Wishlist
 
-    // ------------------- Wishlists for specific UserID
-    public void displayWishlistbyUserID (int userID){
-        boolean idMatch = false;
-        for (Wishlist wishlist : wishlists) {
-            if (wishlist.getID() == userID){
-                System.out.print(wishlist);
-                idMatch = true;
-            }
-        }
-        if (!idMatch) {
-            System.out.println("Der blev ikke fundet nogle ønskelister. :-(");
-        }
-    }
-    /*
-    public Wishlist getWishlistById(int id) {
-        for (Wishlist wishlist : wishlists) {
-            if (wishlist.getId() == id) {
-                return wishlist;
-            }
-        }
-        return null;
-    }
-    */
 
-    // ------------------- Get Wishlist By Name(String listName)
-    public Wishlist getWishlistByName(String wName) {
-        for (Wishlist wishlist : wishlists) {
-            if (wishlist.getWishlist_name().equals(wName)) {
-                return wishlist;
-            }
-        }
-        return null;
+    // ------------------- Read List of Wishlists
+
+
+    // ------------------- CRUD methods for Wishlists of User -------------------
+    public void addWishlist (Wishlist newList){
+        wishlists.add(newList);
     }
 
-    // ------------------- Update Wishlist
+    public void displayWishlists() {
+        for (Wishlist wishlist : wishlists) {
+            System.out.println(wishlist);
+        }
+    }
+
     public void updateWishlist(Wishlist updatedWishlist) {
-        int index = wishlists.indexOf(getWishlistByName(updatedWishlist.getWishlist_name()));
+        // wishlist name is unique
+        // -> find the index of the old wishlist to update using name
+
+        int index = wishlists.indexOf(updatedWishlist.getName());
         wishlists.remove(index);
         wishlists.set(index, updatedWishlist);
     }
 
-
-    // ------------------- Delete Wishlist by name
     public void deleteWishlist(String name) {
         for (int i = 0; i < wishlists.size(); i++){
-            if (wishlists.get(i).getWishlist_name().equals(name)) {
+            if (wishlists.get(i).getName().equals(name)) {
                 wishlists.remove(i);
                 return;
             }
         }
         System.out.println("Der ikke fundet nogle ønskelister med dette navn: " + name);
     }
-
-    // ------------------- GET and SET
-    public int getId() { return userID; }
-    public int getUserID() {
-        return userID;
+    public void deleteWishlist(Wishlist wl) {
+        wishlists.remove(wl);
     }
-    public void setUserID(int i) {
-        this.userID = i;
+
+    // ------------------- GET and SET -------------------
+    public int getID() {
+        return ID;
+    }
+    public void setID(int id) {
+        this.ID = id;
     }
 
     public String getName() {
-        return username;
+        return name;
     }
-    public void setUsername(String userName) {
-        this.username = userName;
+    public void setName(String userName) {
+        this.name = userName;
     }
 
-    public String getUser_password() {
-        return user_password;
+    public String getUserPassword() {
+        return userPassword;
     }
-    public void setUser_password(String user_password) {
-        this.user_password = user_password;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
     public String getEmail() {
@@ -144,9 +126,9 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userID=" + userID +
-                ", username='" + username + '\'' +
-                ", user_password='" + user_password + '\'' +
+                "ID=" + ID +
+                ", name='" + name + '\'' +
+                ", user password='" + userPassword + '\'' +
                 ", email='" + email + '\'' +
                 ", wishlists=" + wishlists +
                 '}';

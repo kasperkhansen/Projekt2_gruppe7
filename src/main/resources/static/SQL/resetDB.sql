@@ -1,0 +1,6 @@
+-- deletes all data from the tables
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE Items;
+TRUNCATE TABLE Wishlists;
+TRUNCATE TABLE Users;
+SET FOREIGN_KEY_CHECKS = 1;

@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 // frontend vscode
 // backend intellij
 
@@ -26,7 +28,7 @@ public class HomeController {
         List<User> userList = wishService.getUsers();
         model.addAttribute("users", userList);
 
-        return "startpage";
+        return "home";
     }
 
 
@@ -39,33 +41,19 @@ public class HomeController {
         // check if User is not null and retrieve Wishlists
         if(user != null){
             System.out.println(" User:"+user);
-            System.out.println(" User id: " + user.getUserID());
+            System.out.println(" User id: " + user.getID());
 
             List<Wishlist> wishlists = user.getWishlists();
             System.out.println("- wishlists from User object "+ user.getWishlists());
 
             // add user id and wishlists to model
             model.addAttribute("user", user);
-            model.addAttribute("userId", user.getUserID());
+            model.addAttribute("userId", user.getID());
             model.addAttribute("wishlists", wishlists);
-
-
         }
 
         return "userpage";
     }
-
-    @PostMapping("/user")
-    public String addUser(@RequestParam("userName") String userName) {
-
-        // wishService addUser - calls database
-        wishService.addUser(userName);
-
-        //redirecting to the same user page after adding the user
-        return "redirect:/home";
-    }
-
-
 
     @GetMapping("/{userName}/wishlist/{wishlistName}")
     public String wishlistPage(@PathVariable("userName") String userName, @PathVariable("wishlistName") String wishlistName, Model model) {
@@ -74,7 +62,7 @@ public class HomeController {
         User user = wishService.getUserByUsername(userName);
         Wishlist wishlist = wishService.getWishlistByName(wishlistName, user);
 
-        if(user != null && wishlist != null){
+        if (user != null && wishlist != null){
             // wishService getItems - calls hardcoded data
             List<Item> items = wishService.getItemsFromWishlist(wishlist);
 
@@ -86,35 +74,51 @@ public class HomeController {
         return "wishlistpage";
     }
 
+    @PostMapping("/user")
+    public String addUser(@RequestParam("userName") String userName, RedirectAttributes redirectAttributes) {
+        try {
+            wishService.addUser(userName);
+            redirectAttributes.addFlashAttribute("success", "User '"+userName+"' added successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Failed to add user");
+        }
+        return "redirect:/home";
+    }
+
+
     @PostMapping("/wishlist")
-    public String addWishlist(@RequestParam("username") String username, @RequestParam("wishlist_name") String wishlist_name) {
-
-        // debug addWishlist POST
-        System.out.println("DEBUG addWishlist POST method");
-        System.out.println("username: " + username);
-        System.out.println("wishlist_name: " + wishlist_name);
-        System.out.println();
-
-        // wishService addWishlist - calls database
-        wishService.addWishlist(username, wishlist_name);
-
-        //redirecting to the same user page after adding the wishlist
-        return "redirect:/user/" + username;
+    public String addWishlist(
+            @RequestParam("userName") String userName,
+            @RequestParam("wishlistName") String wishlistName,
+            RedirectAttributes redirectAttributes) {
+        // Validate wishlistName doesn't include special characters like æ, ø, å
+        if (!wishlistName.matches("[a-zA-Z0-9 ]+")) {
+            redirectAttributes.addFlashAttribute("error", "Invalid characters in the wishlist name");
+        } else {
+            try {
+                wishService.addWishlist(userName, wishlistName);
+                redirectAttributes.addFlashAttribute("success", "Wishlist '"+wishlistName+"' added successfully");
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("error", "Failed to add wishlist");
+            }
+        }
+        return "redirect:/user/" + userName;
     }
 
     @PostMapping("/item")
-    public String addItem(@RequestParam("username") String username,
-                          @RequestParam("wishlist_name") String wishlist_name,
-                          @RequestParam("itemName") String item_name,
-                          @RequestParam("price") Double item_price,
-                          @RequestParam("URL") String item_url,
-                          Model model) {
-
-        // You will need to add a new item to user's specific wishlist here
-        wishService.addItem(username, wishlist_name, item_name, item_price, item_url);
-
-        // After adding the item, redirect back to the wishlist page.
-        return "redirect:/" + username + "/wishlist/" + wishlist_name;
+    public String addItem(@RequestParam("userName") String userName,
+                          @RequestParam("wishlistName") String wishlistName,
+                          @RequestParam("itemName") String itemName,
+                          @RequestParam("price") Double price,
+                          @RequestParam("URL") String URL,
+                          RedirectAttributes redirectAttributes) {
+        try {
+            wishService.addItem(userName, wishlistName, itemName, price, URL);
+            redirectAttributes.addFlashAttribute("success", "Item added successfully");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Failed to add item");
+        }
+        return "redirect:/" + userName + "/wishlist/" + wishlistName;
     }
 
 

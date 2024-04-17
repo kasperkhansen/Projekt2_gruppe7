@@ -18,21 +18,35 @@ public class WishService {
     @Autowired
     private WishRepo repo;
 
-
     // ------------------- CRUD Methods for Users, Wishlist and Items
     public void addUser(String username){
-        // check if userName is null
-        if (username == null) {
-            return;
-        }
+        try {
+            System.out.println("DEBUG addUser");
+            System.out.println("DEBUG check: Is 'username' null? - " + (username == null));
 
-        // check if user exists in database
-        if (repo.checkUserExists(new User(username)) == true) {
-            return;
-        }
+            // check if userName is null
+            if (username == null) {
+                System.out.println("Username is null");
+                return;
+            }
 
-        User u = new User(username);
-        repo.addUser(u);
+            System.out.println("DEBUG check: Does User exist? - " + repo.checkUserExists(new User(username)));
+
+            // check if user exists in database
+            if (repo.checkUserExists(new User(username)) == true) {
+                System.out.println("User already exists");
+                return;
+            }
+
+            User u = new User(username);
+            System.out.println("user=" + u);
+            System.out.println("DEBUG addUser end");
+            System.out.println();
+            repo.addUser(u);
+        } catch (Exception e) {
+            System.out.println("DEBUG: Exception in addUser!");
+            e.printStackTrace();
+        }
     }
 
     public void addWishlist(String username, String wishlistName) {
@@ -56,9 +70,7 @@ public class WishService {
                 repo.addUser(new User(username));
                 repo.addWishlist(wl, u);
             }
-
-
-            }
+        }
     }
 
 
@@ -72,10 +84,6 @@ public class WishService {
     // ------------------- Read Methods
     public List<User> getUsers() {
         return repo.fetchAllUsers();
-    }
-
-    public List<Wishlist> getWishlists() {
-        return repo.fetchAllWishlists();
     }
 
     public List<Wishlist> getWishlistsFrom(String userName) {
@@ -181,9 +189,9 @@ public class WishService {
         return null;
     }
 
-    public List<Wishlist> getWishlistsTest(int userID) {
+    public List<Wishlist> getWishlistsTest(int ID) {
         for (User user : users) {
-            if (user.getId()==userID) {
+            if (user.getId()==ID) {
                 return user.getWishlists();
             }
         }

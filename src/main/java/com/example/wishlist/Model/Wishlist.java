@@ -4,24 +4,24 @@ package com.example.wishlist.Model;
 import java.util.List;
 
 public class Wishlist {
-    private int wishlistID;
+    private int ID;
+    private String name;
     private int userID;
-    private String wishlist_name;
 
     List<Item> items;
 
     // load-from-table constructor
-    public Wishlist(int wishlistID, int userID, String wishlist_name, List<Item> items){
-        this.wishlistID = wishlistID;
+    public Wishlist(int ID, int userID, String name, List<Item> items){
+        this.ID = ID;
         this.userID = userID;
-        this.wishlist_name = wishlist_name;
+        this.name = name;
         this.items = items;
     }
 
     public Wishlist () {}
 
-    public Wishlist(String wishlist_name) {
-        this.wishlist_name = wishlist_name;
+    public Wishlist(String name) {
+        this.name = name;
     }
 
 
@@ -42,7 +42,7 @@ public class Wishlist {
     // ------------------- Search for Item by name
     public Item getItemByName(String name){
         for (Item item : items){
-            if (item.getItemName().equals(name)){
+            if (item.getName().equals(name)){
                 return item;
             }
         }
@@ -52,7 +52,7 @@ public class Wishlist {
     // ------------------- Update Item
     public void updateItem (Item updatedItem) {
         for (int i = 0 ; i < items.size(); i++) {
-            if (items.get(i).getItemName().equals(updatedItem.getItemName())){
+            if (items.get(i).getName().equals(updatedItem.getName())){
                 items.set(i, updatedItem);
                 return;
             }
@@ -60,26 +60,19 @@ public class Wishlist {
     }
     // ------------------- Delete Item
     public void deleteItem(String name) {
-        items.removeIf(item -> item.getItemName().equals(name));
+        items.removeIf(item -> item.getName().equals(name));
     }
 
 
 
     // ------------------- GET and SET
+
     public int getID() {
-        return wishlistID;
+        return ID;
     }
 
-    public String getName() {
-        return wishlist_name;
-    }
-
-    public int getWishlistID() {
-        return wishlistID;
-    }
-
-    public void setWishlistID(int wishlistID) {
-        this.wishlistID = wishlistID;
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public int getUserID() {
@@ -90,12 +83,12 @@ public class Wishlist {
         this.userID = userID;
     }
 
-    public String getWishlist_name() {
-        return wishlist_name;
+    public String getName() {
+        return name;
     }
 
-    public void setWishlist_name(String wishlist_name) {
-        this.wishlist_name = wishlist_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<Item> getItems() {
@@ -109,9 +102,9 @@ public class Wishlist {
     @Override
     public String toString() {
         return "Wishlist{" +
-                "wishlistID=" + wishlistID +
+                "ID=" + ID +
                 ", userID=" + userID +
-                ", wishlist_name='" + wishlist_name + '\'' +
+                ", wishlist_name='" + name + '\'' +
                 ", items=" + items +
                 '}';
     }
