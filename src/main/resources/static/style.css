@@ -225,8 +225,8 @@ nav a:hover {
 .notification-box {
     display: inline-block;
     padding: 1em;
-
     box-sizing: border-box;
+    animation: fadeout 5s forwards;
 }
 
 .notifications {
@@ -244,18 +244,6 @@ nav a:hover {
     padding: 10px 20px; /* Y X - vertical horizontal */ /* Adds a space buffer around the text inside the box */
 }
 
-.notifications .close {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: .75rem 1.25rem;
-    color: inherit;
-    background-color: transparent;
-    border: 0;
-    font-size: 1.5rem;
-    cursor: pointer;
-}
-
 
 .error-message {
     color: #a94442;
@@ -270,6 +258,5 @@ nav a:hover {
 }
 
 @keyframes fadeout {
-    0%   { opacity: 1; }
-    100% { opacity: 0; }
+    100% { opacity: 0; display: none; }
 }

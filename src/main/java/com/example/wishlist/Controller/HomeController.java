@@ -55,17 +55,6 @@ public class HomeController {
         return "userpage";
     }
 
-    @PostMapping("/user")
-    public String addUser(@RequestParam("userName") String userName, RedirectAttributes redirectAttributes) {
-        try {
-            wishService.addUser(userName);
-            redirectAttributes.addFlashAttribute("success", "User added successfully");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Failed to add user");
-        }
-        return "redirect:/home";
-    }
-
     @GetMapping("/{userName}/wishlist/{wishlistName}")
     public String wishlistPage(@PathVariable("userName") String userName, @PathVariable("wishlistName") String wishlistName, Model model) {
 
@@ -83,6 +72,17 @@ public class HomeController {
         }
 
         return "wishlistpage";
+    }
+
+    @PostMapping("/user")
+    public String addUser(@RequestParam("userName") String userName, RedirectAttributes redirectAttributes) {
+        try {
+            wishService.addUser(userName);
+            redirectAttributes.addFlashAttribute("success", "User added successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Failed to add user");
+        }
+        return "redirect:/home";
     }
 
 
