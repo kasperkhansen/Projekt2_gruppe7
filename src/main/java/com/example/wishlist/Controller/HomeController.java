@@ -114,6 +114,26 @@ public class HomeController {
         return "redirect:/home";
     }
 
+    @PostMapping("/addfriend")
+    public String addFriend(@RequestParam("userName") String userName,
+                          @RequestParam("email") String email,
+                          @RequestParam("password") String password,
+                          @RequestParam("loggedinuser") User loggedInUser,
+                          RedirectAttributes redirectAttributes) {
+        List<Object> requiredParameters = Arrays.asList(userName);
+
+        try {
+            validationService.validateNotNullInput(requiredParameters);
+            userName = validationService.validateName(userName); // validate the username
+            wishService.addUser(userName, email, password);
+            redirectAttributes.addFlashAttribute("success", "User '" + userName + "' added successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage()); // Uses the exception message set by the ValidationService method
+        }
+        return "redirect:/home";
+    }
+
+
     @PostMapping("/register")
     public String registerUser(@RequestParam("userName") String userName,
                                @RequestParam("email") String email,
