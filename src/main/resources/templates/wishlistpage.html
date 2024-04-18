@@ -18,7 +18,7 @@
         </div>
 
         <nav>
-
+            <a href="/wishlist/{{userName}/wishlist/{wishlistName}}-wishlist" id="userWishlistLink"><button id="currentUrlButton">Show Current URL</button></a>
         </nav>
     </header>
 
@@ -39,14 +39,12 @@
                         <th>Name</th>
                         <th>Price</th>
                         <th>URL</th>
-                        <th>CopyUrl</th>
                     </tr>
                     <tr th:each="item, iterStat: ${items}" class="item-row">
                         <td th:text="${iterStat.count}"></td>
                         <td th:text="${item.name}"></td>
                         <td th:text="${item.price}"></td>
                         <td><a th:href="${item.URL}" th:text="${item.URL}">Item link</a></td>
-                        <td><input type="text" value="${item.URL}" onFocus="this.select();" readonly></td>
                     </tr>
                 </table>
 
