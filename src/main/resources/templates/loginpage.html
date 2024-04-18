@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login Page</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="login-container">
+    <h2>Login</h2>
+    <form action="/login" method="post">
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required placeholder="Enter Email">
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required placeholder="Enter Password">
+        </div>
+        <div>
+            <input type="submit" value="Login">
+        </div>
+        <br>
+        <br>
+    </form>
+    <form th:action="@{/user}" method="post">
+        <label for="userName">Create New User:</label>
+        <input type="text" name="userName" id="userName" placeholder="New User Name">
+        <input type="text" name="email" id="email" placeholder="Email">
+        <input type="text" name="password" id="password" placeholder="New Password">
+        <button type="submit">Add User</button>
+    </form>
+</div>
+
+</body>
+</html>
