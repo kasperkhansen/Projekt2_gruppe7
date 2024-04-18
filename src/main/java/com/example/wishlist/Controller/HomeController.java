@@ -118,6 +118,7 @@ public class HomeController {
     public String loginUser (@RequestParam("userName") String userName,
                              @RequestParam("email") String email,
                              @RequestParam("password") String password,
+                             Model model,
                              RedirectAttributes redirectAttributes) {
         List<Object> requiredParameters = Arrays.asList(userName, password);
 
@@ -129,8 +130,9 @@ public class HomeController {
 
             User loggedInUser = wishService.getUserByUsername(userName);
 
-            if(loggedInUser != null && validationService.loginValidation(email, password) {
+            if(loggedInUser != null && validationService.loginValidation(email, password)) {
                 wishService.loginUser(userName, password);
+                model.addAttribute("loggedInUser", loggedInUser);
                 redirectAttributes.addFlashAttribute("success", "User '" + userName + "' logged in successfully!");
                 return "redirect:/user/" + userName;
             } else {
@@ -209,32 +211,31 @@ public class HomeController {
     }
 
     @PostMapping("/reserveItem")
-    public String reserveItem(@RequestParam("reserverUserName") String reserverUserName,
+    public String reserveItem(@RequestParam("loggedInUser") User loggedInUser,
                               @RequestParam("userName") String userName,
                               @RequestParam("wishlist") Wishlist wishlist,
                               @RequestParam("wishlistName") String wishlistName,
                               @RequestParam("itemName") String itemName,
+                              Model model,
                               RedirectAttributes redirectAttributes) {
         try {
             // initialize with items retrieved from the database
             wishlist = wishService.getWishlistByName(wishlistName, wishService.getUserByUsername(userName));
-            // TODO: validate users exists (reserver and owner of the wishlist)
 
             // validate user inputs
             validationService.validateNotNullInput(Arrays.asList(itemName));
             itemName = validationService.validateName(itemName);
 
+            wishService.toggleReserveItem(loggedInUser, wishlist, itemName);
 
-
-            wishService.reserveItem(reserverUserName, wishlist, itemName); // reserverUserName should be of the logged in Reserver, not the owner of the wishlist
-
+            model.addAttribute("wishlist", wishlist);
+            model.addAttribute("loggedInUser", loggedInUser);
             redirectAttributes.addFlashAttribute("success", "Item '"+itemName+"'reserved successfully");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
         return "redirect:/" + userName + "/wishlist/" + wishlistName;
-    } // TODO: with log in feature the userName should be of the logged in user
-
+    }
 
 }
 

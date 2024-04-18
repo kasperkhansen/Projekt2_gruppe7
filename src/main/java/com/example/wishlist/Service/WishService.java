@@ -18,23 +18,41 @@ public class WishService {
     private WishRepo repo;
 
 
+    // Login a user
+    public void loginUser(String username, String password) {
+        User user = getUserByUsername(username);
+        // Ensure user exists
+        if (user == null) {
+            System.out.println("User does not exist.");
+            return;
+        }
+
+        // Check password
+        // Hash and compare in real situation
+        if (!user.getUserPassword().equals(password)) {
+            System.out.println("Password is incorrect.");
+            return;
+        }
+
+        // Log the user in
+        user.setLoggedIn(true);
+
+    }
 
     // ------------------- main functionality methods -------------------
         // reserve item
-    public void reserveItem(String userNameOfTheUserReserving, Wishlist wishlist, String itemName) {
-        System.out.println("DEBUG reserveItem");
-        User user = getUserByUsername(userNameOfTheUserReserving);
+    public void toggleReserveItem(User loggedInUser, Wishlist wishlist, String itemName) {
 
-        System.out.println("User: " + user);
-        System.out.println("Wishlist: " + wishlist);
-        System.out.println("Item: "+ wishlist.getItem(itemName));
+        Item item = wishlist.getItem(itemName);
 
-        repo.reserveItem(user, wishlist.getItem(itemName));
-    }
-        // unreserve item
-    public void unreserveItem(Wishlist wishlist, String itemName) {
-
-        repo.unreserveItem(wishlist.getItem(itemName));
+        // Check the current reservation status of the item
+        if(item.isReserved()) {
+            // If the item is already reserved, unreserve it
+            repo.unreserveItem(item);
+        } else {
+            // If the item is not reserved, reserve it
+            repo.reserveItem(loggedInUser, item);
+        }
     }
 
     // ------------------- CRUD Methods for Users, Wishlist and Items
