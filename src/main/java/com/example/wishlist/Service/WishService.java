@@ -131,6 +131,22 @@ public class WishService {
         return this.repo;
     }
 
+
+
+
+
+    public User getUserByEmail(String email) {
+
+        for (User user : getUsers()) {
+            if (user.getEmail().equals(email) && user.getEmail() != null) {
+                return user;
+            }
+        }
+
+        return null;
+    }
+
+
     public User getUserByUsername(String userName) {
 
         for (User user : getUsers()) {
