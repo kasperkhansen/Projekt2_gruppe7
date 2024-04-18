@@ -8,7 +8,6 @@ import com.example.wishlist.Repository.WishRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class WishService {
 
 
     // ------------------- CRUD Methods for Users, Wishlist and Items
-    public void addUser(String username){
+    public void addUser(String username, String email, String password){
         try {
             // check if userName is null
             if (username == null) {

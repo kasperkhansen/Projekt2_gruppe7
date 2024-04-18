@@ -24,6 +24,11 @@ public class HomeController {
     @Autowired
     private ValidationService validationService;
 
+    @GetMapping("/login")
+    public String login(){
+        return "loginpage";
+    }
+
     @GetMapping("/home")
     public String home(Model model) {
 
@@ -91,18 +96,44 @@ public class HomeController {
     }
 
     @PostMapping("/user")
-    public String addUser(@RequestParam("userName") String userName, RedirectAttributes redirectAttributes) {
+    public String addUser(@RequestParam("userName") String userName,
+                          @RequestParam("email") String email,
+                          @RequestParam("password") String password,
+                          RedirectAttributes redirectAttributes) {
         List<Object> requiredParameters = Arrays.asList(userName);
 
         try {
             validationService.validateNotNullInput(requiredParameters);
             userName = validationService.validateName(userName); // validate the username
-            wishService.addUser(userName);
+            wishService.addUser(userName, email, password);
             redirectAttributes.addFlashAttribute("success", "User '" + userName + "' added successfully!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage()); // Uses the exception message set by the ValidationService method
         }
         return "redirect:/home";
+    }
+
+    @PostMapping("/register")
+    public String registerUser(@RequestParam("userName") String userName,
+                               @RequestParam("email") String email,
+                               @RequestParam("password") String password,
+                               RedirectAttributes redirectAttributes) {
+        List<Object> requiredParameters = Arrays.asList(userName, email, password);
+
+        try {
+            // Validate input parameters
+            validationService.validateNotNullInput(requiredParameters);
+            userName = validationService.validateName(userName); // Validate the username
+            email = validationService.validateEmail(email);     // Validate the email
+            password = validationService.validatePassword(password); // Validate the password
+
+            wishService.addUser(userName, email, password);
+
+            redirectAttributes.addFlashAttribute("success", "User '" + userName + "' registered successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage()); // Uses the exception message set by the ValidationService method
+        }
+        return "redirect:/login"; // Redirect to the login page after registration
     }
 
     @PostMapping("/wishlist")

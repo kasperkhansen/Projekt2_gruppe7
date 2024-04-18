@@ -13,6 +13,8 @@ public class ValidationService {
     private static final int NAME_MAX_LENGTH = 15; // names = username, passwords, wishlistNames and item names
     private static final int EMAIL_MAX_LENGTH = 40;
 
+    private static final int PASSWORD_MAX_LENGTH = 20;
+
 
     // ----------------- public methods -----------------
         // complex rule-check methods with combination of specific and individual rules
@@ -27,6 +29,14 @@ public class ValidationService {
         validateLength(name, NAME_MAX_LENGTH, "Name '"+name+"' is too long");
         validateCharacterSet(name, "Name '"+name+"' contains invalid characters");
         return name;
+    }
+
+    public String validatePassword(String passwordPara) throws Exception {
+        String password = cleanUpField(passwordPara);
+        validateNonEmpty(password, "Password cannot be empty");
+        validateLength(password, PASSWORD_MAX_LENGTH, "Passord is too long");
+        validatePasswordFormat(password, "Password can only contain letters A-Z and numbers");
+        return password;
     }
 
     public String validateEmail(String emailPara) throws Exception {
@@ -92,6 +102,12 @@ public class ValidationService {
 
         // character set rules
     private void validateCharacterSet(String field, String message) throws IllegalArgumentException {
+        if (!field.matches("[a-zA-Z0-9 ]+")) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    private void validatePasswordFormat(String field, String message) throws IllegalArgumentException {
         if (!field.matches("[a-zA-Z0-9 ]+")) {
             throw new IllegalArgumentException(message);
         }

@@ -156,7 +156,7 @@ public class WishRepo {
     // ------------------- Update methods -------------------
 
     public void updateWishlist(Wishlist wl){
-        String sql = "UPDATE Wishlist SET wishlist_name = ? WHERE wishlistID = ?";
+        String sql = "UPDATE wishlists SET wishlist_name = ? WHERE wishlistID = ?";
         template.update(sql, wl.getName(), wl.getID());
     }
 
