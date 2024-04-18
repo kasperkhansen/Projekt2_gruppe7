@@ -150,9 +150,6 @@ public class WishService {
     }
 
 
-
-
-
     public User getUserByEmail(String email) {
 
         for (User user : getUsers()) {
