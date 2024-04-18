@@ -36,7 +36,7 @@ public class HomeController {
 
 
     @GetMapping("/user/{userName}")
-    public String userPage(@PathVariable("userName") String username, Model model) {
+    public String userpage(@PathVariable("userName") String username, Model model) {
         try {
             // get User
             User user = wishService.getUserByUsername(username);
@@ -56,11 +56,11 @@ public class HomeController {
             model.addAttribute("errorMessage", e.getMessage());
             return "errorPage";
         }
-        return "userPage";
+        return "userpage";
     }
 
     @GetMapping("/{userName}/wishlist/{wishlistName}")
-    public String wishlistPage(@PathVariable("userName") String userName,
+    public String wishlistpage(@PathVariable("userName") String userName,
                                @PathVariable("wishlistName") String wishlistName,
                                Model model) {
         try {
@@ -87,7 +87,7 @@ public class HomeController {
             model.addAttribute("errorMessage", e.getMessage());
             return "errorPage";
         }
-        return "wishlistPage";
+        return "wishlistpage";
     }
 
     @PostMapping("/user")
