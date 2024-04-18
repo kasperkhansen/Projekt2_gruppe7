@@ -1,5 +1,8 @@
 package com.example.wishlist.Service;
 
+import com.example.wishlist.Model.User;
+import com.example.wishlist.Repository.WishRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
@@ -14,6 +17,15 @@ public class ValidationService {
     private static final int EMAIL_MAX_LENGTH = 40;
 
     private static final int PASSWORD_MAX_LENGTH = 20;
+    @Autowired
+    private final WishRepo wishRepo;
+    @Autowired
+    private final WishService wishService;
+
+    public ValidationService(WishRepo wishRepo, WishService wishService) {
+        this.wishRepo = wishRepo;
+        this.wishService = wishService;
+    }
 
 
     // ----------------- public methods -----------------
@@ -138,4 +150,15 @@ public class ValidationService {
         return name.trim();
     }
 
+
+
+    public boolean loginValidation(String email, String password) {
+        User user = wishService.getUserByEmail(email);
+        if (user != null) {
+            if (user.getUserPassword().equals(password)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
