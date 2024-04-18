@@ -67,7 +67,9 @@ public class HomeController {
     @GetMapping("/{userName}/wishlist/{wishlistName}")
     public String wishlistpage(@PathVariable("userName") String userName,
                                @PathVariable("wishlistName") String wishlistName,
+                               @RequestParam("loggedInUser") User loggedInUser,
                                Model model) {
+
         try {
             // Get User and Wishlist
             User user = wishService.getUserByUsername(userName);
@@ -82,6 +84,7 @@ public class HomeController {
             if(wishlist != null) {
                 List<Item> items = wishService.getItemsFromWishlist(wishlist);
 
+                model.addAttribute("loggedInUser", loggedInUser); // add loggedInUser to model (for reserveItem method
                 model.addAttribute("user", user);
                 model.addAttribute("wishlist", wishlist);
                 model.addAttribute("items", items);
@@ -115,26 +118,27 @@ public class HomeController {
     }
 
     @PostMapping("/loginUser")
-    public String loginUser (@RequestParam("userName") String userName,
-                             @RequestParam("email") String email,
+    public String loginUser (@RequestParam("email") String email,
                              @RequestParam("password") String password,
                              Model model,
                              RedirectAttributes redirectAttributes) {
-        List<Object> requiredParameters = Arrays.asList(userName, password);
+        List<Object> requiredParameters = Arrays.asList(email, password);
 
         try {
             validationService.validateNotNullInput(requiredParameters);
-            userName = validationService.validateName(userName); // validate the username
+
             email = validationService.validateEmail(email);     // validate the email
             password = validationService.validatePassword(password); // validate the password
 
-            User loggedInUser = wishService.getUserByUsername(userName);
+            User loggedInUser = wishService.getUserByEmail(email);
+            loggedInUser.setEmail(email);
+            loggedInUser.setUserPassword(password);
 
             if(loggedInUser != null && validationService.loginValidation(email, password)) {
-                wishService.loginUser(userName, password);
+                wishService.loginUser(loggedInUser.name, password);
                 model.addAttribute("loggedInUser", loggedInUser);
-                redirectAttributes.addFlashAttribute("success", "User '" + userName + "' logged in successfully!");
-                return "redirect:/user/" + userName;
+                redirectAttributes.addFlashAttribute("success", "User '" + loggedInUser.name + "' logged in successfully!");
+                return "redirect:/user/" + loggedInUser.name;
             } else {
                 throw new Exception("Invalid email or password");
             }

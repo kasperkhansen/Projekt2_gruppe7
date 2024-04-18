@@ -69,6 +69,8 @@ public class WishService {
             }
 
             User u = new User(username);
+            u.setEmail(email);
+            u.setUserPassword(password);
             repo.addUser(u);
         } catch (Exception e) {
 
@@ -151,13 +153,11 @@ public class WishService {
 
 
     public User getUserByEmail(String email) {
-
         for (User user : getUsers()) {
-            if (user.getEmail().equals(email) && user.getEmail() != null) {
+            if (user.getEmail() != null && user.getEmail().equals(email)) {
                 return user;
             }
         }
-
         return null;
     }
 
