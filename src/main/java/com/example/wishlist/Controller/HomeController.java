@@ -114,6 +114,34 @@ public class HomeController {
         return "redirect:/home";
     }
 
+    @PostMapping("/loginUser")
+    public String loginUser (@RequestParam("userName") String userName,
+                             @RequestParam("email") String email,
+                             @RequestParam("password") String password,
+                             RedirectAttributes redirectAttributes) {
+        List<Object> requiredParameters = Arrays.asList(userName, password);
+
+        try {
+            validationService.validateNotNullInput(requiredParameters);
+            userName = validationService.validateName(userName); // validate the username
+            email = validationService.validateEmail(email);     // validate the email
+            password = validationService.validatePassword(password); // validate the password
+
+            User loggedInUser = wishService.getUserByUsername(userName);
+
+            if(loggedInUser != null && validationService.loginValidation(email, password) {
+                wishService.loginUser(userName, password);
+                redirectAttributes.addFlashAttribute("success", "User '" + userName + "' logged in successfully!");
+                return "redirect:/user/" + userName;
+            } else {
+                throw new Exception("Invalid email or password");
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage()); // Uses the exception message set by the ValidationService method
+            return "redirect:/login";
+        }
+    }
+
     @PostMapping("/register")
     public String registerUser(@RequestParam("userName") String userName,
                                @RequestParam("email") String email,

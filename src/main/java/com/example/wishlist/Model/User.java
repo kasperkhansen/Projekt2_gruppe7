@@ -7,6 +7,7 @@ public class User {
     public String name;
     public String userPassword;
     private String email;
+    private boolean isLoggedIn = false; // added this to keep track of whether the user is logged in or not
 
     private List<Wishlist> wishlists;
 
@@ -32,13 +33,24 @@ public class User {
         this.wishlists = wishlists;
     }
 
-    // load-from-table constructor
+    // load-from-table constructor (doesn't have isLoggedIn, since this shouldn't be saved to DB)
     public User(int ID, String name, String userPassword, String email, List<Wishlist> wishlists){
         this.ID = ID;
         this.name = name;
         this.userPassword = userPassword;
         this.email = email;
         this.wishlists = wishlists;
+        this.isLoggedIn = false;
+    }
+
+    // full constructor of User (with isLoggedIn)
+    public User(int ID, String name, String userPassword, String email, List<Wishlist> wishlists, boolean isLoggedIn){
+        this.ID = ID;
+        this.name = name;
+        this.userPassword = userPassword;
+        this.email = email;
+        this.wishlists = wishlists;
+        this.isLoggedIn = isLoggedIn;
     }
 
 
@@ -119,6 +131,13 @@ public class User {
 
     public List<Wishlist> getWishlists() { return wishlists; }
     public void setWishlists(List<Wishlist> updatedWishlists) { this.wishlists = updatedWishlists; }
+
+    public boolean isLoggedIn() {
+        return isLoggedIn;
+    }
+    public void setLoggedIn(boolean loggedIn) {
+        isLoggedIn = loggedIn;
+    }
 
 
 

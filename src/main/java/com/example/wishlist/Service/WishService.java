@@ -17,6 +17,8 @@ public class WishService {
     @Autowired
     private WishRepo repo;
 
+
+
     // ------------------- main functionality methods -------------------
         // reserve item
     public void reserveItem(String userNameOfTheUserReserving, Wishlist wishlist, String itemName) {
@@ -79,7 +81,6 @@ public class WishService {
             }
         }
     }
-
 
     public void addItem(String username, String wishlistName, String itemName, double price, String url) {
         Item i = new Item(itemName, price, url);
@@ -152,68 +153,5 @@ public class WishService {
         return null;
     }
 
-
-
-
-    /*
-    // ------------------- Testing methods -------------------------
-    public List<User> users = new ArrayList<>((List.of(
-            new User(1, "Jørgen", "1234", "1@mail.dk", getWishlistsJorgen()),
-            new User(2, "Alma", "1234", "2@mail.dk", getWishlistsAlma())
-    )));
-
-    private List<Wishlist> getWishlistsAlma() {
-        return (List.of(
-                new Wishlist(1, 1, "Birthday", getItems()),
-                new Wishlist(2, 1, "Christmas", getItems()),
-                new Wishlist(3, 1, "Apartment", getItems())
-        ));
-    }
-
-    private List<Wishlist> getWishlistsJorgen() {
-        return (List.of(
-                new Wishlist(1,1, "Holiday", getItems()),
-                new Wishlist(2, 1, "Christmas", getItems()),
-                new Wishlist(3, 1, "Apartment", getItems())
-        ));
-    }
-
-
-
-    public List<Wishlist> getWishlistsTest() {
-        List<Wishlist> allWishlists = new ArrayList<>();
-        allWishlists.addAll(getWishlistsAlma());
-        allWishlists.addAll(getWishlistsJorgen());
-
-        return allWishlists;
-    }
-    public List<Wishlist> getWishlistTest(String userName) {
-        for (User user : users) {
-            if(user.getItemName().equals(userName)) {
-                return user.getWishlists();
-            }
-        }
-        return null;
-    }
-
-    public List<Wishlist> getWishlistsTest(int ID) {
-        for (User user : users) {
-            if (user.getId()==ID) {
-                return user.getWishlists();
-            }
-        }
-        return null;
-    }
-
-    public void addItem(Wishlist wl, Item i){
-        repo.addItem(wl,i);
-    }
-
-
-    public void updateWishlist(Wishlist wl){
-        repo.updateWishlist(wl);
-    }
-
-     */
 
 }
