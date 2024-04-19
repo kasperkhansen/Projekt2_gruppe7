@@ -22,9 +22,9 @@
         </nav>
     </header>
 
-    <div class="containers">
+    <div class="containers-mat">
         <div class="container-1">
-            <h2 th:text="${user.name} + ' wishlists'">User's wishlists</h2>
+            <div class="h22"><h2 th:text="${user.name} + ' wishlists'">User's wishlists</h2></div>
 
             <div class = "table">
                 <table>
@@ -63,7 +63,7 @@
         <!--  <h2 th:text="${user.name} + ' wishlists'">User's wishlists</h2> -->
 
         <div class="container-3">
-            <h2 th:text="${user.name} + ' friends'">User's friends</h2>
+            <div class="h22"><h2 th:text="${user.name} + ' friends'">User's friends</h2></div>
 
             <div class = "table">
                 <table>
@@ -84,9 +84,11 @@
 
 
                 <form th:action="@{/user}" method="post">
-                    <label for="userName">User Name:</label>
-                    <input type="text" name="userName" id="userName" placeholder="New User Name">
-                    <button type="submit">Add User</button>
+                    <label for="userName">Friend Name:</label>
+                    <input type="text" name="userName" id="userName" placeholder="New Friend Name">
+                    <input type="hidden" name="email" id="userName" placeholder="New Friend Name">
+                    <input type="hidden" name="password" id="userName" placeholder="New Friend Name">
+                    <button type="submit">Add Friend</button>
                 </form>
             </div>
         </div>
