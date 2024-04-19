@@ -43,26 +43,20 @@ public class HomeController {
 
 
     @GetMapping("/user/{userName}")
-    public String userpage(@PathVariable("userName") String loggedInUserName, Model model) {
+    public String userpage(@PathVariable("userName") String username, Model model) {
         System.out.println("DEBUG userpage");
 
         try {
             // get User
-            User loggedInUser = wishService.getUserByUsername(loggedInUserName);
-            System.out.println("- loggedInUser: " + loggedInUser);
+            User user = wishService.getUserByUsername(username);
 
             // Check if User exists and retrieve Wishlists
-            if(loggedInUser != null) {
-                System.out.println("-> loggedInUser != null");
-                List<Wishlist> wishlists = loggedInUser.getWishlists();
-                System.out.println("- wishlists: " + wishlists);
+            if(user != null) {
+                List<Wishlist> wishlists = user.getWishlists();
 
                 // Add user and wishlists to model
-                model.addAttribute("user", loggedInUser);
-                model.addAttribute("loggedInUserName", loggedInUserName);
+                model.addAttribute("user", user);
                 model.addAttribute("users", wishService.getUsers());
-                List<User> friendList = wishService.getFriends(loggedInUserName);
-                model.addAttribute("friends", friendList);
                 model.addAttribute("wishlists", wishlists);
             } else {
                 throw new Exception("User does not exist");
@@ -79,8 +73,6 @@ public class HomeController {
     @GetMapping("/{userName}/wishlist/{wishlistName}")
     public String wishlistpage(@PathVariable("userName") String userName,
                                @PathVariable("wishlistName") String wishlistName,
-                               @RequestParam("loggedInUser") User loggedInUser,
-                               @RequestParam("loggedInUserName") String loggedInUserName,
                                Model model) {
 
         try {
@@ -97,7 +89,7 @@ public class HomeController {
             if(wishlist != null) {
                 List<Item> items = wishService.getItemsFromWishlist(wishlist);
 
-                model.addAttribute("loggedInUser", loggedInUser); // add loggedInUser to model (for reserveItem method
+
                 model.addAttribute("user", user);
                 model.addAttribute("wishlist", wishlist);
                 model.addAttribute("items", items);
@@ -119,8 +111,8 @@ public class HomeController {
 
         try {
             validationService.validateNotNullInput(requiredParameters);
-            wishService.addFriend(userName);
-            redirectAttributes.addFlashAttribute("success", "User '" + userName + "' added successfully!");
+           // wishService.addFriend(userName);
+            //redirectAttributes.addFlashAttribute("success", "User '" + userName + "' added successfully!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage()); // Uses the exception message set by the ValidationService method
         }
@@ -173,11 +165,30 @@ public class HomeController {
         }
     }
 
+    @PostMapping("/login")
+    public String registerUser(@RequestParam("email") String email,
+                               @RequestParam("password") String password,
+                               RedirectAttributes redirectAttributes) {
+        List<Object> requiredParameters = Arrays.asList(email, password);
+
+        try {
+            // Validate input parameters
+            validationService.validateNotNullInput(requiredParameters);
+            email = validationService.validateEmail(email);     // Validate the email
+            password = validationService.validatePassword(password); // Validate the password
+
+
+            redirectAttributes.addFlashAttribute("success", "User '" + email + "' logged in successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage()); // Uses the exception message set by the ValidationService method
+        }
+        return "redirect:/home"; // Redirect to the login page after registration
+    }
+
     @PostMapping("/addfriend")
     public String addFriend(@RequestParam("userName") String userName,
                           @RequestParam("email") String email,
                           @RequestParam("password") String password,
-                          @RequestParam("loggedinuser") User loggedInUser,
                           RedirectAttributes redirectAttributes) {
         List<Object> requiredParameters = Arrays.asList(userName);
 
