@@ -96,20 +96,27 @@ body {
     position: relative;
     padding-top: 5vh; /* actual header height = 5% */
 }
-.container-1 {
-    margin-right: auto;
 
+.containers-mat {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    min-height: 95vh; /* Remaining height under the header */
+}
+
+.containers-mat .container-1 {
+    margin-right: auto;
     padding-left: 15%;
 
 }
-.container-2 {
+.cotainers-mat .container-2 {
 
 }
-.container-3 {
+.containers-mat .container-3 {
     margin-left: auto;
-    text-align: right;
-    align-items: center;
-    justify-content: center;
     padding-right: 15%;
 
 }
@@ -131,6 +138,7 @@ body {
     padding-top: 5vh; /* actual header height = 5% */
 
 }
+
 
 .button {
     background-color: var(--primary-color);
