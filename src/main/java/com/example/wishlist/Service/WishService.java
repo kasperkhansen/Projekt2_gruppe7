@@ -17,22 +17,42 @@ public class WishService {
     @Autowired
     private WishRepo repo;
 
+
+    // Login a user
+    public void loginUser(String username, String password) {
+        User user = getUserByUsername(username);
+        // Ensure user exists
+        if (user == null) {
+            System.out.println("User does not exist.");
+            return;
+        }
+
+        // Check password
+        // Hash and compare in real situation
+        if (!user.getUserPassword().equals(password)) {
+            System.out.println("Password is incorrect.");
+            return;
+        }
+
+        // Log the user in
+        user.setLoggedIn(true);
+
+    }
+
     // ------------------- main functionality methods -------------------
         // reserve item
-    public void reserveItem(String userNameOfTheUserReserving, Wishlist wishlist, String itemName) {
-        System.out.println("DEBUG reserveItem");
-        User user = getUserByUsername(userNameOfTheUserReserving);
+    public void toggleReserveItem(User loggedInUser, Wishlist wishlist, String itemName) {
 
-        System.out.println("User: " + user);
-        System.out.println("Wishlist: " + wishlist);
-        System.out.println("Item: "+ wishlist.getItem(itemName));
+        Item item = wishlist.getItem(itemName);
 
-        repo.reserveItem(user, wishlist.getItem(itemName));
-    }
-        // unreserve item
-    public void unreserveItem(Wishlist wishlist, String itemName) {
-
-        repo.unreserveItem(wishlist.getItem(itemName));
+        // Check the current reservation status of the item
+        if(item.isReserved()) {
+            // If the item is already reserved, unreserve it
+            repo.unreserveItem(item);
+        } else {
+            // If the item is not reserved, reserve it
+            repo.reserveItem(loggedInUser, item);
+        }
     }
 
     // ------------------- CRUD Methods for Users, Wishlist and Items
@@ -49,6 +69,8 @@ public class WishService {
             }
 
             User u = new User(username);
+            u.setEmail(email);
+            u.setUserPassword(password);
             repo.addUser(u);
         } catch (Exception e) {
 
@@ -79,7 +101,6 @@ public class WishService {
             }
         }
     }
-
 
     public void addItem(String username, String wishlistName, String itemName, double price, String url) {
         Item i = new Item(itemName, price, url);
@@ -131,17 +152,12 @@ public class WishService {
     }
 
 
-
-
-
     public User getUserByEmail(String email) {
-
         for (User user : getUsers()) {
-            if (user.getEmail().equals(email) && user.getEmail() != null) {
+            if (user.getEmail() != null && user.getEmail().equals(email)) {
                 return user;
             }
         }
-
         return null;
     }
 
@@ -168,68 +184,5 @@ public class WishService {
         return null;
     }
 
-
-
-
-    /*
-    // ------------------- Testing methods -------------------------
-    public List<User> users = new ArrayList<>((List.of(
-            new User(1, "Jørgen", "1234", "1@mail.dk", getWishlistsJorgen()),
-            new User(2, "Alma", "1234", "2@mail.dk", getWishlistsAlma())
-    )));
-
-    private List<Wishlist> getWishlistsAlma() {
-        return (List.of(
-                new Wishlist(1, 1, "Birthday", getItems()),
-                new Wishlist(2, 1, "Christmas", getItems()),
-                new Wishlist(3, 1, "Apartment", getItems())
-        ));
-    }
-
-    private List<Wishlist> getWishlistsJorgen() {
-        return (List.of(
-                new Wishlist(1,1, "Holiday", getItems()),
-                new Wishlist(2, 1, "Christmas", getItems()),
-                new Wishlist(3, 1, "Apartment", getItems())
-        ));
-    }
-
-
-
-    public List<Wishlist> getWishlistsTest() {
-        List<Wishlist> allWishlists = new ArrayList<>();
-        allWishlists.addAll(getWishlistsAlma());
-        allWishlists.addAll(getWishlistsJorgen());
-
-        return allWishlists;
-    }
-    public List<Wishlist> getWishlistTest(String userName) {
-        for (User user : users) {
-            if(user.getItemName().equals(userName)) {
-                return user.getWishlists();
-            }
-        }
-        return null;
-    }
-
-    public List<Wishlist> getWishlistsTest(int ID) {
-        for (User user : users) {
-            if (user.getId()==ID) {
-                return user.getWishlists();
-            }
-        }
-        return null;
-    }
-
-    public void addItem(Wishlist wl, Item i){
-        repo.addItem(wl,i);
-    }
-
-
-    public void updateWishlist(Wishlist wl){
-        repo.updateWishlist(wl);
-    }
-
-     */
 
 }

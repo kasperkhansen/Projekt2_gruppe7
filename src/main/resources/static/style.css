@@ -73,7 +73,9 @@ body {
     justify-content: center;
     min-height: 100vh;
     color: var(--primary-color);
-    background-color: lightblue;
+    /* background-color: lightblue; */
+    background: linear-gradient(to bottom, lightblue, cornflowerblue); /* A light grey gradient, blue */
+
 }
 
 @media all and (max-width: 700px) {

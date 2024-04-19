@@ -52,6 +52,7 @@
                         <td class="unreserved" th:unless="${item.reserved}">Not Reserved</td>
                         <td>
                             <form th:action="@{/reserveItem}" method="post">
+                                <input type="hidden" name="loggedInUser" id="loggedInUser" th:value="${loggedInUser}">
                                 <input type="hidden" name="userName" id="userName" th:value="${user.name}">
                                 <input type="hidden" name="reserverUserName" id="reserverUserName" th:value="${user.name}">
                                 <input type="hidden" name="wishlist" id="wishlist" th:value="${wishlist}">
@@ -99,6 +100,7 @@
                 <h3 th:if="${success}" th:class="'success-message'" th:text="${success}" class='notifications'></h3>
             </div>
         </div>
+        <input type="hidden" id="loggedInUser" th:value="${loggedInUser}">
     </div>
 
 <footer class="footer">
