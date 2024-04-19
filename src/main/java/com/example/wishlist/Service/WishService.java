@@ -1,5 +1,6 @@
 package com.example.wishlist.Service;
 
+import com.example.wishlist.Model.DTO;
 import com.example.wishlist.Model.Item;
 import com.example.wishlist.Model.User;
 import com.example.wishlist.Model.Wishlist;
@@ -17,33 +18,15 @@ public class WishService {
     @Autowired
     private WishRepo repo;
 
-
-    // Login a user
-    public void loginUser(String username, String password) {
-        User user = getUserByUsername(username);
-        // Ensure user exists
-        if (user == null) {
-            System.out.println("User does not exist.");
-            return;
-        }
-
-        // Check password
-        // Hash and compare in real situation
-        if (!user.getUserPassword().equals(password)) {
-            System.out.println("Password is incorrect.");
-            return;
-        }
-
-        // Log the user in
-        user.setLoggedIn(true);
-
+    public WishService(WishRepo repo) {
+        this.repo = repo;
     }
 
     // ------------------- main functionality methods -------------------
         // reserve item
-    public void toggleReserveItem(User loggedInUser, Wishlist wishlist, String itemName) {
-
-        Item item = wishlist.getItem(itemName);
+    public void toggleReserveItem(DTO dto) {
+        User loggedInUser = dto.getLoggedInUser();
+        Item item = dto.getItemDTO(dto.getItemName());
 
         // Check the current reservation status of the item
         if(item.isReserved()) {
@@ -55,25 +38,24 @@ public class WishService {
         }
     }
 
+    public void addFriend(DTO dto) {
+        User loggedInUser = dto.getLoggedInUser();
+        User friend = dto.getUserDTO();
+        repo.addFriend(loggedInUser, friend);
+    }
+
     // ------------------- CRUD Methods for Users, Wishlist and Items
-    public void addUser(String username, String email, String password){
+    public void addUser(DTO dto) {
         try {
-            // check if userName is null
-            if (username == null) {
-                return;
-            }
+            User userDTO = dto.getUserDTO();
 
             // check if user exists in database
-            if (repo.checkUserExists(new User(username)) == true) {
+            if (repo.checkUserExists(new User(userDTO.getName())) == true) {
                 return;
             }
 
-            User u = new User(username);
-            u.setEmail(email);
-            u.setUserPassword(password);
-            repo.addUser(u);
+            repo.addUser(userDTO);
         } catch (Exception e) {
-
             e.printStackTrace();
         }
     }
@@ -161,7 +143,6 @@ public class WishService {
         return null;
     }
 
-
     public User getUserByUsername(String userName) {
 
         for (User user : getUsers()) {
@@ -185,4 +166,11 @@ public class WishService {
     }
 
 
+    public void deleteItem(DTO dto) {
+        repo.deleteItem(dto.getItemDTO());
+    }
+
+    public List<User> getFriends(User userDTO) {
+        return repo.getFriends(userDTO);
+    }
 }

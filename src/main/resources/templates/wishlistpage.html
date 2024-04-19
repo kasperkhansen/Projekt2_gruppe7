@@ -24,7 +24,7 @@
     <div class="containers">
         <div class="container-left"></div>
         <div class="container-center">
-            <h2 th:text="${user.name} + '\'s wishlist:'">Default header</h2>
+            <h2 th:text="${dto.userDTO.name} + '\'s wishlist:'">Default header</h2>
             <h2 th:text="${wishlistName}">Wishlist name</h2>
 
             <div class = "table">
@@ -41,7 +41,7 @@
                         <th>CopyUrl</th>
                         <th>Status</th>
                     </tr>
-                    <tr th:each="item, iterStat: ${items}" class="item-row">
+                    <tr th:each="item, iterStat: ${dto.userDTO.wishlist.items}" class="item-row">
                         <td th:text="${iterStat.count}"></td>
                         <td th:text="${item.name}"></td>
                         <td th:text="${item.price}"></td>
@@ -52,8 +52,8 @@
                         <td class="unreserved" th:unless="${item.reserved}">Not Reserved</td>
                         <td>
                             <form th:action="@{/reserveItem}" method="post">
-                                <input type="hidden" name="loggedInUser" id="loggedInUser" th:value="${loggedInUser}">
-                                <input type="hidden" name="userName" id="userName" th:value="${user.name}">
+                                <input type="hidden" name="loggedInUser" id="loggedInUser" th:value="${dto.loggedInUser.name}">
+                                <input type="hidden" name="userName" id="userName" th:value="${dto.userDTO.name}">
                                 <input type="hidden" name="reserverUserName" id="reserverUserName" th:value="${user.name}">
                                 <input type="hidden" name="wishlist" id="wishlist" th:value="${wishlist}">
                                 <input type="hidden" name="wishlistName" id="wishlistName" th:value="${wishlist.name}">
@@ -66,23 +66,19 @@
                         </td>
 
                         <td>
-                            <form th:action="@{/item}" method="post">
-                                <input type="hidden" name="userName" id="userName" th:value="${user.name}">
-                                <input type="hidden" name="wishlistName" id="wishlistName" th:value="${wishlist.name}">
-                                <input type="hidden" name="wishlistID" id="wishlistID" th:value="${wishlist.ID}">
-                                <input type="hidden" name="itemName" id="itemName" th:value="${item.name}">
-                                <input type="hidden" name="price" id="price" th:value="${item.price}">
-                                <input type="hidden" name="URL" id="URL" th:value="${item.URL}">
+                            <form th:action="@{/deleteItem}" method="post">
+                                <input type="hidden" name="itemID" id="itemID" th:value="${item.ID}">
                                 <button type="submit" name="action" value="delete">Delete</button>
                             </form>
                         </td>
                     </tr>
                 </table>
 
-                <form th:action="@{/item}" method="post">
+                <form th:action="@{/addItem}" method="post">
                     <input type="hidden" name="userName" id="userName" th:value="${user.name}">
                     <input type="hidden" name="wishlistName" id="wishlistName" th:value="${wishlist.name}">
                     <input type="hidden" name="wishlistID" id="wishlistID" th:value="${wishlist.ID}">
+
 
                     <label for="itemName">new Item:</label>
 
@@ -100,7 +96,7 @@
                 <h3 th:if="${success}" th:class="'success-message'" th:text="${success}" class='notifications'></h3>
             </div>
         </div>
-        <input type="hidden" id="loggedInUser" th:value="${loggedInUser}">
+
     </div>
 
 <footer class="footer">

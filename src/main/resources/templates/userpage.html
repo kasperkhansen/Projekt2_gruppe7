@@ -24,11 +24,11 @@
 
     <div class="containers">
         <div class="container-1">
-            <h2 th:text="${user.name} + ' wishlists'">User's wishlists</h2>
+            <h2 th:text="${dto.userDTO.name} + ' wishlists'">User's wishlists</h2>
 
             <div class = "table">
                 <table>
-                    <tr th:each="wishlist : ${wishlists}">
+                    <tr th:each="wishlist : ${dto.userDTO.wishlists}">
                         <td><a th:href="@{'/' + ${user.name} + '/wishlist/' + ${wishlist.name}}" th:text="${wishlist.name}">Wishlist name</a></td>
 
 
@@ -43,8 +43,8 @@
                     </tr>
                 </table>
 
-                <form th:action="@{/wishlist}" method="post">
-                    <input type="hidden" name="userName" id="userName" th:value="${user.name}">
+                <form th:action="@{/addWishlist}" method="post">
+                    <input type="hidden" name="userName" id="userName" th:value="${dto.loggedInUser.name}">
                     <label for="wishlistName">Name for new Wishlist:</label>
                     <input type="text" name="wishlistName" id="wishlistName" placeholder="New Wishlist Name">
                     <button type="submit" class="sky-plus-button"></button>
@@ -63,34 +63,40 @@
         <!--  <h2 th:text="${user.name} + ' wishlists'">User's wishlists</h2> -->
 
         <div class="container-3">
-            <h2 th:text="${user.name} + ' friends'">User's friends</h2>
+            <h2 th:text="${dto.userDTO.name} + ' friends'">User's friends</h2>
 
-            <div class = "table">
-                <table>
-                    <div class="table-body">
-                        <tbody id="table-body">
-                        <!-- Table rows will be here -->
-                        <tr th:each="user : ${users}">
-                            <td><a th:href="@{'/user/' + ${user.name}}" th:text="${user.name}">Username</a></td>
-                            <td th:each="wishlist : ${user.wishlists}">
-                                <!-- add your URL pattern for wishlists along with the ID if needed -->
-                                <a th:text="${wishlist.name}">WishlistName</a>
-                            </td>
-                        </tr>
-
-                        </tbody>
-                    </div>
-                </table>
-
-
-                <form th:action="@{/user}" method="post">
-                    <label for="userName">User Name:</label>
-                    <input type="text" name="userName" id="userName" placeholder="New User Name">
-                    <button type="submit">Add User</button>
-                </form>
+            <!-- Show table only when friends' list is not empty -->
+            <div th:if="${not #lists.isEmpty(dto.friends)}">
+                <div class = "table">
+                    <table>
+                        <div class="table-body">
+                            <tbody id="table-body">
+                            <tr th:each="user : ${dto.friends}">
+                                <td><a th:href="@{'/user/' + ${user.name}}" th:text="${user.name}">Username</a></td>
+                                <td th:each="wishlist : ${user.wishlists}">
+                                    <a th:text="${wishlist.name}">WishlistName</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </div>
+                    </table>
+                </div>
             </div>
+
+            <!-- Show message when friends' list is empty -->
+            <div th:unless="${not #lists.isEmpty(dto.friends)}">
+                <p>No friends to show.</p>
+            </div>
+
+
+            <form th:action="@{/addUser}" method="post">
+                <label for="userName">User Name:</label>
+                <input type="text" name="userName" id="userName" placeholder="New User Name">
+                <button type="submit">Add User</button>
+            </form>
         </div>
     </div>
+
 
     <footer class="footer">
         <p>Created by: Gruppe 7</p>

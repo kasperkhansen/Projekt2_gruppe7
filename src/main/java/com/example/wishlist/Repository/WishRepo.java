@@ -66,51 +66,45 @@ public class WishRepo {
     // ------------------- Fetch/Get methods -------------------
 
     public User getUser(String userName){
-        String sql = "SELECT * FROM Users WHERE name = ?";
-        RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
-        return template.queryForObject(sql, rowMapper, userName);
+        for (User user : fetchAllUsers()){
+            if (user.getName().equals(userName)){
+                return user;
+            }
+        }
+        return null;
     }
 
     public List<User> fetchAllUsers(){
         List<User> users = fetchAllUsersEmpty();
         List<User> usersNotNull = new ArrayList<User>();
 
-        // System.out.println("DEBUG fetchAllUsers");
-
-        // go through all users and fill them with their Wishlists and the Items of the wishlists, check for null
         for (User u : users){
-
-            if (u.getName() == null) {
-                continue;
-            }
-
-            /*
-            System.out.println("- ID = "+u.getID());
-            System.out.println("- name = "+u.getName());
-            System.out.println("- password = "+u.getUserPassword());
-            System.out.println("- email = "+u.getEmail());
-
-             */
 
             List<Wishlist> wishlists = fetchAllWishlistsFrom(u);
             for (Wishlist wl : wishlists){
                 List<Item> items = fetchAllItemsFrom(wl);
                 wl.setItems(items);
             }
-            // System.out.println("- "+wishlists);
+
             u.setWishlists(wishlists);
             usersNotNull.add(u);
         }
 
-        // System.out.println("DEBUG fetchAllUsers end");
-
         return usersNotNull;
     }
 
-    public List<User> fetchAllUsersEmpty(){
+    public List<User> fetchAllUsersEmpty() {
         String sql = "SELECT * FROM Users";
-        RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
-        return template.query(sql, rowMapper);
+        return template.query(sql, new RowMapper<User>() {
+            public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+                User user = new User();
+                user.setID(rs.getInt("ID"));
+                user.setName(rs.getString("name"));
+                user.setUserPassword(rs.getString("user_password"));
+                user.setEmail(rs.getString("email"));
+                return user;
+            }
+        });
     }
 
     // note: mapRow used for fetching Wishlists and Items when using the foreign keys, since the BeanPropertyRowMapper didn't map Model and Table correctly
@@ -181,6 +175,16 @@ public class WishRepo {
 
     // ------------------- Add methods -------------------
 
+    public void addFriend(User loggedInUser, User friend) {
+        String sql = "INSERT INTO Friends (user_ID, friend_ID) VALUES (?, ?)";
+        template.update(sql, loggedInUser.getID(), friend.getID());
+    }
+
+    public void addUser(User u){
+        String sql = "INSERT INTO Users (name, user_password, email) VALUES (?, ?, ?)";
+        template.update(sql, u.getName(), u.getUserPassword(), u.getEmail());
+    }
+
     public void addWishlist(Wishlist wl, User u){
         String sql = "INSERT INTO Wishlists (user_ID, wishlist_name) VALUES (?, ?)";
         template.update(sql, u.getID(), wl.getName());
@@ -191,13 +195,7 @@ public class WishRepo {
         template.update(sql, i.getName(), wl.getID(), i.getPrice(), i.getURL());
     }
 
-    public void addUser(User u){
-        System.out.println("DEBUG repo.addUser()");
-        String sql = "INSERT INTO Users (name, user_password, email) VALUES (?, ?, ?)";
-        System.out.println("SQL Command: "+ sql +", Parameters: name=" + u.getName() + ", password=" + u.getUserPassword() + ", email=" + u.getEmail());
-        System.out.println("DEBUG repo.addUser() end\n");
-        template.update(sql, u.getName(), u.getUserPassword(), u.getEmail());
-    }
+
 
     // ------------------- Update methods -------------------
 
@@ -229,4 +227,28 @@ public class WishRepo {
         template.update(sql);
     }
 
+    public void deleteItem(Item item) {
+        String sql = "DELETE FROM Items WHERE ID = ?";
+        template.update(sql, item.getID());
+    }
+
+    public List<User> getFriends(User userDTO) {
+        List<User> populatedFriends = new ArrayList<>();
+        for (User friend : fetchAllFriends(userDTO)) {
+            User user = getUser(friend.getName());
+            populatedFriends.add(user);
+        }
+        return populatedFriends;
+    }
+
+    private List<User> fetchAllFriends(User userDTO) {
+        String sql = "SELECT * FROM Friends WHERE user_ID = ?";
+        return template.query(sql, new RowMapper<User>() {
+            public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+                User user = new User();
+                user.setID(rs.getInt("friend_ID"));
+                return user;
+            }
+        }, userDTO.getID());
+    }
 }

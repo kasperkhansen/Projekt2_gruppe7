@@ -104,6 +104,9 @@ public class Wishlist {
         }
         return null;
     }
+    public Item getItemDTO() {
+        return items.get(0); // assumes DTO only has one item at a time
+    }
 
     public List<Item> getItems() {
         return items;
@@ -122,6 +125,7 @@ public class Wishlist {
                 ", items=" + items +
                 '}';
     }
+
 
 
 } //wishlist class

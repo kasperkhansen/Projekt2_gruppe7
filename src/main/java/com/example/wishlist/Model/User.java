@@ -1,5 +1,9 @@
 package com.example.wishlist.Model;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -7,9 +11,9 @@ public class User {
     public String name;
     public String userPassword;
     private String email;
-    private boolean isLoggedIn = false; // added this to keep track of whether the user is logged in or not
+    private boolean isLoggedIn = false;
 
-    private List<Wishlist> wishlists;
+    private List<Wishlist> wishlists = new ArrayList<>();
 
 
     // Constructor used when creating a new user
@@ -54,18 +58,6 @@ public class User {
     }
 
 
-    // -----------
-
-    public List<Wishlist> getAllWishlists (){
-        return wishlists;
-    }
-
-    // ------------------- CRUD Methods for Wishlists
-    // ------------------- Create Wishlist
-
-
-    // ------------------- Read List of Wishlists
-
 
     // ------------------- CRUD methods for Wishlists of User -------------------
     public void addWishlist (Wishlist newList){
@@ -100,6 +92,7 @@ public class User {
         wishlists.remove(wl);
     }
 
+
     // ------------------- GET and SET -------------------
     public int getID() {
         return ID;
@@ -118,8 +111,8 @@ public class User {
     public String getUserPassword() {
         return userPassword;
     }
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
+    public void setUserPassword(String password) {
+        this.userPassword = password;
     }
 
     public String getEmail() {
@@ -132,6 +125,44 @@ public class User {
     public List<Wishlist> getWishlists() { return wishlists; }
     public void setWishlists(List<Wishlist> updatedWishlists) { this.wishlists = updatedWishlists; }
 
+    public Wishlist getWishlist(String name) {
+        for (Wishlist wishlist : wishlists) {
+            if (wishlist.getName().equals(name)) {
+                return wishlist;
+            }
+        }
+        return null;
+    }
+    public void setWishlist(Wishlist updatedWishlist) {
+        for (int i = 0; i < wishlists.size(); i++) {
+            if (wishlists.get(i).getName().equals(updatedWishlist.getName())) {
+                wishlists.set(i, updatedWishlist);
+                return;
+            }
+        }
+    }
+
+    public Item getItem(String itemName) {
+        for (Wishlist wl : wishlists){
+            for (Item i : wl.getItems()){
+                if (i.getName().equals(itemName)){
+                    return i;
+                }
+            }
+        }
+        return null;
+    }
+    public Item getItem(int itemID) {
+        for (Wishlist wl : wishlists){
+            for (Item i : wl.getItems()){
+                if (i.getID() == itemID){
+                    return i;
+                }
+            }
+        }
+        return null;
+    }
+
     public boolean isLoggedIn() {
         return isLoggedIn;
     }
@@ -140,8 +171,32 @@ public class User {
     }
 
 
+    // ------------------- Password hashing -------------------
+    /*
+    public static String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hashedBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
+            String fullHash = bytesToHex(hashedBytes);
 
-    // tostring
+            // Let's take only the first 32 characters of the hash
+            return fullHash.substring(0, 32);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
+    }
+
+     */
+
+    // ------------------- toString -------------------
     @Override
     public String toString() {
         return "User{" +
