@@ -229,4 +229,27 @@ public class WishRepo {
         template.update(sql);
     }
 
+    public void addFriend(User u) {
+        String sql = "INSERT INTO Friends (user_ID, friend_ID) VALUES (?, ?)";
+        template.update(sql, u.getID(), u.getID());
+    }
+
+    public List<User> fetchAllFriends(String username) {
+        return fetchAllFriendsOfUser(getUser(username).getID());
+    }
+
+    // fetchALlFriendsOfUser(int userID)
+
+    private List<User> fetchAllFriendsOfUser(int userID) {
+        String sql = "SELECT * FROM Friends WHERE user_ID = ?";
+        return template.query(sql, new RowMapper<User>() {
+            public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+                User user = new User();
+                user.setID(rs.getInt("friend_ID"));
+                return user;
+            }
+        }, userID);
+    }
+
+
 }

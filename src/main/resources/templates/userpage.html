@@ -70,7 +70,7 @@
                     <div class="table-body">
                         <tbody id="table-body">
                         <!-- Table rows will be here -->
-                        <tr th:each="user : ${users}">
+                        <tr th:each="user : ${friends}">
                             <td><a th:href="@{'/user/' + ${user.name}}" th:text="${user.name}">Username</a></td>
                             <td th:each="wishlist : ${user.wishlists}">
                                 <!-- add your URL pattern for wishlists along with the ID if needed -->
@@ -91,6 +91,13 @@
             </div>
         </div>
     </div>
+
+    <input type ="hidden" id="loggedInUser" th:value="${loggedInUser}">
+    <input type ="hidden" id="loggedInUserName" th:value="${loggedInUserName}">
+    <input type ="hidden" id="userName" th:value="${user.name}">
+    <input type ="hidden" id="wishlist" th:value="${wishlist.name}">
+    <input type ="hidden" id="wishlistID" th:value="${wishlist.ID}">
+
 
     <footer class="footer">
         <p>Created by: Gruppe 7</p>

@@ -36,22 +36,33 @@ public class HomeController {
         List<User> userList = wishService.getUsers();
         model.addAttribute("users", userList);
 
+
+
         return "home";
     }
 
 
     @GetMapping("/user/{userName}")
-    public String userpage(@PathVariable("userName") String username, Model model) {
+    public String userpage(@PathVariable("userName") String loggedInUserName, Model model) {
+        System.out.println("DEBUG userpage");
+
         try {
             // get User
-            User user = wishService.getUserByUsername(username);
+            User loggedInUser = wishService.getUserByUsername(loggedInUserName);
+            System.out.println("- loggedInUser: " + loggedInUser);
 
             // Check if User exists and retrieve Wishlists
-            if(user != null) {
-                List<Wishlist> wishlists = user.getWishlists();
+            if(loggedInUser != null) {
+                System.out.println("-> loggedInUser != null");
+                List<Wishlist> wishlists = loggedInUser.getWishlists();
+                System.out.println("- wishlists: " + wishlists);
 
                 // Add user and wishlists to model
-                model.addAttribute("user", user);
+                model.addAttribute("user", loggedInUser);
+                model.addAttribute("loggedInUserName", loggedInUserName);
+                model.addAttribute("users", wishService.getUsers());
+                List<User> friendList = wishService.getFriends(loggedInUserName);
+                model.addAttribute("friends", friendList);
                 model.addAttribute("wishlists", wishlists);
             } else {
                 throw new Exception("User does not exist");
@@ -59,8 +70,9 @@ public class HomeController {
 
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "errorPage";
+            return "error";
         }
+        System.out.println("DEBUG userpage end");
         return "userpage";
     }
 
@@ -68,6 +80,7 @@ public class HomeController {
     public String wishlistpage(@PathVariable("userName") String userName,
                                @PathVariable("wishlistName") String wishlistName,
                                @RequestParam("loggedInUser") User loggedInUser,
+                               @RequestParam("loggedInUserName") String loggedInUserName,
                                Model model) {
 
         try {
@@ -94,22 +107,19 @@ public class HomeController {
 
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "errorPage";
+            return "error";
         }
         return "wishlistpage";
     }
 
     @PostMapping("/user")
     public String addUser(@RequestParam("userName") String userName,
-                          @RequestParam("email") String email,
-                          @RequestParam("password") String password,
                           RedirectAttributes redirectAttributes) {
         List<Object> requiredParameters = Arrays.asList(userName);
 
         try {
             validationService.validateNotNullInput(requiredParameters);
-            userName = validationService.validateName(userName); // validate the username
-            wishService.addUser(userName, email, password);
+            wishService.addFriend(userName);
             redirectAttributes.addFlashAttribute("success", "User '" + userName + "' added successfully!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage()); // Uses the exception message set by the ValidationService method
@@ -118,30 +128,45 @@ public class HomeController {
     }
 
     @PostMapping("/loginUser")
-    public String loginUser (@RequestParam("email") String email,
-                             @RequestParam("password") String password,
-                             Model model,
-                             RedirectAttributes redirectAttributes) {
+    public String loginUser(@RequestParam("email") String email,
+                            @RequestParam("password") String password,
+                            Model model,
+                            RedirectAttributes redirectAttributes) {
         List<Object> requiredParameters = Arrays.asList(email, password);
 
+        System.out.println("DEBUG loginUser");
         try {
             validationService.validateNotNullInput(requiredParameters);
 
+            System.out.println("- email: " + email);
+            System.out.println("- password: " + password);
             email = validationService.validateEmail(email);     // validate the email
             password = validationService.validatePassword(password); // validate the password
 
             User loggedInUser = wishService.getUserByEmail(email);
+            System.out.println("- loggedInUser: " + loggedInUser);
             loggedInUser.setEmail(email);
             loggedInUser.setUserPassword(password);
+            System.out.println("- loggedInUser: " + loggedInUser);
 
             if(loggedInUser != null && validationService.loginValidation(email, password)) {
-                wishService.loginUser(loggedInUser.name, password);
-                model.addAttribute("loggedInUser", loggedInUser);
+                System.out.println("-> loggedInUser != null");
+                try {
+                    wishService.loginUser(loggedInUser.name, password);
+                } catch (Exception e) {
+                    System.out.println("Exception in loginUser: " + e.getMessage());
+                    throw e;
+                }
+
+                System.out.println("-> loggedInUser.name: " + loggedInUser.name);
+                model.addAttribute("loggedInUser", loggedInUser); // added -------------------
+
                 redirectAttributes.addFlashAttribute("success", "User '" + loggedInUser.name + "' logged in successfully!");
                 return "redirect:/user/" + loggedInUser.name;
             } else {
                 throw new Exception("Invalid email or password");
             }
+
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage()); // Uses the exception message set by the ValidationService method
             return "redirect:/login";

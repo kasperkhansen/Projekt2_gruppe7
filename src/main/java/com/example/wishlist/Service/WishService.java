@@ -185,4 +185,14 @@ public class WishService {
     }
 
 
+    public void addFriend(String userName) {
+        User u = getUserByUsername(userName);
+        if (u != null) {
+            repo.addFriend(u);
+        }
+    }
+
+    public List<User> getFriends(String userName) {
+        return repo.fetchAllFriends(userName);
+    }
 }
